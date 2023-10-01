@@ -1,0 +1,20 @@
+nav {
+    color: $clr4;
+    display: flex;
+    justify-content: center;
+  
+    .category-slider {
+      display: flex;
+      gap: 10px; /* Add gap for spacing between NavLink elements */
+    }
+  
+    .category-slider > * {
+      border-bottom: 2px solid #272c33;
+      transition: border-bottom-color 0.5s linear;
+      padding: 8px 34px;
+    }
+  }
+
+    // .active {
+    //     color: red;
+    // }

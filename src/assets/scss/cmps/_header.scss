@@ -1,0 +1,25 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $clr1;
+    height: 46px;
+
+    .menu-btn {
+        color: aliceblue;
+        padding-right: 10px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .logo-container {
+        width: 32px;
+        height: 32px;
+        padding-left: 10px;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

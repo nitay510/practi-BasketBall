@@ -1,0 +1,310 @@
+// setup
+@import "setup/variables.scss";
+@import "setup/functions.scss";
+@import "setup/mixins.scss";
+@import "setup/layout.scss";
+@import "setup/typography.scss";
+
+// basics
+@import "./basics/helpers";
+@import "./basics/base";
+@import "./basics/buttons";
+
+//VIEWS
+// general
+
+
+// story
+
+
+// quote
+
+// cmps
+@import "./cmps/header";
+@import "./cmps/cta-bar";
+@import "./cmps/nav";
+@import "./cmps/video-modal";
+@import "./cmps/video-app";
+@import "./cmps/video-preview";
+
+
+
+
+
+
+// @import "./views/template-edit2";
+
+body {
+    margin: 0;
+    background-color: $clr1;
+}
+
+img {
+    filter: grayscale(100%);
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.video-hero {
+    height: 81vh;
+    margin-left: 2px;
+}
+
+.cta-bar>* {
+    // color: $clr4;
+    border: black;
+}
+
+.cta-container {
+    position: relative;
+}
+
+.home-page {
+    display: flex;
+    flex-direction: column;
+    // background-image: url("../../images/homepage-background-rotate.jpg");
+    background-size: cover;
+    flex: 1;
+
+    .dark-fade-div {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        flex: 1;
+        background: linear-gradient(90.14deg, rgba(40, 40, 40, 0.5) 44.72%, rgba(63, 63, 63, 0) 100.05%);
+        // background: linear-gradient(90.14deg, rgba(40, 40, 40, 0.5) 44.72%, rgba(63, 63, 63, 0) 80.05%);
+    }
+
+    .light-fade-div {
+        width: 100%;
+        flex: 1;
+        background: linear-gradient(90.14deg, rgba(255, 255, 255, 0.5) 50.01%, rgba(255, 255, 255, 0) 74.94%);
+    }
+
+    .home-header-content {
+        // padding-bottom: 30px;
+        font-family: Rubik;
+        display: none;
+
+        @include for-normal-layout {
+            display: block;
+        }
+
+        h1 {
+            font-size: rem(30px);
+            margin-bottom: 3px;
+
+            @include for-normal-layout {
+                font-size: rem(34px);
+            }
+
+            @include for-wide-layout {
+                font-size: rem(42px);
+            }
+        }
+
+        p {
+            font-size: rem(16px);
+            margin: 0;
+
+            @include for-normal-layout {
+                font-size: rem(20px);
+            }
+
+            @include for-wide-layout {
+                font-size: rem(24px);
+            }
+        }
+    }
+
+    .headers-container {
+        margin-bottom: 24px;
+    }
+
+    .call-to-action-section {
+        p {
+            margin: 0;
+            font-weight: 500;
+            font-size: rem(16px);
+
+            @include for-normal-layout {
+                font-size: rem(20px);
+            }
+
+            @include for-wide-layout {
+                font-size: rem(24px);
+            }
+        }
+
+        .cta-btn {
+            width: 350px;
+            margin: 20px 0px 0px;
+
+            @include for-normal-layout {
+                width: 400px;
+            }
+
+            @include for-wide-layout {
+                width: 450px;
+            }
+        }
+    }
+
+    .register-modal {
+        @include for-normal-layout {
+            grid-column: 2;
+            grid-row: 1/3;
+            padding: 0 50px;
+        }
+
+        &__input {
+            padding: rem(13px);
+            margin-bottom: rem(8px);
+            width: 100%;
+            border-radius: 3px;
+            border: none;
+
+            &:focus {
+                outline: none;
+                border: 1px solid #232323;
+            }
+        }
+
+        .password-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+            font-size: rem(14px);
+
+            &__remmember-user {
+                display: flex;
+                align-items: center;
+            }
+
+            &__show-password {
+                all: unset;
+                cursor: pointer;
+            }
+        }
+
+        &__cta-btn {
+            width: 100%;
+        }
+
+        &__alternatives-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        &__or-seperator {
+            margin: 8px 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .border {
+                height: 1px;
+                width: 100%;
+                background-color: white;
+                margin: 10px 0;
+            }
+
+            p {
+                margin: 0;
+                padding: 0 30px;
+                color: white;
+            }
+        }
+
+        .register-basic-btn {
+            padding: 13px;
+            width: 100%;
+            border: none;
+            margin-bottom: rem(8px);
+        }
+
+        &__alternative-btn {
+            color: white;
+            background-color: #232323;
+            @extend .register-basic-btn;
+        }
+
+        &__facebook-btn {
+            background-color: #395185;
+            color: white;
+            @extend .register-basic-btn;
+        }
+
+        &__google-btn {
+            padding: 13px;
+            width: 100%;
+            border: none;
+            margin-bottom: rem(24px);
+        }
+
+        &__skip-link {
+            color: white;
+        }
+    }
+}
+
+// .home-layout {
+//     height: 100%;
+//     margin: 50px auto 0;
+
+//     width: 90%;
+
+//     text-align: start;
+
+//     width: 350px;
+//     text-align: start;
+
+//     @include for-narrow-layout {
+//         width: 400px;
+//     }
+
+//     @include for-normal-layout {
+//         width: 80%;
+//         display: grid;
+//         grid-template-columns: 1fr 1fr;
+//         grid-template-rows: 1fr 1fr;
+//     }
+
+//     @include for-wide-layout {
+//         width: 80%;
+//         padding-bottom: 30px;
+//     }
+
+//     .home-header-content {
+//         grid-column: 1;
+//         text-align: start;
+
+//         @include for-normal-layout {
+//             align-items: start;
+//         }
+//     }
+
+//     .call-to-action-section {
+//         text-align: start;
+
+//         @include for-normal-layout {
+//             grid-column: 2;
+//             grid-row: 2;
+//         }
+//     }
+// }
+
+
+.baba {
+    height: 400px;
+}
+
+.active {
+    border-bottom: 2px solid white;
+
+}
+
