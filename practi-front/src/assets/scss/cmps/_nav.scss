@@ -1,0 +1,21 @@
+nav {
+    color: $clr4;
+    display: flex;
+    justify-content: center;
+  
+    .category-slider {
+      display: flex;
+    }
+  
+    .category-slider > .bold-category {
+      height: 60px;
+      border-bottom: 2px solid #ff0000;
+      font-weight: bold;
+    }
+    
+    .category-slider > * {
+      border-bottom: 2px solid #272c33;
+      transition: border-bottom-color 0.5s linear;
+      padding: 8px 30px;
+    }
+  }
