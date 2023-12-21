@@ -34,7 +34,7 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
 
   // Fetch all double drills from the server
   const getAllDrills = async () => {
-    const res = await fetch(`http://localhost:5000/api/DrillsDouble`, {
+    const res = await fetch(`https://practi-web.onrender.com/api/DrillsDouble`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
 
   // Fetch the number of wins for a specific opponent
   const howManyWins = async (opponent: string): Promise<number> => {
-    const res = await fetch(`http://localhost:5000/api/Drills/howManyWins/${opponent}`, {
+    const res = await fetch(`https://practi-web.onrender.com/api/Drills/howManyWins/${opponent}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

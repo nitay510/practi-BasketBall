@@ -83,7 +83,7 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus }: Pr
   const findLastDrill = async () => {
     // Fetch information about the last drill
     console.log('enterlastdrill')
-    const getUserResponse = await fetch(`http://localhost:5000/api/LastDrill/`, {
+    const getUserResponse = await fetch(`https://practi-web.onrender.com/api/LastDrill/`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

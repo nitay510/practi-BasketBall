@@ -63,7 +63,7 @@ export function CtaOpen({
   };
 //find how manny drils you end(did the מסכם)
   const getHowManyDrills = async () => {
-    const res = await fetch(`http://localhost:5000/api/HowManyDrills`, {
+    const res = await fetch(`https://practi-web.onrender.com/api/HowManyDrills`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

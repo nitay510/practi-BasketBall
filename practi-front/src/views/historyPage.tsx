@@ -35,7 +35,7 @@ function HistoryPage({ token, setTopic }: HistoryPageProps) {
 
   // Fetch all drills from the server
   const getDrills = async () => {
-    const res = await fetch(`http://localhost:5000/api/Drills/${category}`, {
+    const res = await fetch(`https://practi-web.onrender.com/api/Drills/${category}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

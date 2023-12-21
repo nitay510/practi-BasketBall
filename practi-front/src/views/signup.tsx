@@ -36,7 +36,7 @@ export function Signup(): JSX.Element {
       age: age,
       username: username
     };
-    const res = await fetch('http://localhost:5000/api/Users', {
+    const res = await fetch('https://practi-web.onrender.com/api/Users', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

@@ -26,7 +26,8 @@ customEnv.env(process.env.NODE_ENV, './config')
 console.log(process.env.CONNECTION_STRING)
 mongoose.connect(process.env.CONNECTION_STRING, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+   tls: true
 })
 
 // Routes

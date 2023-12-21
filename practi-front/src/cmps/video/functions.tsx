@@ -1,6 +1,6 @@
 //use the server to get the videos and return them
 export  const getVideos = async (filterBy: any,token: any) => {
-    const res = await fetch(`http://localhost:5000/api/videos/${filterBy}`, {
+    const res = await fetch(`https://practi-web.onrender.com/api/videos/${filterBy}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ export  const getVideos = async (filterBy: any,token: any) => {
   }
   //use the server to get the Subvideos and return them
   export  const getSubVideos = async (filterBy: any,token: any) => {
-    const res = await fetch(`http://localhost:5000/api/subVideos/${filterBy}`, {
+    const res = await fetch(`https://practi-web.onrender.com/api/subVideos/${filterBy}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ export  const getVideos = async (filterBy: any,token: any) => {
   }
     //use the server to get the next category(by order) for the next drill
 export const getNextCategory = async (category: any, token: any) => {
-    const res = await fetch(`http://localhost:5000/api/nextCategory/${category}`, {
+    const res = await fetch(`https://practi-web.onrender.com/api/nextCategory/${category}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const getNextCategory = async (category: any, token: any) => {
       videoName: actualVideoName,
     });
   
-    const url = `http://localhost:5000/api/nextVideoCategory/${category}?${params.toString()}`;
+    const url = `https://practi-web.onrender.com/api/nextVideoCategory/${category}?${params.toString()}`;
   
     try {
       const res = await fetch(url, {

@@ -33,7 +33,7 @@ export const VideoDetailsDouble = ({ drillId, mission1,title,token,drillName,top
 
     try {
       // Send the message
-      const res1 = await fetch(`http://localhost:5000/api/Drills/${drillId}`, {
+      const res1 = await fetch(`https://practi-web.onrender.com/api/Drills/${drillId}`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json', // the data (username/password) is in the form of a JSON object
