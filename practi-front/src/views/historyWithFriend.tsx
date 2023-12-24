@@ -108,17 +108,15 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
       <div className='content-container'>
         <HeaderTwo />
 
-        {drills.length > 0 && (
+        {drills.length > 0 ? (
           <div className="drill-list">
             {uniqueOpponents.map((opponent) => (
               <div key={opponent} className="opponent-item">
                 <div className="opponent-header">
-                  {/* Clicking on the opponent name toggles the opponent details */}
                   <div onClick={() => toggleOpponent(opponent)} className="opponent-name">
                     {opponent}
                   </div>
                   <div className="latest-drill">
-                    {/* Display opponent's win-lose balance */}
                     <div className="opponent-latest">
                       :מאזן
                     </div>
@@ -126,26 +124,20 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
                       {`${opponentStats[opponent]?.wins || 0}-${opponentStats[opponent]?.loses || 0}`}
                     </div>
                   </div>
-                  {/* Clicking the expand button also toggles the opponent details */}
                   <button className='expendMore' onClick={() => toggleOpponent(opponent)}>
                     <MdOutlineExpandMore />
                   </button>
                 </div>
-                {/* Display opponent details when expanded */}
                 {expandedOpponent === opponent && (
                   <div className="opponent-drills">
-                    {/* Display details for each drill against the opponent */}
                     {drills
                       .filter((drill) => drill.opponentName === opponent)
                       .map((drill) => (
                         <div key={drill.drillId} className="drill-item">
-                          {/* Display the date of the drill */}
                           <div className="drill-date">
                             {new Date(drill.date).toLocaleDateString()}
                           </div>
-                          {/* Display the drill name */}
                           <div className="drill-name">{drill.drillName}</div>
-                          {/* Display the score and highlight based on the result */}
                           <div
                             className={`score ${
                               drill.successes === drill.opponentScore ? 'neutral' : drill.successes > drill.opponentScore ? 'green' : 'red'
@@ -153,10 +145,9 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
                           >
                             {drill.opponentScore}-{drill.successes}
                           </div>
-                          {/* Clicking this button returns to the training view */}
                           <button
                             className="back-to-training"
-                            onClick={() => handleReturnToTraining(drill.drillName,drill.topic)}
+                            onClick={() => handleReturnToTraining(drill.drillName, drill.topic)}
                           >
                             חזור לאימון
                           </button>
@@ -167,14 +158,16 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
               </div>
             ))}
           </div>
+        ) : (
+          <div className="drill-item">
+            כאן יופיעו האימונים שתבצע עם חברים
+          </div>
         )}
       </div>
-      {/* Display the call-to-action bar */}
       <div className="cta-bar-container">
         <CtaBar />
       </div>
     </div>
   );
 }
-
 export default HistoryPageDouble;

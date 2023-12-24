@@ -1,7 +1,7 @@
 const videos = {
     
     'באמפ יורו סטפ': [
-        { _id: 'a150', title: 'תרגיל מול מגן דמיוני', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686140/pract-subVideos/%D7%94%D7%98%D7%A2%D7%99%D7%99%D7%AA_%D7%94%D7%A9%D7%94%D7%99%D7%99%D7%94_-_%D7%99%D7%97%D7%99%D7%93_1_pzqrq0.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:90},
+        { _id: 'a150', title: 'תרגיל מול מגן דמיוני', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686167/pract-subVideos/%D7%91%D7%90%D7%9E%D7%A4_%D7%99%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4_-_%D7%99%D7%97%D7%99%D7%93_1_w1lcdu.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:90},
         { _id: 'c150', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686128/pract-subVideos/%D7%91%D7%90%D7%9E%D7%A4_%D7%99%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4_-_%D7%96%D7%95%D7%92%D7%99_r7plma.mp4', mission1:'אחד על אחד- סל בבאמפ יורו-סטפ שווה 4 נק',single:true,haveForm:true},
 
     ],
@@ -13,7 +13,7 @@ const videos = {
     ],
     'הטעיית השהייה': [
         { _id: 'a152', title: 'הטעיית השהייה לליאפ', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686140/pract-subVideos/%D7%94%D7%98%D7%A2%D7%99%D7%99%D7%AA_%D7%94%D7%A9%D7%94%D7%99%D7%99%D7%94_-_%D7%99%D7%97%D7%99%D7%93_1_pzqrq0.mp4', mission1:'10 זריקות מכל צד',tries:10,single:true,haveForm:true,target:100},
-        { _id: 'b152', title: 'תרגיל מסכם', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686147/pract-subVideos/%D7%94%D7%98%D7%A2%D7%99%D7%99%D7%AA_%D7%94%D7%A9%D7%94%D7%99%D7%99%D7%94_-_%D7%99%D7%97%D7%99%D7%93_t1ivfo.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:60},
+        { _id: 'b152', title: 'הטעיית השהייה לקליעה', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686147/pract-subVideos/%D7%94%D7%98%D7%A2%D7%99%D7%99%D7%AA_%D7%94%D7%A9%D7%94%D7%99%D7%99%D7%94_-_%D7%99%D7%97%D7%99%D7%93_t1ivfo.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:60},
         { _id: 'd152', title: 'תרגיל  זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1694706700/practi/%D7%94%D7%A9%D7%94%D7%99%D7%99%D7%94_%D7%96%D7%95%D7%92%D7%99_ohnp1q.mp4', mission1:' 20 זריקות בשמאל + 20 זריקות בימין',tries:10,single:false,haveForm:true },
 
     ],
@@ -38,7 +38,7 @@ const videos = {
     'יורו סטפ מהמקום': [
         { _id: 'a156', title: 'יורו סטפ מהצד', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686392/pract-subVideos/%D7%99%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4_%D7%9E%D7%94%D7%9E%D7%A7%D7%95%D7%9D_-_%D7%99%D7%97%D7%99%D7%93_mhijqu.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:70 },
         { _id: 'b156', title: 'יורו סטפ מהאמצע', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686392/pract-subVideos/%D7%99%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4_%D7%9E%D7%94%D7%9E%D7%A7%D7%95%D7%9D_-_%D7%99%D7%97%D7%99%D7%93_mhijqu.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:90 },
-        { _id: 'c156', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686410/pract-subVideos/%D7%99%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4_%D7%9E%D7%94%D7%9E%D7%A7%D7%95%D7%9D_-_%D7%96%D7%95%D7%92%D7%99_1_xypdbj.mp4',  mission1:'אחד על אחד- סל ביורו-סטפ שווה 4 נק',single:true,haveForm:true},
+        { _id: 'c156', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686410/pract-subVideos/%D7%99%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4_%D7%9E%D7%94%D7%9E%D7%A7%D7%95%D7%9D_-_%D7%96%D7%95%D7%92%D7%99_1_xypdbj.mp4',  mission1:'אחד על אחד- סל ביורו-סטפ שווה 4 נק',single:false,haveForm:true},
 
     ],
     'הטעיית קרוס-אובר': [
@@ -62,18 +62,18 @@ const videos = {
 
     ],
     'כדרור תחת לחץ': [
-        { _id: 'a160', title: 'תרגיל מסכם', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686425/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%AA%D7%97%D7%AA_%D7%9C%D7%97%D7%A5_-_%D7%99%D7%97%D7%99%D7%93_sk3ask.mp4', mission1:'10 זריקות לאחר כדרור נגד לחץ מהחצי',tries:10,single:true,haveForm:true,target:60},
+        { _id: 'a160', title: 'לחץ מגן דמיוני', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686425/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%AA%D7%97%D7%AA_%D7%9C%D7%97%D7%A5_-_%D7%99%D7%97%D7%99%D7%93_sk3ask.mp4', mission1:'10 זריקות לאחר כדרור נגד לחץ מהחצי',tries:10,single:true,haveForm:true,target:60},
         { _id: 'b160', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686433/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%AA%D7%97%D7%AA_%D7%9C%D7%97%D7%A5_-_%D7%AA%D7%A8%D7%92%D7%95%D7%9C_%D7%96%D7%95%D7%92%D7%99_z6fxri.mp4', mission1:'אחד על אחד תחת לחץ מתחילים מהחצי',single:false,haveForm:true },
 
     ],
     'כדרור מול לחץ מגרש שלם': [
 
-        { _id: 'a161', title: 'תרגיל מסכם', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1702547684/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%A0%D7%92%D7%93_%D7%9C%D7%97%D7%A5_%D7%9E%D7%92%D7%A8%D7%A9_%D7%A9%D7%9C%D7%9D_-_%D7%99%D7%97%D7%99%D7%93_1_embqrr.mp4', mission1:'5 מגרשים עם הטעייה כל כמה שניות',tries:10,single:true,haveForm:true,target:100},
+        { _id: 'a161', title: 'שחרור מלחץ לליאפ', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1702547684/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%A0%D7%92%D7%93_%D7%9C%D7%97%D7%A5_%D7%9E%D7%92%D7%A8%D7%A9_%D7%A9%D7%9C%D7%9D_-_%D7%99%D7%97%D7%99%D7%93_1_embqrr.mp4', mission1:'5 מגרשים עם הטעייה כל כמה שניות',tries:10,single:true,haveForm:true,target:100},
         { _id: 'b161', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686419/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%A0%D7%92%D7%93_%D7%9C%D7%97%D7%A5_%D7%9E%D7%92%D7%A8%D7%A9_%D7%A9%D7%9C%D7%9D_-_%D7%96%D7%95%D7%92%D7%99_kxiwjt.mp4', mission1:'אחד על אחד תחת לחץ מגרש שלם',single:false,haveForm:true },
 
     ],
     'כדרור מסל לסל': [
-        { _id: 'a162', title: 'תרגיל מסכם', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1702547684/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%A0%D7%92%D7%93_%D7%9C%D7%97%D7%A5_%D7%9E%D7%92%D7%A8%D7%A9_%D7%A9%D7%9C%D7%9D_-_%D7%99%D7%97%D7%99%D7%93_1_embqrr.mp4', mission1:'10 מעברי מגרש מהירים עם סיומת של פלאוטר',tries:10,single:true,haveForm:true,target:70},
+        { _id: 'a162', title: 'כדרור אחרי ריבאונד', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1702547684/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%A0%D7%92%D7%93_%D7%9C%D7%97%D7%A5_%D7%9E%D7%92%D7%A8%D7%A9_%D7%A9%D7%9C%D7%9D_-_%D7%99%D7%97%D7%99%D7%93_1_embqrr.mp4', mission1:'10 מעברי מגרש מהירים עם סיומת של פלאוטר',tries:10,single:true,haveForm:true,target:70},
         { _id: 'b162', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686420/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%9E%D7%A1%D7%9C_%D7%9C%D7%A1%D7%9C_-_%D7%AA%D7%A8%D7%92%D7%95%D7%9C_%D7%96%D7%95%D7%92%D7%99_xk9jrd.mp4', mission1:'אחד על אחד בקצב גבוה על מגרש שלם',single:false,haveForm:true },
 
     ],
@@ -83,7 +83,7 @@ const videos = {
         { _id: 'c163', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686420/pract-subVideos/%D7%9B%D7%93%D7%A8%D7%95%D7%A8_%D7%91%D7%A4%D7%99%D7%A7%D7%A0%D7%A8%D7%95%D7%9C_-_%D7%96%D7%95%D7%92%D7%99_mwa24k.mp4', mission1:'אחד על אחד עם חוסם דמיוני',single:false,haveForm:true },
 
     ],
-    'יצירת מרווח בחדירה': [
+    'הרחקת המגן בחדירה': [
         { _id: 'a164', title: 'חדירה מול מגן דמיוני', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686391/pract-subVideos/%D7%94%D7%A8%D7%97%D7%A7%D7%AA_%D7%94%D7%9E%D7%92%D7%9F_%D7%91%D7%97%D7%93%D7%99%D7%A8%D7%94_-_%D7%99%D7%97%D7%99%D7%93_1_cbqpzs.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:90},
         { _id: 'b164', title: 'חדירה מול מגן דמיוני לרוורס לייאפ', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686393/pract-subVideos/%D7%97%D7%93%D7%99%D7%A8%D7%94_%D7%9E%D7%95%D7%9C_%D7%9E%D7%92%D7%9F_%D7%92%D7%91%D7%95%D7%94_-_%D7%99%D7%97%D7%99%D7%93_2_zn6goh.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:80},
         { _id: 'c164', title: 'תרגיל מסכם', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686384/pract-subVideos/%D7%94%D7%A8%D7%97%D7%A7%D7%AA_%D7%94%D7%9E%D7%92%D7%9F_%D7%91%D7%97%D7%93%D7%99%D7%A8%D7%94_-_%D7%99%D7%97%D7%99%D7%93_%D7%9E%D7%A1%D7%9B%D7%9D_r05gor.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:60},
@@ -93,7 +93,7 @@ const videos = {
     'סטפ-בק ארוך': [
         { _id: 'a165', title: 'סטפ בק ארוך לחצי מרחק', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686461/pract-subVideos/%D7%A1%D7%98%D7%A4_%D7%91%D7%A7_%D7%90%D7%A8%D7%95%D7%9A_-_%D7%99%D7%97%D7%99%D7%93_1_umuiov.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:50},
         { _id: 'b165', title: 'תרגיל  מסכם', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686465/pract-subVideos/%D7%A1%D7%98%D7%A4_%D7%91%D7%A7_%D7%90%D7%A8%D7%95%D7%9A_-_%D7%99%D7%97%D7%99%D7%93_%D7%9E%D7%A1%D7%9B%D7%9D_maosl5.mp4', mission1:'20 זריקות מחוץ לקשת',tries:20,single:true,haveForm:true,target:40},
-        { _id: 'c165', title: 'תרגיל  מסכם זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686465/pract-subVideos/%D7%A1%D7%98%D7%A4_%D7%91%D7%A7_%D7%90%D7%A8%D7%95%D7%9A_-_%D7%99%D7%97%D7%99%D7%93_%D7%9E%D7%A1%D7%9B%D7%9D_maosl5.mp4', mission1:'אחד על אחד- סל בסטפ בק ארוך שווה 4 נק',single:true,haveForm:true},
+        { _id: 'c165', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686446/pract-subVideos/%D7%A1%D7%98%D7%A4_%D7%91%D7%A7_%D7%90%D7%A8%D7%95%D7%9A_-_%D7%96%D7%95%D7%92%D7%99_a5ydoe.mp4', mission1:'אחד על אחד- סל בסטפ בק ארוך שווה 4 נק',single:false,haveForm:true},
     ],
     'זריקת עונשין': [
         { _id: 'b166', title: 'עונשין בדופק גבוה', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686415/pract-subVideos/%D7%98%D7%A7%D7%A1_%D7%A2%D7%95%D7%A0%D7%A9%D7%99%D7%9F_-_%D7%99%D7%97%D7%99%D7%93_znnjgk.mp4',mission1:'20 זריקות בדופק גבוה',tries:20,single:true,haveForm:true,target:80 },

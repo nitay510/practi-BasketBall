@@ -98,9 +98,10 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
             Practi
           </div>
           <div className='PractiDisc'>
-            מאמן אישי דיגטלי לשחקני כדורסל
+            מאמן אישי דיגיטלי לשחקני כדורסל
           </div>
           {/* Input container for the username */}
+          <form onSubmit={handleLogin}>
           <div className='input-container'>
             <label htmlFor='username'>מספר טלפון</label>
             <input
@@ -113,7 +114,7 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
        
           {/* Button to trigger the login process */}
           <button onClick={handleLogin}>התחבר</button>
-          {/* Link to navigate to the signup page if the user doesn't have an account */}
+          </form>
           <p>
             אין לך עדיין חשבון? <Link to='/signup' className="blue-link">לחץ כאן</Link>
           </p>

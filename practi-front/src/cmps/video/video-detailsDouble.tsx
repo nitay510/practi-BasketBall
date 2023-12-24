@@ -48,8 +48,7 @@ export const VideoDetailsDouble = ({ drillId, mission1,title,token,drillName,top
 
   return (
     <div className="video-details" style={{ direction: 'rtl' }}>
-      <form>
-        <label htmlFor="missionName">{mission1}</label>
+      <form onSubmit={handleSubmit}>
         <div>
           <div>
             <input

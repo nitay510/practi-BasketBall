@@ -23,14 +23,15 @@ export const Header = (): JSX.Element => {
     }
     // If the user chooses "לא", do nothing (cancel logout)
   };
+  const handleLogo = () => {
+      navigate('/app');
+    };
     return (
         
         <header>
-                 < NavLink to={'/app'}>
-                 <div className='logo-container'>
+                 <button className='logo-container'  onClick={handleLogo}>
                 <img src={logo} alt="" />
-            </div>
-         </NavLink>
+            </button>
          <button className='back-button' onClick={handleLogout}>
        <MdLogout/>
       </button>

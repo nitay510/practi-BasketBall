@@ -11,14 +11,15 @@ export const HeaderTwo = (): JSX.Element => {
     navigate(-1); // Go back to the previous pag
 
   };
+  const handleLogo = () => {
+    navigate('/app');
+  };
     return (
         
         <header>
-                 < NavLink to={'/app'}>
-                 <div className='logo-container'>
+                 <button className='logo-container'  onClick={handleLogo}>
                 <img src={logo} alt="" />
-            </div>
-         </NavLink>
+            </button>
          <button className='back-button' onClick={goBack}>
         <MdOutlineArrowForwardIos/>
       </button>

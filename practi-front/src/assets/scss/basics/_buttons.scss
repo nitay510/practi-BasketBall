@@ -33,23 +33,24 @@ button {
     cursor: pointer;
   }
 .last-drill-btn {
+    margin-top: 60px;
     color: #e32652;
-    font-size: 14px;
+    font-size: 20px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px;
+    border-radius: 20px;
+    padding: 5px 20px;
     background: white;
     cursor: pointer;
 }
 .next-drill-btn {
-        color: #e32652;
-        font-size: 18px;
-        font-weight: bold;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 5px;
-        background: white;
-        cursor: pointer;    
+    margin-top: 10px;
+    color: #fff;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 20px;
+    background: #e32652;
+    cursor: pointer;
 }
 .hello-nitay{
     color:white;
@@ -60,7 +61,7 @@ button {
 }
 .cta-btns {
     position: absolute;
-    bottom: 10%;
+    bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
 
@@ -119,4 +120,10 @@ button {
 }
 .history-icon {
     color: white;
+  }
+  .close-popup-btn {
+        position: absolute;
+        top: 0; 
+        right: 2px;
+    
   }

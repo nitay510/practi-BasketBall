@@ -1,4 +1,4 @@
-
+import React, { useState } from "react";
 import subVideoModel from "../../Models/subVideoModel"
 import { SubVideoPreview } from "./subVideo-preview"
 
@@ -18,6 +18,7 @@ interface SubVideoListProps {
   This component is the list of subVideos that present in each drill use subVideoPreview in order to present them
 */
 export const SubVideoList = ({ videos, onSetVideo, selectedVideo, videoRef, onSetVideoStatus,token,topic,drillName }: SubVideoListProps): JSX.Element => {
+    const [currentlyOpenDetails, setCurrentlyOpenDetails] = useState<string | null>(null);
     return (
         <div className="video-list">
             {videos.map((video) =>
@@ -31,6 +32,8 @@ export const SubVideoList = ({ videos, onSetVideo, selectedVideo, videoRef, onSe
                     drillName={drillName}
                     topic={topic}
                     title={video.title}
+                    currentlyOpenDetails={currentlyOpenDetails}
+                    setCurrentlyOpenDetails={setCurrentlyOpenDetails}
                 />)}
         </div>
     )

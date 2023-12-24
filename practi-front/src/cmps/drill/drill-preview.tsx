@@ -34,7 +34,9 @@ function DrillPreview({ drillName, token, category, setTopic, drillList }: drill
   const loadSub = async () => {
     try {
       const subVideos = await getSubVideos(drillName, token);
-  
+      if(drillName=='זריקת עונשין')
+      setTotalDrills(subVideos.length - 2);
+      else
       setTotalDrills(subVideos.length - 1);
     } catch (error) {
       console.error('Error loading sub videos:', error);

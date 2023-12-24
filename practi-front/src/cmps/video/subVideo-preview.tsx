@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Confetti from 'react-dom-confetti';
+import { MdClose } from 'react-icons/md';
 import { useSelector } from "react-redux";
 // models
 import subVideoModel from "../../Models/subVideoModel";
@@ -11,7 +12,6 @@ import { VideoDetails } from "./video-details";
 import { VideoDetailsDouble } from "./video-detailsDouble";
 // state
 import { videoElState } from "../../store/store";
-
 interface SubVideoPreviewProps {
   video: subVideoModel;
   selectedVideo: subVideoModel;
@@ -22,11 +22,10 @@ interface SubVideoPreviewProps {
   drillName: string;
   topic: string;
   title: string;
+  currentlyOpenDetails: string | null;
+  setCurrentlyOpenDetails: (detailsId: string | null) => void;
 }
 
-/* 
-  This component is the subVideo preview used to present the subvideoline of each subVideo
-*/
 export const SubVideoPreview = ({
   video,
   onSetVideo,
@@ -35,73 +34,80 @@ export const SubVideoPreview = ({
   token,
   drillName,
   topic,
-  title
+  title,
+  currentlyOpenDetails,
+  setCurrentlyOpenDetails,
 }: SubVideoPreviewProps) => {
-  const [showDetails, setShowDetails] = useState(false);
-  const videoPlayerRef = useSelector(videoElState);
   const [isSubmit, setIsSubmit] = useState(false);
   const [brokenRecord, setBrokenRecord] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [color, setColor] = useState('');
+  const [rate, setRate] = useState(0);
   const [submitMessageNoHighScore, setSubmitMessageNoHighScore] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const videoPlayerRef = useSelector(videoElState);
 
-  // Handle the submit message and display popup
   useEffect(() => {
-    if(isSubmit){
-    if ( brokenRecord) {
-      // Show the popup
-      setShowPopup(true);
-      // Close the popup after 5 seconds
-      const timer = setTimeout(() => {
-        setShowDetails(false);
-        setShowPopup(false);
-        setBrokenRecord(false);
-        setIsSubmit(false);
-        setSubmitMessage("");
-      }, 4000);
+    if (isSubmit) {
+      if (brokenRecord) {
+        setShowPopup(true);
+        const timer = setTimeout(() => {
+          setCurrentlyOpenDetails(null);
+          setShowPopup(false);
+          setBrokenRecord(false);
+          setIsSubmit(false);
+          setSubmitMessage("");
+        }, 6000);
 
-      return () => clearTimeout(timer);
-    } else {
-      setSubmitMessageNoHighScore("אימון נוסף בהצלחה")
-      const timer = setTimeout(() => {
-        setShowDetails(false);
-        setIsSubmit(false);
-        setShowPopup(false);
-        setSubmitMessage("");
-    }, 2000);
+        return () => clearTimeout(timer);
+      } else {
+        setSubmitMessageNoHighScore("אימון נוסף בהצלחה");
+        const timer = setTimeout(() => {
+          setCurrentlyOpenDetails(null);
+          setIsSubmit(false);
+          setShowPopup(false);
+          setSubmitMessage("");
+        }, 2000);
+      }
     }
-  }
   }, [isSubmit]);
 
-  // Pause the video when clicked
+  const handleClosePopup = () => {
+    setCurrentlyOpenDetails(null);
+    setShowPopup(false);
+    setBrokenRecord(false);
+    setIsSubmit(false);
+    setSubmitMessage("");
+  };
+
   const onPauseVideo = (): void => {
     onSetVideoStatus(false);
-    videoPlayerRef.pause();
+    videoPlayerRef && videoPlayerRef.pause();
   };
-
-  // Toggle the display of details
   const onToggleDetails = () => {
-    setShowDetails(prevState => !prevState);
+    if (currentlyOpenDetails === video._id) {
+      setCurrentlyOpenDetails(null);
+    } else {
+      setCurrentlyOpenDetails(video._id);
+    }
   };
 
-  // Play the video and set submit state
   const onPlayVideo = async (videoId: string) => {
     if (selectedVideo._id !== videoId) {
       onSetVideo(video);
       setTimeout(() => {
         onSetVideoStatus(true);
-        videoPlayerRef.play();
+        videoPlayerRef && videoPlayerRef.play();
       }, 2000);
     } else {
       onSetVideoStatus(true);
-      videoPlayerRef.play();
+      videoPlayerRef && videoPlayerRef.play();
     }
   };
 
-  
   let detailsComponent = null;
-//decide if its single or double form and choose acording weich component to  load
-  if (!isSubmit && showDetails) {
+
+  if (!isSubmit && currentlyOpenDetails === video._id) {
     if (video.single === true) {
       detailsComponent = (
         <VideoDetails
@@ -115,6 +121,8 @@ export const SubVideoPreview = ({
           setIsSubmit={setIsSubmit}
           setBrokenRecord={setBrokenRecord}
           setSubmitMessage={setSubmitMessage}
+          setColor={setColor}
+          setRate={setRate}
         />
       );
     } else if (video.single === false) {
@@ -131,38 +139,48 @@ export const SubVideoPreview = ({
       );
     }
   }
-
   // Handle the click event on the video line
   const handleClick = (videoId: string) => {
     if (selectedVideo._id !== videoId) {
       onSetVideo(video);
     }
   };
-
+  const rateStyle = `popup-rate ${color}`;
   return (
     <article
       className={`video-preview ${selectedVideo._id === video._id ? 'playing' : ''}`}
       onClick={() => handleClick(video._id)}
     >
-        {isSubmit && (
-          <div className="submit-message">
-            {submitMessageNoHighScore}
-          </div>
-        )}
-      <Confetti active={showPopup} />
-      {showPopup && (
-        <div className="popup-container">
-          <div className="popup">
-            <img
-              src={`${process.env.PUBLIC_URL}/pop-up-photo.png`} 
-              alt="Celebrity"
-              style={{ width: '100%', maxWidth: '400px', marginBottom: '10px' }}
-            />
-            {submitMessage}
-          </div>
+      {isSubmit && (
+        <div className="submit-message">
+          {submitMessageNoHighScore}
         </div>
       )}
-
+      <Confetti active={showPopup} />
+      {showPopup && (
+  <div className="popup-container">
+    <div className="popup">
+      <img
+        src={`${process.env.PUBLIC_URL}/pop-up-photo.jpg`}
+        alt="Celebrity"
+        style={{ width: '100%', maxWidth: '400px', marginBottom: '10px',height:'120%' }}
+      />
+          <div className="popup-message">
+              שיא חדש:
+            {/* Use the modified rateStyle for the color class */}
+            <div className={rateStyle}>
+              {rate}%
+            </div>
+            </div>
+            <div className="popup-message">
+            {submitMessage}!
+            </div>
+      <button className="close-popup-btn" onClick={handleClosePopup}>
+        <MdClose size={23} />
+      </button>
+    </div>
+  </div>
+)}
       <div className="preview-wrap">
         <div className="details-container">
           {video.haveForm && (
@@ -182,8 +200,9 @@ export const SubVideoPreview = ({
           </button>
         </div>
       </div>
-                    
+
       {detailsComponent}
     </article>
   );
 };
+

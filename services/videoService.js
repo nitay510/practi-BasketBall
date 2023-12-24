@@ -8,7 +8,7 @@ const videos= {
         { _id: 'a104', title:"בונוס: תרגול סיומות", url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1693647778/%D7%AA%D7%A8%D7%92%D7%95%D7%9C_%D7%A1%D7%99%D7%95%D7%9E%D7%95%D7%AA_art36z.mp4', haveSub: false },
     ],
     'חדירות': [
-        { _id: 'a110', title: 'יצירת מרווח בחדירה', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701683407/practi-videos/%D7%94%D7%A8%D7%97%D7%A7%D7%AA_%D7%94%D7%9E%D7%92%D7%9F_%D7%91%D7%97%D7%93%D7%99%D7%A8%D7%94_sw0wdp.mp4',  haveSub: true },
+        { _id: 'a110', title: 'הרחקת המגן בחדירה', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701683407/practi-videos/%D7%94%D7%A8%D7%97%D7%A7%D7%AA_%D7%94%D7%9E%D7%92%D7%9F_%D7%91%D7%97%D7%93%D7%99%D7%A8%D7%94_sw0wdp.mp4',  haveSub: true },
         { _id: 'a111', title: 'חדירה מול מגן גבוה', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701683596/practi-videos/%D7%97%D7%93%D7%99%D7%A8%D7%94_%D7%9E%D7%95%D7%9C_%D7%9E%D7%92%D7%9F_%D7%92%D7%91%D7%95%D7%94_wvjxbv.mp4',  haveSub: true },
         { _id: 'a112', title: 'באמפ יורו סטפ', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701683337/practi-videos/%D7%91%D7%90%D7%9E%D7%A4_%D7%99%D7%95%D7%A8%D7%95-%D7%A1%D7%98%D7%A4_1_cwvegh.mp4',  haveSub: true },
         { _id: 'a113', title: 'יורו סטפ מהמקום', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701685356/practi-videos/%D7%99%D7%95%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4%D7%A4_%D7%9E%D7%94%D7%9E%D7%A7%D7%95%D7%9D_ihqxcy.mp4',  haveSub: true },

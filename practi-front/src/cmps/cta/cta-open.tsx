@@ -36,11 +36,6 @@ export function CtaOpen({
   const videoPlayerRef = useSelector(videoElState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [howManyDrills, setHowManyDrills] = useState(0);
-
-  useEffect(() => {
-    getHowManyDrills();
-  }, [latestDrillName]);
 
   const loadVideosForLastDrill = async (filterBy: string) => {
     const videos = await getVideos(filterBy, token);
@@ -61,44 +56,26 @@ export function CtaOpen({
       ctaBarContainerRef.current.scrollIntoView({ behavior: 'smooth' });
     }, 400);
   };
-//find how manny drils you end(did the מסכם)
-  const getHowManyDrills = async () => {
-    const res = await fetch(`https://practi-web.onrender.com/api/HowManyDrills`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.ok) {
-      const highS = await res.json();
-      setHowManyDrills(highS);
-    } else {
-      alert('Unable to fetch drills');
-    }
-  };
 
   return (
     <section className="cta-container">
       <Hero />
       <div className="cta-btns">
         <div className="start-cta-open">
-        <div className="hello-nitay">
-          <span>שלום {firstname}</span>
+        <div className='bigPracti'>
+            Practi
+          </div>
+          <div className='PractiDisc'>
+            <p>מאמן אישי דיגיטלי</p> 
+            <p>איתך במגרש</p> 
+                     </div>
         </div>
-        <p>
-          <span>השלמת {howManyDrills} מתוך 19 אימונים </span>
-        </p>
-        </div>
-        <p>:האימון האחרון שביצעת</p>
         <button className="last-drill-btn" onClick={onStartDrill}>
-          {latestDrillName}
+        המשך אימון
         </button>
         {/* Display information about the next drill */}
-        <p>:האימון הבא</p>
         <button className="next-drill-btn" onClick={onNextDrillClick}>
-          {nextDrillName}
+          לאימון הבא
         </button>
         <p></p>
       </div>

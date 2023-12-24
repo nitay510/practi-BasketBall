@@ -20,8 +20,12 @@ export const SuccessRate = ({ success, tries, target }: SuccessRateProps): JSX.E
       return 'green'; // Add green style
     } else if (rate >= target - 40) {
       return 'yellow'; // Add yellow style
-    } else {
+    } else if(rate!=0){
       return 'red'; // Add red style
+    }
+    //if there is no result
+    else{
+      return '';
     }
   };
 

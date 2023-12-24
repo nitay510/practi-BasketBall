@@ -121,7 +121,7 @@ exports.getHighScore = async (currentUser, missionName, drillName) => {
  * @returns {Promise<number>} - Returns the total number of unique drills.
  */
 exports.getHowManyDrills = async (currentUser) => {
-  const uniqueDrillNames = await Drill.distinct('drillName', { user: currentUser, missionName: /מסכם/,isSingle:true });
+  const uniqueDrillNames = await Drill.distinct('drillName', { user: currentUser,isSingle:true });
   const totalUniqueDrills = uniqueDrillNames.length;
   return totalUniqueDrills;
 };

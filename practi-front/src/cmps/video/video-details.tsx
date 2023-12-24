@@ -12,6 +12,8 @@ interface VideoDetailsProps {
   setIsSubmit: (isSubmit: boolean) => void;
   setBrokenRecord: (isSubmit: boolean) => void;
   setSubmitMessage: (isSubmit: string) => void;
+  setColor: (isSubmit: string) => void;
+  setRate: (rate: number) => void;
 }
 
 /* 
@@ -29,6 +31,8 @@ export const VideoDetails = ({
   setIsSubmit,
   setBrokenRecord,
   setSubmitMessage,
+  setColor,
+  setRate,
 }: VideoDetailsProps) => {
   const [missionCount, setMissionCount] = useState<number | null>(null);
   const [highScore, setHighScore] = useState(0);
@@ -72,19 +76,21 @@ export const VideoDetails = ({
     setIsSubmit(true);
     // Calculate success rate percentage
     const successRate = Math.round((missionCount! / tries) * 100);
-
-    let newMessage = `שיא חדש: ${successRate}% \n`;
-
+    setRate(successRate);
+    let newMessage = ``;
     if (missionCount! > highScore) {
       setHighScore(missionCount!);
       setBrokenRecord(true);
 //choose the massege acording to the result and target
       if (successRate >= target) {
-        newMessage += 'מעולה! הגעת למטרה';
+        newMessage = 'התוצאה שלך מעל הממוצע, כל הכבוד';
+        setColor('green')
       } else if (successRate >= target - 40) {
-        newMessage += 'אתה מתקרב למטרה';
+        newMessage += 'התוצאה שלך בטווח הממוצע, עוד קצת';
+        setColor('yellow')
       } else {
-        newMessage += '!אתה יכול טוב יותר';
+        newMessage += 'התוצאה שלך מתחת לממוצע, המשך להתאמן';
+        setColor('red')
       }
     }
 
@@ -116,7 +122,7 @@ export const VideoDetails = ({
 
   return (
     <div className="video-details">
-      <form>
+         <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="mission1Count"> שיא אישי:
           <SuccessRate success={highScore} tries={tries} target={target} />
