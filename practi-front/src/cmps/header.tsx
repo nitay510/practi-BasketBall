@@ -2,9 +2,12 @@ import logo from '../assets/images/logo.jpeg'
 import { useNavigate } from 'react-router-dom';
 import { MdLogout} from 'react-icons/md';
 import { NavLink } from "react-router-dom"
+interface headerProps {
+  setLoginStatus: (isLogin: boolean) => void;
+}
 
 /* this component is the header of pages with logo and go back arrow */
-export const Header = (): JSX.Element => {
+export const Header = ({setLoginStatus}:headerProps): JSX.Element => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -16,7 +19,7 @@ export const Header = (): JSX.Element => {
     // Clear the localStorage
     localStorage.removeItem('authToken');
     localStorage.removeItem('userName');
-
+    setLoginStatus(false);
     // Navigate to the login page
     navigate('/');
   // If the user chooses "לא", do nothing (cancel logout)

@@ -19,15 +19,17 @@ interface PractiViewProps {
   topic: string;
   setTopic: (topic: string) => void;
   loginStatus: boolean;
+  setLoginStatus:(isLogin: boolean) => void;
+  isFirstLoad: boolean;
+  setIsFirstLoad:(isLogin: boolean) => void;
 }
 
-export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus }: PractiViewProps): JSX.Element => {
+export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLoginStatus,isFirstLoad,setIsFirstLoad }: PractiViewProps): JSX.Element => {
   // State
   const [latestDrillName, setLatestDrillName] = useState('');
   const [nextDrill, setNextDrill] = useState<VideoModel | null>(null);
   const [nextDrillTopic, setNextDrillTopic] = useState("חדירות");
   const videos = useSelector(selectedVideosState);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [filterBy, setFilterBy] = useState("קליעה");
   const selectedVideo = useSelector(selectedVideoState);
   const navBarRef = useRef<null | HTMLDivElement>(null);
@@ -38,7 +40,6 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus }: Pr
   useEffect(() => {
     // Fetch data on component mount or when filterBy or token changes
     const fetchData = async () => {
-     console.log("token",token)
       setFilterBy(topic);
       await findLastDrill();
       await loadVideos();
@@ -47,14 +48,6 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus }: Pr
     fetchData();
   }, [filterBy, token,]);
 
-  useEffect(() => {
-    // Scroll to the bottom when topic changes
-    if (!isFirstLoad) {
-      ctaBarContainerRef.current.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      setIsFirstLoad(false);
-    }
-  }, [topic]);
 
   useEffect(() => {
     // Redirect to login page when loginStatus is false
@@ -64,6 +57,11 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus }: Pr
   }, [loginStatus]);
 
   const loadVideos = async () => {
+    if (!isFirstLoad) {
+      ctaBarContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      setIsFirstLoad(false);
+    }
     // Fetch videos based on filterBy and set them in the Redux store
     const fetchedVideos = await getVideos(filterBy, token);
     dispatch(setVideos(fetchedVideos));
@@ -82,7 +80,6 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus }: Pr
 
   const findLastDrill = async () => {
     // Fetch information about the last drill
-    console.log('enterlastdrill')
     const getUserResponse = await fetch(`https://practi-web.onrender.com/api/LastDrill/`, {
       method: 'get',
       headers: {
@@ -90,7 +87,6 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus }: Pr
         'Authorization': `Bearer ${token}`
       }
     });
-    console.log(getUserResponse.body)
     if (getUserResponse.ok&&getUserResponse.json!=null) {
       const userJson = await getUserResponse.json();
       const { drillName, topic } = userJson;
@@ -114,7 +110,8 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus }: Pr
   return (
     <div className='practi-app'>
       <div className='content-container'>
-        <Header />
+        <Header 
+        setLoginStatus={setLoginStatus}/>
         <CtaOpen
           token={token}
           firstname={firstname}
@@ -142,7 +139,7 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus }: Pr
         </section>
       </div>
       <div className="cta-bar-container">
-        <CtaBar />
+        <CtaBar  />
       </div>
     </div>
   );

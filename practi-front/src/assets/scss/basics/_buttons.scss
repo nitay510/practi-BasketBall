@@ -76,7 +76,11 @@ button {
             width: 50px;
             height: 52px;
             margin-right: 30px;
-
+            
+            &.ic-active {
+                border-bottom: 2px solid white;
+                font-weight: bold;
+              }
             :first-child {
                 font-size: 38px;
             }

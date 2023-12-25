@@ -56,7 +56,7 @@ const videos = {
     ],
     'סטפ-בק': [
         { _id: 'a159', title: 'סטפ בק מהמקום', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686443/pract-subVideos/%D7%A1%D7%98%D7%A4_%D7%91%D7%A7_-_%D7%99%D7%97%D7%99%D7%93_1_pap4ln.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:50},
-        { _id: 'b159', title: 'סטפ בק בתנועה לזריקה', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686481/pract-subVideos/%D7%A1%D7%98%D7%A4_%D7%91%D7%A7_-_%D7%99%D7%97%D7%99%D7%93_vbzd71.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:60},
+        { _id: 'b159', title: 'סטפ בק בתנועה', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686481/pract-subVideos/%D7%A1%D7%98%D7%A4_%D7%91%D7%A7_-_%D7%99%D7%97%D7%99%D7%93_vbzd71.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:60},
         { _id: 'c159', title: 'תרגיל  מסכם', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686465/pract-subVideos/%D7%A1%D7%98%D7%A4_%D7%91%D7%A7_%D7%90%D7%A8%D7%95%D7%9A_-_%D7%99%D7%97%D7%99%D7%93_%D7%9E%D7%A1%D7%9B%D7%9D_maosl5.mp4', mission1:'20 זריקות מחוץ לקשת',tries:20,single:true,haveForm:true,target:50},
         { _id: 'd159', title: 'תרגיל  זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1694707757/practi/%D7%A1%D7%98%D7%A4_%D7%91%D7%A7_%D7%96%D7%95%D7%92%D7%99_fgv3cf.mp4', mission1:' 20 זריקות בשמאל + 20 זריקות בימין',tries:20,single:false,haveForm:true },
 

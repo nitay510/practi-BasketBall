@@ -57,7 +57,6 @@ exports.addDrill = async (drillId, user, missionName, tries, successes, drillNam
  */
 exports.getUserLastDrill = async (username) => {
   try {
-    console.log(username);
     const drills = await Drill.find({ user: username }).sort({ date: -1 }).limit(1);
 
     if (drills.length === 0) {

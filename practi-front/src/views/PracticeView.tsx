@@ -48,7 +48,7 @@ export const PracticeView = ({ token, topic }: practiceViewProps): JSX.Element =
 
   return (
     <div className='practi-app'>
-      <div className='content-container'>
+      <div className='content-container-practice'>
         <HeaderTwo />
         <div className='video-container'>
           <h1 className="big-title">{Drill}</h1>

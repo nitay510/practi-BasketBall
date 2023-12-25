@@ -58,7 +58,7 @@ function HistoryPage({ token, setTopic }: HistoryPageProps) {
 
   return (
     <div className="history-page">
-      <div className='content-container'>
+      <div className='content-container-practice'>
         <HeaderTwo />
         <NavBarHistory
           category={category}

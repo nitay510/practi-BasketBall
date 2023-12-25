@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.9f65ae98.css",
-    "main.js": "/static/js/main.d658044d.js",
+    "main.css": "/static/css/main.4d2d6c4a.css",
+    "main.js": "/static/js/main.6b9dc6d4.js",
     "static/media/open-screen.gif": "/static/media/open-screen.cf1533326b991dc594c1.gif",
     "static/media/Rubik-Regular.ttf": "/static/media/Rubik-Regular.974ab100afa4538622da.ttf",
     "static/media/Rubik-Bold.ttf": "/static/media/Rubik-Bold.12b9f128a901a8977a57.ttf",
@@ -9,11 +9,11 @@
     "service-worker.js": "/service-worker.js",
     "static/media/logo.jpeg": "/static/media/logo.358f4d2f6a2c221916cb.jpeg",
     "index.html": "/index.html",
-    "main.9f65ae98.css.map": "/static/css/main.9f65ae98.css.map",
-    "main.d658044d.js.map": "/static/js/main.d658044d.js.map"
+    "main.4d2d6c4a.css.map": "/static/css/main.4d2d6c4a.css.map",
+    "main.6b9dc6d4.js.map": "/static/js/main.6b9dc6d4.js.map"
   },
   "entrypoints": [
-    "static/css/main.9f65ae98.css",
-    "static/js/main.d658044d.js"
+    "static/css/main.4d2d6c4a.css",
+    "static/js/main.6b9dc6d4.js"
   ]
 }

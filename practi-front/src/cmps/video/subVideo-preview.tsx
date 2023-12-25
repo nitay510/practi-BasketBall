@@ -161,9 +161,9 @@ export const SubVideoPreview = ({
   <div className="popup-container">
     <div className="popup">
       <img
-        src={`${process.env.PUBLIC_URL}/pop-up-photo.jpg`}
+        src={`${process.env.PUBLIC_URL}/pop-up.jpg`}
         alt="Celebrity"
-        style={{ width: '100%', maxWidth: '400px', marginBottom: '10px',height:'120%' }}
+        style={{ width: '100%', maxWidth: '400px', marginBottom: '10px' }}
       />
           <div className="popup-message">
               שיא חדש:

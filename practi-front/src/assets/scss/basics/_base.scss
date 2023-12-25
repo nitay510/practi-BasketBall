@@ -24,7 +24,14 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 32px); /* Adjust the value to make the content container smaller */
+    max-height: calc(100vh - 30px); 
+    overflow-y: auto; /* Add this to enable scrolling for the content if it exceeds the fixed height */
+  }
+  .content-container-practice {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 50px); 
     overflow-y: auto; /* Add this to enable scrolling for the content if it exceeds the fixed height */
   }
 
@@ -395,5 +402,5 @@ input {
   }
 .PractiDisc{
   font-size: 16px;
-  margin-bottom: 160px;
+  margin-bottom: 170px;
 }

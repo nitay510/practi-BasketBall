@@ -17,12 +17,13 @@ export function App() {
   const [firstname, setFirstname] = useState('');
   const [topic, setTopic]= useState('קליעה')
   const [loginStatus,setLoginStatus] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   return (
     <div className="App">
 
       <Routes>
 
-        <Route path="/app" element={<PractiApp token={token} firstname= {firstname} topic={topic} setTopic={setTopic} loginStatus={loginStatus}/>} />
+        <Route path="/app" element={<PractiApp token={token} firstname= {firstname} topic={topic} setTopic={setTopic} loginStatus={loginStatus} setLoginStatus={setLoginStatus} isFirstLoad={isFirstLoad} setIsFirstLoad={setIsFirstLoad}/>} />
         <Route path="/PracticeView/:Drill" element={<PracticeView token={token} topic={topic} />} />
         <Route path="/history" element={<HistoryPage token={token} setTopic={setTopic}  />} />
         <Route path="/historyFriends" element={<HistoryPageDouble token={token} setTopic={setTopic} />} />
