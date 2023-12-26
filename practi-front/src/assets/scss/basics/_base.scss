@@ -24,7 +24,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 30px); 
+    max-height: calc(100vh - 10vh); 
     overflow-y: auto; /* Add this to enable scrolling for the content if it exceeds the fixed height */
   }
   .content-container-practice {
