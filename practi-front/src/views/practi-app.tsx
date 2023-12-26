@@ -57,11 +57,6 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLo
   }, [loginStatus]);
 
   const loadVideos = async () => {
-    if (!isFirstLoad) {
-      ctaBarContainerRef.current.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      setIsFirstLoad(false);
-    }
     // Fetch videos based on filterBy and set them in the Redux store
     const fetchedVideos = await getVideos(filterBy, token);
     dispatch(setVideos(fetchedVideos));

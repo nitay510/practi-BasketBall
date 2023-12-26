@@ -19,7 +19,6 @@ export const seletedVideoSlice = createSlice({
     reducers: {
         setSelectedVideo: (state, action: PayloadAction<VideoModel>) => {
            
-
             state.video = { ...action.payload }
         },
         setVideoState: (state, action: PayloadAction<boolean>) => {

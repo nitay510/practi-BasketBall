@@ -37,10 +37,8 @@ export const VideoPreview = ({
       if (selectedVideo._id !== videoId) {
         onSetVideo(video);
         //for synchorizition 
-        setTimeout(() => {
           onSetVideoStatus(true);
           videoPlayerRef.play();
-        }, 400);
       } else {
         onSetVideoStatus(true);
         videoPlayerRef.play();

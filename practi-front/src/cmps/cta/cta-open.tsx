@@ -56,24 +56,25 @@ export function CtaOpen({
       ctaBarContainerRef.current.scrollIntoView({ behavior: 'smooth' });
     }, 400);
   };
-
   return (
     <section className="cta-container">
       <Hero />
       <div className="cta-btns">
         <div className="start-cta-open">
-        <div className='bigPracti'>
+          <div className='bigPracti'>
             Practi
           </div>
           <div className='PractiDisc'>
-            <p>מאמן אישי דיגיטלי</p> 
+            {/* Apply styling to control spacing between the paragraphs */}
+            <p style={{ marginBottom: '3px' }}>מאמן אישי דיגיטלי</p> 
             <p>איתך במגרש</p> 
-                     </div>
+          </div>
         </div>
-        <button className="last-drill-btn" onClick={onStartDrill}>
-        המשך אימון
-        </button>
-        {/* Display information about the next drill */}
+        {latestDrillName !== '' && (
+          <button className="last-drill-btn" onClick={onStartDrill}>
+            המשך אימון
+          </button>
+        )}
         <button className="next-drill-btn" onClick={onNextDrillClick}>
           לאימון הבא
         </button>

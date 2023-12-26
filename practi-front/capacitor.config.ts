@@ -5,10 +5,10 @@ const config: CapacitorConfig = {
   appName: 'Practi',
   webDir: 'build',
   server: {
-    androidScheme: 'http',  // Update to 'http'
-    hostname:  'https://practi-web.onrender.com/app',  // Replace with your computer's IP address
+    androidScheme: 'https',  // Update to 'http'
+    hostname:  'practi-web.onrender.com/app',  // Replace with your computer's IP address
     androidPort: 5000, // Add this line with your desired port
-    iosScheme: 'http',  // Update to 'http' if needed for iOS
+    iosScheme: 'https',  // Update to 'http' if needed for iOS
   }
 };
 
