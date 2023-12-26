@@ -70,11 +70,15 @@ export function CtaOpen({
             <p>איתך במגרש</p> 
           </div>
         </div>
-        {latestDrillName !== '' && (
+        {latestDrillName !== '' ? (
           <button className="last-drill-btn" onClick={onStartDrill}>
             המשך אימון
           </button>
-        )}
+        ):
+        <button className="last-drill-btn" onClick={onNextDrillClick}>
+        המשך אימון
+      </button>
+        }
         <button className="next-drill-btn" onClick={onNextDrillClick}>
           לאימון הבא
         </button>

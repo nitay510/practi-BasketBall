@@ -60,7 +60,6 @@ exports.getUser = async (req, res) => {
 exports.authenticateUser = async (req, res) => {
   try {
     const { username} = req.body;
-    console.log("token",username);
     // Find the user in the database
     const user = await userService.getUserByUsername(username);
 
@@ -68,7 +67,6 @@ exports.authenticateUser = async (req, res) => {
       // Check if the provided password matches the user's password
         // Generate a JWT token
         const token = jwt.sign({ username: user.username }, 'your-secret-key');
-        console.log(token);
         // Return the token as the response
         res.json({ token });
     } else {

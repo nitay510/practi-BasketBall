@@ -25,7 +25,6 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
     const storedUsername = localStorage.getItem('userName');
 
     if (storedToken && storedUsername) {
- 
       // If a token is found, set the token and fetch user details
       setToken(storedToken);
       setUsername(storedUsername);
@@ -34,36 +33,41 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
   }, []);
 
   // Function to handle the login process
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent form submission default behavior
+
     const userLogin = {
       username,
     };
 
-    const res = await fetch('https://practi-web.onrender.com/api/Tokens', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userLogin),
-    });
+    try {
+      const res = await fetch('https://practi-web.onrender.com/api/Tokens', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userLogin),
+      });
 
-    if (res.ok) {
-      const newToken = await res.text();
-
-      // Save the token and username in localStorage
-      localStorage.setItem('authToken', newToken);
-      localStorage.setItem('userName', username);
-      setToken(newToken);
-      // Fetch user details using the obtained token
-      fetchUserDetails(newToken, username);
-    } else {
-      alert('אין לך עדיין משתמש, הירשם');
+      if (res.ok) {
+        const newToken = await res.text();
+        // Save the token and username in localStorage
+        localStorage.setItem('authToken', newToken);
+        localStorage.setItem('userName', username);
+        // Await the completion of setToken before proceeding
+        await setToken(newToken);
+        // Fetch user details using the obtained token
+        fetchUserDetails(newToken, username);
+      } else {
+        alert('אין לך עדיין משתמש, הירשם');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
     }
   };
 
   // Function to fetch user details using the authentication token
   const fetchUserDetails = async (token: string, username: string) => {
-
     const getUserResponse = await fetch(`https://practi-web.onrender.com/api/Users/${username}`, {
       method: 'get',
       headers: {
@@ -79,7 +83,6 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
       // Set user details and login status
       setFirstname(fullName);
       setLoginStatus(true);
-
       // Navigate to the app page
       navigate('/app');
     } else {
@@ -90,7 +93,6 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
   // Return the JSX structure of the Login component
   return (
     <div className='loginPage'>
-
       <section className="cta-container">
         <HeroLogin />
         <div className='login'>
@@ -102,18 +104,17 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
           </div>
           {/* Input container for the username */}
           <form onSubmit={handleLogin}>
-          <div className='input-container'>
-            <label htmlFor='username'>מספר טלפון</label>
-            <input
-              type='text'
-              id='username'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-       
-          {/* Button to trigger the login process */}
-          <button onClick={handleLogin}>התחבר</button>
+            <div className='input-container'>
+              <label htmlFor='username'>מספר טלפון</label>
+              <input
+                type='text'
+                id='username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+            {/* Button to trigger the login process */}
+            <button type="submit">התחבר</button>
           </form>
           <p>
             אין לך עדיין חשבון? <Link to='/signup' className="blue-link">לחץ כאן</Link>

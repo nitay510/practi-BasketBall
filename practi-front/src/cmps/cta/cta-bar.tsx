@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 export const CtaBar = (): JSX.Element => {
   const navigate = useNavigate();
-  const [activeLink, setActiveLink] = useState<string>(window.location.pathname);
+  const [activeLink, setActiveLink] = useState<string>('https://practi-web.onrender.com');
 
   const handleNavigation = (path: string) => {
     setActiveLink(path);
