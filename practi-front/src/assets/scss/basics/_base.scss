@@ -1,4 +1,3 @@
-/* styles.css */
 
 * {
     box-sizing: border-box;
@@ -24,15 +23,15 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: calc(92vh); 
+    max-height: 92vh; 
     overflow-y: auto; 
   }
   .content-container-practice {
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: 90vh; 
-    overflow-y: auto; /* Add this to enable scrolling for the content if it exceeds the fixed height */
+    max-height: 88vh; 
+    overflow-y: auto; 
   }
 
 img {
@@ -132,11 +131,6 @@ input {
 .login button:hover {
     background-color: #0056b3;
 }
-.video-details {
-  z-index: 1;
-  position: relative;
-}
-
 /* Style the form labels */
 .video-details label {
   direction: rtl;
