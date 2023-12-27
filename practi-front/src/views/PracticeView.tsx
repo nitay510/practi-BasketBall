@@ -65,9 +65,7 @@ export const PracticeView = ({ token, topic }: practiceViewProps): JSX.Element =
           />
         </div>
       </div>
-      <div className="cta-bar-container">
         <CtaBar />
-      </div>
     </div>
   );
 };
