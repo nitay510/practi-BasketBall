@@ -147,9 +147,9 @@ export const SubVideoPreview = ({
   };
   const rateStyle = `popup-rate ${color}`;
   return (
-    <div className="Subpreview-wrap">
+   
     <article
-      className={`video-preview ${selectedVideo._id === video._id ? 'playing' : ''}`}
+      className={`subvideo-preview ${selectedVideo._id === video._id ? 'playing' : ''}`}
       onClick={() => handleClick(video._id)}
     >
       {isSubmit && (
@@ -203,7 +203,7 @@ export const SubVideoPreview = ({
 </div>
       {detailsComponent}
     </article>
-    </div>
+
   );
 };
 

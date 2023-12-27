@@ -133,7 +133,8 @@ input {
     background-color: #0056b3;
 }
 .video-details {
-    direction: rtl;
+  z-index: 1;
+  position: relative;
 }
 
 /* Style the form labels */
