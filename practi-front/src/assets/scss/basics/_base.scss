@@ -24,14 +24,14 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 10vh); 
+    max-height: calc(100vh - 8vh); 
     overflow-y: auto; /* Add this to enable scrolling for the content if it exceeds the fixed height */
   }
   .content-container-practice {
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 50px); 
+    max-height: calc(100vh -10vh); 
     overflow-y: auto; /* Add this to enable scrolling for the content if it exceeds the fixed height */
   }
 

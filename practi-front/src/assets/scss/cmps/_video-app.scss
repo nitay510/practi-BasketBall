@@ -6,12 +6,11 @@
     .video-player {
             margin-bottom: 10px;
             height: 188.3px;
-            width: 334.8px
+            width: 100%;
     }
 
     .video-list {
         color: white;
-        height: 57vh;
         & :not(:last-child) {
 
             span {
