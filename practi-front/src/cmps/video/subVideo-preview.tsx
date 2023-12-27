@@ -199,9 +199,9 @@ export const SubVideoPreview = ({
             )}
           </button>
         </div>
-      </div>
 
       {detailsComponent}
+      </div>
     </article>
   );
 };

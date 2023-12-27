@@ -49,7 +49,6 @@ export const VideoDetailsDouble = ({ drillId, mission1,title,token,drillName,top
   return (
     <div className="video-details" style={{ direction: 'rtl' }}>
       <form onSubmit={handleSubmit}>
-        <div>
           <div>
             <input
               type="text"
@@ -60,7 +59,7 @@ export const VideoDetailsDouble = ({ drillId, mission1,title,token,drillName,top
               placeholder="שם היריב"
             />
           </div>
-        </div>
+  
 
         <div>
           <input

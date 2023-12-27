@@ -28,10 +28,12 @@ body {
     overflow-y: auto; /* Add this to enable scrolling for the content if it exceeds the fixed height */
   }
   .content-container-practice {
+    position: relative;
+    z-index: 1;
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 15vh); 
+    max-height: 90vh; 
     overflow-y: auto; /* Add this to enable scrolling for the content if it exceeds the fixed height */
   }
 
