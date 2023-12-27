@@ -11,13 +11,13 @@
     justify-content: center;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    z-index: 1040;
+    z-index: 3;
 
     .video-modal {
         position: relative;
         width: auto;
         margin: 1.75rem 0;
-        z-index: 1040;
+        z-index: 3;
         min-height: calc(100% - 3.5rem);
         height: 95vh;
 
@@ -49,10 +49,4 @@
 
     }
 
-}
-
-
-
-.video-container {
-    z-index: 1456156;
 }
