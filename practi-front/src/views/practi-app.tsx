@@ -20,17 +20,15 @@ interface PractiViewProps {
   setTopic: (topic: string) => void;
   loginStatus: boolean;
   setLoginStatus:(isLogin: boolean) => void;
-  isFirstLoad: boolean;
-  setIsFirstLoad:(isLogin: boolean) => void;
 }
 
-export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLoginStatus,isFirstLoad,setIsFirstLoad }: PractiViewProps): JSX.Element => {
+export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLoginStatus }: PractiViewProps): JSX.Element => {
   // State
   const [latestDrillName, setLatestDrillName] = useState('');
   const [nextDrill, setNextDrill] = useState<VideoModel | null>(null);
-  const [nextDrillTopic, setNextDrillTopic] = useState("חדירות");
+  const [nextDrillTopic, setNextDrillTopic] = useState("כדרור");
   const videos = useSelector(selectedVideosState);
-  const [filterBy, setFilterBy] = useState("קליעה");
+  const [filterBy, setFilterBy] = useState("כדרור");
   const selectedVideo = useSelector(selectedVideoState);
   const navBarRef = useRef<null | HTMLDivElement>(null);
   const ctaBarContainerRef = useRef<HTMLDivElement>(null);

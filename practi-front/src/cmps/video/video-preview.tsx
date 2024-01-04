@@ -24,10 +24,12 @@ export const VideoPreview = ({
   }: VideoPreviewProps) => {
     const videoPlayerRef = useSelector(videoElState);
     const navigate = useNavigate();
+    const [isPlaying,setIsPlaying] = useState(false);
   
     // Pause the video and update state when the pause button is clicked
     const onPauseVideo = (): void => {
       onSetVideoStatus(false);
+      setIsPlaying(false);
       videoPlayerRef.pause();
     };
   
@@ -39,10 +41,13 @@ export const VideoPreview = ({
         //for synchorizition 
           onSetVideoStatus(true);
           videoPlayerRef.play();
+          setIsPlaying(true);
       } else {
         onSetVideoStatus(true);
         videoPlayerRef.play();
+        setIsPlaying(true);
       }
+
     };
   
     // Navigate to the practice view when the "התחל אימון" button is clicked
@@ -53,7 +58,15 @@ export const VideoPreview = ({
     // Handle the click event on the video preview, just choose this video.
     const handleClick = (videoId: string) => {
       if (selectedVideo._id !== videoId) {
+        setIsPlaying(false);
+        onSetVideoStatus(false);
         onSetVideo(video);
+        videoPlayerRef.play();
+        const timer = setTimeout(() => {
+          videoPlayerRef.pause();
+        }, 100);
+
+        
       }
     };
   
@@ -65,14 +78,14 @@ export const VideoPreview = ({
         onClick={() => handleClick(video._id)}
       >
         <div className="preview-wrap">
-          <div className="details-container">
-            {/* Show "התחל אימון" button only if the selected video equals the current video */}
-            {video.haveSub && selectedVideo._id === video._id && (
-              <button className="start-drill-btn" onClick={onStartDrill}>
-                התחל אימון
-              </button>
-            )}
-          </div>
+        <div className="details-container">
+        {/* Show "התחל אימון" button only if the selected video equals the current video */}
+        {video.haveSub && selectedVideo._id === video._id && (
+          <button className={`start-drill-btn ${isPlaying ? 'playing' : ''}`} onClick={onStartDrill}>
+            התחל תרגול
+          </button>
+        )}
+      </div>
           <div className="action-heading-container">
             <span>{video.title}</span>
             <button className="play-pause-btn">

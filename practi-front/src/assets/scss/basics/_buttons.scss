@@ -7,16 +7,6 @@ button {
 }
 
 .start-drill-btn {
-    margin-top: 4px;
-    color: #ff6f00;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    padding: 3px;
-}
-.start-drill-btn {
     border: 2px solid #ccc;
     border-radius: 10px;
     color: #fff;
@@ -25,6 +15,12 @@ button {
     /* font-weight: 600; */
     margin-top: 4px;
     padding: 5px;
+
+    &.playing {
+        /* Add styles when the video is playing */
+        background-color: white;
+        color: black;
+      }
 }
 .expendMore {
     color: white;

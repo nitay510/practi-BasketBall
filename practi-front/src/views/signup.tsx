@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Header } from '../cmps/header';
 import { useNavigate } from 'react-router-dom';
-
-export function Signup(): JSX.Element {
+interface LoginProps {
+  setToken: (token: string) => void; // Function to set the authentication token
+  setFirstname: (username: string) => void; // Function to set the user's first name
+  setLoginStatus: (loginStatus: boolean) => void; // Function to set the login status
+}
+export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): JSX.Element {
   const [fullName, setFullName] = useState('');
   const [cityOfLiving, setCityOfLiving] = useState('');
   const [age, setAge] = useState('');
@@ -28,6 +32,28 @@ export function Signup(): JSX.Element {
         break;
     }
   };
+  const fetchUserDetails = async (token: string, username: string) => {
+    const getUserResponse = await fetch(`https://practi-web.onrender.com/api/Users/${username}`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (getUserResponse.ok) {
+      const userJson = await getUserResponse.json();
+      const { fullName } = userJson;
+
+      // Set user details and login status
+      setFirstname(fullName);
+      setLoginStatus(true);
+      // Navigate to the app page
+      navigate('/app');
+    } else {
+      alert(getUserResponse.status);
+    }
+  };
 
   const handleSignup = async () => {
     var newUser = {
@@ -45,11 +71,31 @@ export function Signup(): JSX.Element {
     });
 
     if (res.ok) {
-      navigate('/');
+      const userLogin = {
+        username,
+      };
+      //get the token after signup
+        const res = await fetch('https://practi-web.onrender.com/api/Tokens', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userLogin),
+        });
+          const newToken = await res.text();
+          // Save the token and username in localStorage
+          localStorage.setItem('authToken', newToken);
+          localStorage.setItem('userName', username);
+          // Await the completion of setToken before proceeding
+          await setToken(newToken);
+          // Fetch user details using the obtained token
+          fetchUserDetails(newToken, username);
     } else {
       // Handle error cases
       alert('מספר טלפון כבר נמצא במערכת');
     }
+
+    
   };
   return (
     <div className="signupPage">

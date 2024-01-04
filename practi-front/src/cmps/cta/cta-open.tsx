@@ -72,11 +72,11 @@ export function CtaOpen({
         </div>
         {latestDrillName !== '' ? (
           <button className="last-drill-btn" onClick={onStartDrill}>
-            המשך אימון
+             המשך תרגול
           </button>
         ):
         <button className="last-drill-btn" onClick={onNextDrillClick}>
-        המשך אימון
+           המשך תרגול
       </button>
         }
         <button className="next-drill-btn" onClick={onNextDrillClick}>

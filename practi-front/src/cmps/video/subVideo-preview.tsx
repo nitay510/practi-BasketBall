@@ -103,6 +103,9 @@ export const SubVideoPreview = ({
       onSetVideoStatus(true);
       videoPlayerRef && videoPlayerRef.play();
     }
+    if (currentlyOpenDetails != video._id) {
+      setCurrentlyOpenDetails(video._id);
+    }
   };
 
   let detailsComponent = null;

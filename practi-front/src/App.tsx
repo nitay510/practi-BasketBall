@@ -15,20 +15,19 @@ import { PracticeView } from './views/PracticeView';
 export function App() {
   const [token, setToken] = useState(' ');
   const [firstname, setFirstname] = useState('');
-  const [topic, setTopic]= useState('קליעה')
+  const [topic, setTopic]= useState('כדרור')
   const [loginStatus,setLoginStatus] = useState(false);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
   return (
     <div className="App">
 
       <Routes>
 
-        <Route path="/app" element={<PractiApp token={token} firstname= {firstname} topic={topic} setTopic={setTopic} loginStatus={loginStatus} setLoginStatus={setLoginStatus} isFirstLoad={isFirstLoad} setIsFirstLoad={setIsFirstLoad}/>} />
+        <Route path="/app" element={<PractiApp token={token} firstname= {firstname} topic={topic} setTopic={setTopic} loginStatus={loginStatus} setLoginStatus={setLoginStatus}/>} />
         <Route path="/PracticeView/:Drill" element={<PracticeView token={token} topic={topic} />} />
         <Route path="/history" element={<HistoryPage token={token} setTopic={setTopic}  />} />
         <Route path="/historyFriends" element={<HistoryPageDouble token={token} setTopic={setTopic} />} />
          <Route path="/" element={<Login setToken={setToken} setFirstname= {setFirstname} setLoginStatus= {setLoginStatus}/>} /> 
-         <Route path="/signup" element={<Signup />} /> 
+         <Route path="/signup" element={<Signup setToken={setToken} setFirstname= {setFirstname} setLoginStatus= {setLoginStatus} />} /> 
       </Routes>
     </div>
   );

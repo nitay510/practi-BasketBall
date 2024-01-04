@@ -2,8 +2,7 @@ const videos = {
     
     'באמפ יורו סטפ': [
         { _id: 'a150', title: 'תרגיל מול מגן דמיוני', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686167/pract-subVideos/%D7%91%D7%90%D7%9E%D7%A4_%D7%99%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4_-_%D7%99%D7%97%D7%99%D7%93_1_w1lcdu.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:90},
-        { _id: 'c150', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686128/pract-subVideos/%D7%91%D7%90%D7%9E%D7%A4_%D7%99%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4_-_%D7%96%D7%95%D7%92%D7%99_r7plma.mp4', mission1:'אחד על אחד- סל בבאמפ יורו-סטפ שווה 4 נק',single:true,haveForm:true},
-
+        { _id: 'c150', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686128/pract-subVideos/%D7%91%D7%90%D7%9E%D7%A4_%D7%99%D7%95%D7%A8%D7%95%D7%A1%D7%98%D7%A4_-_%D7%96%D7%95%D7%92%D7%99_r7plma.mp4', mission1:'אחד על אחד- סל בבאמפ יורו-סטפ שווה 4 נק',single:false,haveForm:true},
     ],
     'אין אאוט': [
         { _id: 'a151', title: 'אין אאוט לקליעה', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1702547651/pract-subVideos/%D7%90%D7%99%D7%A0%D7%90%D7%90%D7%95%D7%98_%D7%99%D7%97%D7%99%D7%93_1_snwaqp.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:60},
