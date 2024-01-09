@@ -29,7 +29,7 @@ const videos = {
 
     ],
     'חדירה מול מגן גבוה': [
-        { _id: 'a155', title: 'חדירה מהמקום', url: 'https://www.youtube.com/watch?v=CbJ91TrOFKI', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:90},
+        { _id: 'a155', title: 'חדירה מהמקום', url: 'https://www.youtube.com/embed/CbJ91TrOFKI?si=s3Deekg1l5gOd20e', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:90},
         { _id: 'b155', title: 'חדירה למעבר טבעת', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686393/pract-subVideos/%D7%97%D7%93%D7%99%D7%A8%D7%94_%D7%9E%D7%95%D7%9C_%D7%9E%D7%92%D7%9F_%D7%92%D7%91%D7%95%D7%94_-_%D7%99%D7%97%D7%99%D7%93_2_zn6goh.mp4', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:90},
         { _id: 'd155', title: 'תרגיל זוגי', url: 'https://res.cloudinary.com/dkkwzdeua/video/upload/v1701686272/pract-subVideos/%D7%97%D7%93%D7%99%D7%A8%D7%94_%D7%9E%D7%95%D7%9C_%D7%9E%D7%92%D7%9F_%D7%92%D7%91%D7%95%D7%94_-_%D7%96%D7%95%D7%92%D7%99_rx8kha.mp4',mission1:'אחד על אחד-סל מתוך הסמיילי שווה 3 נק',single:false,haveForm:true },
 

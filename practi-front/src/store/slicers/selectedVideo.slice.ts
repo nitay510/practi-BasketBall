@@ -24,7 +24,7 @@ export const seletedVideoSlice = createSlice({
         setVideoState: (state, action: PayloadAction<boolean>) => {
             state.video = { ...state.video, isPlaying: action.payload }
         },
-        setVideoPlayerRef: (state, action: PayloadAction<HTMLVideoElement>) => {
+        setVideoPlayerRef: (state, action: PayloadAction<HTMLIFrameElement>) => {
             state.videoPlayerRef = action.payload
         }
     },

@@ -11,7 +11,7 @@ export const VideoPlayerLi = ({ onSetVideoStatus }: VideoPlayerProps) => {
 
     const selectedVideo = useSelector(selectedVideoState)
 
-    const videoRef = useRef<HTMLVideoElement>()
+    const videoRef = useRef<HTMLIFrameElement>(); // Change the type to HTMLIFrameElement
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(setVideoPlayerRef(videoRef.current))
@@ -19,14 +19,15 @@ export const VideoPlayerLi = ({ onSetVideoStatus }: VideoPlayerProps) => {
 
     return (
         <div className='video-player'>
-            <video
-                src={selectedVideo.url}
-                className="video-player"
-                controls
-                onPlay={() => onSetVideoStatus(true)}
-                onPause={() => onSetVideoStatus(false)}
-                ref={videoRef}
-            />
-        </div>
+       <iframe
+        title="YouTube Video"
+        width="100%"
+        height="100%"
+        src={selectedVideo.url}
+        frameBorder="0"
+        allowFullScreen
+        ref={(ref) => (videoRef.current = ref)}
+      />
+    </div>
     );
 };
