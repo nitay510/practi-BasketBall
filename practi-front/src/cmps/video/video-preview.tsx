@@ -35,14 +35,15 @@ export const VideoPreview = ({
   
     // Play the video and update state when the play button is clicked
     const onPlayVideo = async (videoId: string) => {
-        //if the video i try to play  isn't the current video
       if (selectedVideo._id !== videoId) {
         onSetVideo(video);
-        //for synchorizition 
+        setTimeout(() => {
           onSetVideoStatus(true);
           videoPlayerRef.play();
           setIsPlaying(true);
-      } else {
+        }, 1000);
+        //if the video i try to play  isn't the current video
+       } else {
         onSetVideoStatus(true);
         videoPlayerRef.play();
         setIsPlaying(true);
@@ -58,15 +59,7 @@ export const VideoPreview = ({
     // Handle the click event on the video preview, just choose this video.
     const handleClick = (videoId: string) => {
       if (selectedVideo._id !== videoId) {
-        setIsPlaying(false);
-        onSetVideoStatus(false);
         onSetVideo(video);
-        videoPlayerRef.play();
-        const timer = setTimeout(() => {
-          videoPlayerRef.pause();
-        }, 100);
-
-        
       }
     };
   

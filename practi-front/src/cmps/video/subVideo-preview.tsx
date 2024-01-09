@@ -98,13 +98,13 @@ export const SubVideoPreview = ({
       setTimeout(() => {
         onSetVideoStatus(true);
         videoPlayerRef && videoPlayerRef.play();
-      }, 2000);
+        if (currentlyOpenDetails != video._id) {
+          setCurrentlyOpenDetails(video._id);
+        }
+      }, 1000);
     } else {
       onSetVideoStatus(true);
       videoPlayerRef && videoPlayerRef.play();
-    }
-    if (currentlyOpenDetails != video._id) {
-      setCurrentlyOpenDetails(video._id);
     }
   };
 
