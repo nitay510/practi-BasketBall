@@ -23,10 +23,10 @@ export const VideoPlayerLi = ({ onSetVideoStatus }: VideoPlayerProps) => {
     height: "100%",
     width: "100%",
     playerVars: {
-      autoplay: 0, // Set to 1 for autoplay
+      autoplay: 0,
+      fullscreen: 1, // Enable fullscreen mode
     },
   };
-
   const onReady = (event: any) => {
     // Save the player reference in the Redux store
     dispatch(setVideoPlayerRef(event.target));
