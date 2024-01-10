@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux';
 import Confetti from 'react-dom-confetti';
 import { MdClose } from 'react-icons/md';
 import { useSelector } from "react-redux";
@@ -11,6 +12,7 @@ import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { VideoDetails } from "./video-details";
 import { VideoDetailsDouble } from "./video-detailsDouble";
 // state
+import { stopVideo,startVideo } from '../../store/slicers/selctedSubVideo.slice';
 import { videoElState } from "../../store/store";
 interface SubVideoPreviewProps {
   video: subVideoModel;
@@ -46,7 +48,7 @@ export const SubVideoPreview = ({
   const [submitMessageNoHighScore, setSubmitMessageNoHighScore] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const videoPlayerRef = useSelector(videoElState);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     if (isSubmit) {
       if (brokenRecord) {
@@ -82,7 +84,7 @@ export const SubVideoPreview = ({
 
   const onPauseVideo = (): void => {
     onSetVideoStatus(false);
-    videoPlayerRef && videoPlayerRef.pause();
+    dispatch(stopVideo());
   };
   const onToggleDetails = () => {
     if (currentlyOpenDetails === video._id) {
@@ -97,14 +99,14 @@ export const SubVideoPreview = ({
       onSetVideo(video);
       setTimeout(() => {
         onSetVideoStatus(true);
-        videoPlayerRef && videoPlayerRef.play();
+        dispatch(startVideo());
         if (currentlyOpenDetails != video._id) {
           setCurrentlyOpenDetails(video._id);
         }
       }, 1000);
     } else {
       onSetVideoStatus(true);
-      videoPlayerRef && videoPlayerRef.play();
+      dispatch(startVideo());
     }
   };
 
