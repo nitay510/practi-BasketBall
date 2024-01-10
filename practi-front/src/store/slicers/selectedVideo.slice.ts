@@ -18,18 +18,27 @@ export const seletedVideoSlice = createSlice({
     initialState,
     reducers: {
         setSelectedVideo: (state, action: PayloadAction<VideoModel>) => {
-           
-            state.video = { ...action.payload }
+            state.video = { ...action.payload };
         },
         setVideoState: (state, action: PayloadAction<boolean>) => {
-            state.video = { ...state.video, isPlaying: action.payload }
+            state.video = { ...state.video, isPlaying: action.payload };
         },
-        setVideoPlayerRef: (state, action: PayloadAction<HTMLIFrameElement>) => {
-            state.videoPlayerRef = action.payload
-        }
+        setVideoPlayerRef: (state, action: PayloadAction<any>) => {
+            state.videoPlayerRef = action.payload;
+        },
+        startVideo: (state) => {
+            if (state.videoPlayerRef) {
+                state.videoPlayerRef.playVideo();
+            }
+        },
+        stopVideo: (state) => {
+            if (state.videoPlayerRef) {
+                state.videoPlayerRef.pauseVideo();
+            }
+        },
     },
 })
 
-export const { setSelectedVideo, setVideoState, setVideoPlayerRef } = seletedVideoSlice.actions
+export const { setSelectedVideo, setVideoState, setVideoPlayerRef, startVideo, stopVideo } = seletedVideoSlice.actions
 
-export default seletedVideoSlice.reducer
+export default seletedVideoSlice.reducer;

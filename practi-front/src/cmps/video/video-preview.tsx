@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import VideoModel from '../../Models/VideoModel';
-import { MdSportsBasketball } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
+
+import { stopVideo,startVideo } from '../../store/slicers/selectedVideo.slice';
+
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 import { videoElState } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
@@ -24,31 +27,29 @@ export const VideoPreview = ({
   }: VideoPreviewProps) => {
     const videoPlayerRef = useSelector(videoElState);
     const navigate = useNavigate();
-    const [isPlaying,setIsPlaying] = useState(false);
+    const dispatch = useDispatch(); // Add this line to get the dispatch function
   
-    // Pause the video and update state when the pause button is clicked
+    const [isPlaying, setIsPlaying] = useState(false);
+  
     const onPauseVideo = (): void => {
       onSetVideoStatus(false);
       setIsPlaying(false);
-      videoPlayerRef.pause();
+      dispatch(stopVideo()); // Dispatch the stopVideo action
     };
   
-    // Play the video and update state when the play button is clicked
     const onPlayVideo = async (videoId: string) => {
       if (selectedVideo._id !== videoId) {
         onSetVideo(video);
         setTimeout(() => {
           onSetVideoStatus(true);
-          videoPlayerRef.play();
+          dispatch(startVideo()); // Dispatch the startVideo action
           setIsPlaying(true);
         }, 1000);
-        //if the video i try to play  isn't the current video
-       } else {
+      } else {
         onSetVideoStatus(true);
-        videoPlayerRef.play();
+        dispatch(startVideo()); // Dispatch the startVideo action
         setIsPlaying(true);
       }
-
     };
   
     // Navigate to the practice view when the "התחל אימון" button is clicked
