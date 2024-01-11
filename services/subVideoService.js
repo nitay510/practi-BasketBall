@@ -94,7 +94,7 @@ const videos = {
         { _id: 'b165', title: 'תרגיל  מסכם', url: 'iYktyE8TEnU', mission1:'20 זריקות מחוץ לקשת',tries:20,single:true,haveForm:true,target:40},
         { _id: 'c165', title: 'תרגיל זוגי', url: 'rNO1pykrofw', mission1:'אחד על אחד- סל בסטפ בק ארוך שווה 4 נק',single:false,haveForm:true},
     ],
-    'זריקת עונשין': [
+    'טקס זריקת עונשין': [
         { _id: 'b166', title: 'עונשין בדופק גבוה', url: 'Z7KAZR1_WCE',mission1:'20 זריקות בדופק גבוה',tries:20,single:true,haveForm:true,target:80 },
         { _id: 'a166', title: 'אתגר עונשין', url: '35rEDunfbUo',mission1:' 20 זריקות בשמאל + 20 זריקות בימין',tries:20,single:true,haveForm:false },
         { _id: 'c166', title: 'תרגיל זוגי', url: 'krH6wYaHb7M',mission1:'50 זריקות כל אחד- החלפת סלים אחרי כל זריקה',single:false,haveForm:true },
@@ -105,7 +105,7 @@ const videos = {
         { _id: 'c167', title: 'תרגיל זוגי', url: 'ra0dOGWTDvo',mission1:' אחד על אחד אמריקאי-סל מסבסוב בפוסט שווה 2 נק',single:false,haveForm:true },
 
     ],
-    'מעבר טבעת בפוסט-אפ': [
+    'צעד וחצי בפוסט-אפ': [
         { _id: 'a168', title: 'סיומת אחרי באמפים', url: 'LAnG5nWOHyU', mission1:'10 זריקות מכל צד',tries:20,single:true,haveForm:true,target:90},
         { _id: 'b168', title: 'סיומת רחוקה', url: 'qkCVZaoSbr4',mission1:'20 זריקות בדופק גבוה',tries:20,single:true,haveForm:true,target:80 },
         { _id: 'c168', title: 'תרגיל זוגי', url: 'DHoXs3OJo4Y', mission1:' אחד על אחד אמריקאי-סל במעבר טבעת בפוסט שווה 2 נק',single:false,haveForm:true },
