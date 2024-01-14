@@ -32,6 +32,7 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLo
   const selectedVideo = useSelector(selectedVideoState);
   const navBarRef = useRef<null | HTMLDivElement>(null);
   const ctaBarContainerRef = useRef<HTMLDivElement>(null);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

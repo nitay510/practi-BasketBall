@@ -67,7 +67,7 @@ const videos = {
     ],
     'כדרור מול לחץ מגרש שלם': [
 
-        { _id: 'a161', title: 'שחרור מלחץ לליאפ', url: 'V4iI8_-aoM0', mission1:'5 מגרשים עם הטעייה כל כמה שניות',tries:10,single:true,haveForm:true,target:100},
+        { _id: 'a161', title: 'שחרור מלחץ לליאפ', url: '46c-USSWpsA', mission1:'5 מגרשים עם הטעייה כל כמה שניות',tries:10,single:true,haveForm:true,target:100},
         { _id: 'b161', title: 'תרגיל זוגי', url: 'MwSrFj9aQWg', mission1:'אחד על אחד תחת לחץ מגרש שלם',single:false,haveForm:true },
 
     ],

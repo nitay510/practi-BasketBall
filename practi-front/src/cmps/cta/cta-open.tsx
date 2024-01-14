@@ -5,6 +5,7 @@ import VideoModel from '../../Models/VideoModel';
 import { useNavigate } from 'react-router-dom';
 import { videoElState } from '../../store/store';
 import { getVideos } from '../video/functions';
+import { startVideo } from '../../store/slicers/selectedVideo.slice';
 import { setVideos } from '../../store/slicers/videos.slice';
 import { setSelectedVideo, setVideoState } from '../../store/slicers/selectedVideo.slice';
 
@@ -39,7 +40,7 @@ export function CtaOpen({
 
   const loadVideosForLastDrill = async (filterBy: string) => {
     const videos = await getVideos(filterBy, token);
-    dispatch(setVideos(videos));
+    dispatch( setVideos(videos));
   };
 
   const onStartDrill = () => {
@@ -50,11 +51,11 @@ export function CtaOpen({
     setTopic(nextDrillTopic);
     await loadVideosForLastDrill(nextDrillTopic);
     dispatch(setSelectedVideo(nextDrill));
+    ctaBarContainerRef.current.scrollIntoView({ behavior: 'smooth' });
     setTimeout(() => {
       setVideoState(true);
-      videoPlayerRef.play();
-      ctaBarContainerRef.current.scrollIntoView({ behavior: 'smooth' });
-    }, 400);
+      dispatch(startVideo()); // Dispatch the startVideo action
+    }, 1500);
   };
   return (
     <section className="cta-container">

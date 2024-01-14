@@ -29,11 +29,10 @@ export const VideoPreview = ({
     const navigate = useNavigate();
     const dispatch = useDispatch(); // Add this line to get the dispatch function
   
-    const [isPlaying, setIsPlaying] = useState(false);
   
     const onPauseVideo = (): void => {
       onSetVideoStatus(false);
-      setIsPlaying(false);
+ 
       dispatch(stopVideo()); // Dispatch the stopVideo action
     };
   
@@ -43,12 +42,10 @@ export const VideoPreview = ({
         setTimeout(() => {
           onSetVideoStatus(true);
           dispatch(startVideo()); // Dispatch the startVideo action
-          setIsPlaying(true);
-        }, 1000);
+        }, 1500);
       } else {
         onSetVideoStatus(true);
         dispatch(startVideo()); // Dispatch the startVideo action
-        setIsPlaying(true);
       }
     };
   
@@ -75,7 +72,7 @@ export const VideoPreview = ({
         <div className="details-container">
         {/* Show "התחל אימון" button only if the selected video equals the current video */}
         {video.haveSub && selectedVideo._id === video._id && (
-          <button className={`start-drill-btn ${isPlaying ? 'playing' : ''}`} onClick={onStartDrill}>
+          <button className={`start-drill-btn ${selectedVideo.isPlaying ?  'playing' : ''}`} onClick={onStartDrill}>
             התחל תרגול
           </button>
         )}

@@ -18,13 +18,13 @@ export const VideoPlayerLi = ({ onSetVideoStatus }: VideoPlayerProps) => {
     dispatch(setVideoState(isPlaying));
     onSetVideoStatus(isPlaying);
   };
-
   const opts = {
     height: "100%",
     width: "100%",
     playerVars: {
       autoplay: 0,
       fullscreen: 1, // Enable fullscreen mode
+      suggestedQuality: "hd720", // Set default quality to 720p
     },
   };
   const onReady = (event: any) => {

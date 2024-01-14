@@ -103,16 +103,20 @@ export const SubVideoPreview = ({
         if (currentlyOpenDetails != video._id) {
           setCurrentlyOpenDetails(video._id);
         }
-      }, 1000);
+      },1500);
     } else {
       onSetVideoStatus(true);
       dispatch(startVideo());
+      if (currentlyOpenDetails != video._id) {
+        setCurrentlyOpenDetails(video._id);
+      }
     }
+  
   };
 
   let detailsComponent = null;
 
-  if (!isSubmit && currentlyOpenDetails === video._id) {
+  if (!isSubmit && currentlyOpenDetails === video._id  && video.haveForm) {
     if (video.single === true) {
       detailsComponent = (
         <VideoDetails

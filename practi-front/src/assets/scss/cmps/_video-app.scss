@@ -4,13 +4,13 @@
     margin: 0 auto;
 
     .video-player {
-            margin-bottom: 10px;
-            height: 188.3px;
-            width: 100%;
-            &.fullscreen {
-                height: 90vh;
-                width:100vh;
-            }
+        margin-bottom: 10px;
+        width: 100%;
+      
+        iframe {
+          width: 100%;
+          height: 100%;
+        }
     }
 
     .video-list {
