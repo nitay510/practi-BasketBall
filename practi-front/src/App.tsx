@@ -7,6 +7,7 @@ import { Signup } from './views/signup';
 import HistoryPage from "./views/historyPage"
 import HistoryPageDouble from "./views/historyWithFriend"
  import { Login } from './views/login';
+ import {PrivacyPage} from './views/privacy';
 import { PractiApp } from './views/practi-app';
 import { PracticeView } from './views/PracticeView';
 
@@ -24,6 +25,7 @@ export function App() {
 
         <Route path="/app" element={<PractiApp token={token} firstname= {firstname} topic={topic} setTopic={setTopic} loginStatus={loginStatus} setLoginStatus={setLoginStatus}/>} />
         <Route path="/PracticeView/:Drill" element={<PracticeView token={token} topic={topic} />} />
+        <Route path="/privacy" element={<PrivacyPage></PrivacyPage>}> </Route>
         <Route path="/history" element={<HistoryPage token={token} setTopic={setTopic}  />} />
         <Route path="/historyFriends" element={<HistoryPageDouble token={token} setTopic={setTopic} />} />
          <Route path="/" element={<Login setToken={setToken} setFirstname= {setFirstname} setLoginStatus= {setLoginStatus}/>} /> 

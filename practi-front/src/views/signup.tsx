@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Header } from '../cmps/header';
+import { HeaderTwo } from '../cmps/headertwo';
 import { useNavigate } from 'react-router-dom';
 interface LoginProps {
   setToken: (token: string) => void; // Function to set the authentication token
@@ -10,6 +10,7 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
   const [fullName, setFullName] = useState('');
   const [cityOfLiving, setCityOfLiving] = useState('');
   const [age, setAge] = useState('');
+  const [privacyChecked, setPrivacyChecked] = useState(false);
   const [username, setUsername] = useState('');
   const navigate = useNavigate();
 
@@ -31,6 +32,12 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
       default:
         break;
     }
+  };
+  const handlePrivacyCheck = () => {
+    setPrivacyChecked(!privacyChecked);
+  };
+  const handlePrivacyPolicyClick = () => {
+    navigate('/privacy');
   };
   const fetchUserDetails = async (token: string, username: string) => {
     const getUserResponse = await fetch(`https://practi-web.onrender.com/api/Users/${username}`, {
@@ -56,6 +63,10 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
   };
 
   const handleSignup = async () => {
+    if (!privacyChecked) {
+      alert('נא לאשר מידיניות פרטיות');
+      return;
+    }
     var newUser = {
       fullName: fullName,
       cityOfLiving: cityOfLiving,
@@ -99,6 +110,7 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
   };
   return (
     <div className="signupPage">
+         <HeaderTwo/>
       <section className="signup-container">
         <div className="signup-form">
           <h2>הרשמה</h2>
@@ -150,6 +162,22 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
               required
             />
             <label htmlFor="username">מספר טלפון</label>
+          </div>
+          <div className="privacy">
+            <label>
+              <input
+                type="checkbox"
+                checked={privacyChecked}
+                onChange={handlePrivacyCheck}
+              />
+            , אני מאשר שקראתי את
+              <span
+                className="green"
+                onClick={handlePrivacyPolicyClick}
+              >
+                תנאי הפרטיות
+              </span>
+            </label>
           </div>
           <button className="signup-button" onClick={handleSignup}>
             הרשמה

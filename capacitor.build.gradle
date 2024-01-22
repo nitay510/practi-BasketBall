@@ -1,0 +1,3 @@
+// capacitor.build.gradle
+
+apply from: project(':capacitor-android').file('capacitor.build.gradle')
