@@ -1,4 +1,3 @@
-// capacitor.config.ts
 
 import { CapacitorConfig } from '@capacitor/cli';
 
@@ -12,21 +11,27 @@ const config: CapacitorConfig = {
     androidPort: 5000,
     iosScheme: 'https',
   },
-  android: {
-    debug: {
-      keystore: {
-        path: '/mnt/c/Users/yuval/Documents/GitHub/practi-BasketBall/practi-front/my-release-key.keystore',
-        password: 'nitay511',
-        keyAlias: 'my-key-alias',
-        keyPassword: 'nitay511',
-      },
+  cordova: {
+    preferences: {
+      Fullscreen: 'true',
+      'AndroidLaunchMode': 'singleTask', // Add this line
     },
-    release: {
-      keystore: {
-        path: '/mnt/c/Users/yuval/Documents/GitHub/practi-BasketBall/practi-front/my-release-key.keystore',
-        password: 'nitay511',
-        keyAlias: 'my-key-alias',
-        keyPassword: 'nitay511',
+    android: {
+      debug: {
+        keystore: {
+          path: '/mnt/c/Users/yuval/Documents/GitHub/practi-BasketBall/practi-front/my-release-key.keystore',
+          password: 'nitay511',
+          keyAlias: 'my-key-alias',
+          keyPassword: 'nitay511',
+        },
+      },
+      release: {
+        keystore: {
+          path: '/mnt/c/Users/yuval/Documents/GitHub/practi-BasketBall/practi-front/my-release-key.keystore',
+          password: 'nitay511',
+          keyAlias: 'my-key-alias',
+          keyPassword: 'nitay511',
+        },
       },
     },
   },

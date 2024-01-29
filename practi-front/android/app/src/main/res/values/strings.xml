@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Practi</string>
+    <string name="title_activity_main">Practi</string>
+    <string name="package_name">com.Practi</string>
+    <string name="custom_url_scheme">com.Practi</string>
+</resources>
