@@ -22,7 +22,16 @@ function HistoryPage({ token, setTopic }: HistoryPageProps) {
   const [drills, setDrills] = useState<DrillModel[]>([]);
   const [category, setCategory] = useState('קליעה');
   const navigate = useNavigate();
+  const [contentContainerHeight, setContentContainerHeight] = useState<string>('');
 
+  
+  useEffect(() => {
+    // Detect if the app is running as a standalone app or in a browser
+    const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches;
+
+    // Set the content container height based on the environment
+    setContentContainerHeight(isStandaloneApp ? '93vh' : '82vh');
+  }, []);
   useEffect(() => {
     loadVideos();
     getDrills();
@@ -58,7 +67,7 @@ function HistoryPage({ token, setTopic }: HistoryPageProps) {
 
   return (
     <div className="history-page">
-      <div className='content-container-practice'>
+      <div className='content-container' style={{ maxHeight: contentContainerHeight }}>
         <HeaderTwo />
         <NavBarHistory
           category={category}

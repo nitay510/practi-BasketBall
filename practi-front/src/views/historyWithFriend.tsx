@@ -53,6 +53,16 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
   // Extract unique opponents
   const uniqueOpponents = Array.from(new Set(drills.map((drill) => drill.opponentName)));
   const [expandedOpponent, setExpandedOpponent] = useState<string | null>(null);
+  const [contentContainerHeight, setContentContainerHeight] = useState<string>('');
+
+  
+  useEffect(() => {
+    // Detect if the app is running as a standalone app or in a browser
+    const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches;
+
+    // Set the content container height based on the environment
+    setContentContainerHeight(isStandaloneApp ? '93vh' : '82vh');
+  }, []);
 
   // Toggle expanded state for an opponent
   const toggleOpponent = (opponent: string) => {
@@ -105,7 +115,7 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
 
   return (
     <div className="history-page">
-      <div className='content-container-practice'>
+      <div className='content-container' style={{ maxHeight: contentContainerHeight }}>
         <HeaderTwo />
 
         {drills.length > 0 ? (

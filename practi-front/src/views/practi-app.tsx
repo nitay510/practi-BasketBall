@@ -22,7 +22,7 @@ interface PractiViewProps {
   setLoginStatus:(isLogin: boolean) => void;
 }
 
-export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLoginStatus }: PractiViewProps): JSX.Element => {
+export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus, setLoginStatus }: PractiViewProps): JSX.Element => {
   // State
   const [latestDrillName, setLatestDrillName] = useState('');
   const [nextDrill, setNextDrill] = useState<VideoModel | null>(null);
@@ -32,7 +32,8 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLo
   const selectedVideo = useSelector(selectedVideoState);
   const navBarRef = useRef<null | HTMLDivElement>(null);
   const ctaBarContainerRef = useRef<HTMLDivElement>(null);
-  
+  const [contentContainerHeight, setContentContainerHeight] = useState<string>('');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -45,8 +46,7 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLo
     };
 
     fetchData();
-  }, [filterBy, token,]);
-
+  }, [filterBy, token]);
 
   useEffect(() => {
     // Redirect to login page when loginStatus is false
@@ -81,7 +81,7 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLo
         'Authorization': `Bearer ${token}`
       }
     });
-    if (getUserResponse.ok&&getUserResponse.json!=null) {
+    if (getUserResponse.ok && getUserResponse.json != null) {
       const userJson = await getUserResponse.json();
       const { drillName, topic } = userJson;
       setLatestDrillName(drillName);
@@ -99,13 +99,20 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLo
     }
   };
 
+  useEffect(() => {
+    // Detect if the app is running as a standalone app or in a browser
+    const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches;
+
+    // Set the content container height based on the environment
+    setContentContainerHeight(isStandaloneApp ? '93vh' : '82vh');
+  }, []);
+
   if (!videos.length) return <></>;
 
   return (
     <div className='practi-app'>
-      <div className='content-container'>
-        <Header 
-        setLoginStatus={setLoginStatus}/>
+      <div className='content-container' style={{ maxHeight: contentContainerHeight }}>
+        <Header setLoginStatus={setLoginStatus} />
         <CtaOpen
           token={token}
           firstname={firstname}
@@ -133,7 +140,7 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus,setLo
         </section>
       </div>
       <div className="cta-bar-container">
-        <CtaBar  />
+        <CtaBar />
       </div>
     </div>
   );

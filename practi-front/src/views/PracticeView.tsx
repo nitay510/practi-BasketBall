@@ -25,7 +25,16 @@ export const PracticeView = ({ token, topic }: practiceViewProps): JSX.Element =
   const videoRef = useRef<null | HTMLVideoElement>();
   const dispatch = useDispatch();
   const { Drill } = useParams();
+  const [contentContainerHeight, setContentContainerHeight] = useState<string>('');
 
+  
+  useEffect(() => {
+    // Detect if the app is running as a standalone app or in a browser
+    const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches;
+
+    // Set the content container height based on the environment
+    setContentContainerHeight(isStandaloneApp ? '93vh' : '82vh');
+  }, []);
   // Load videos when the component mounts
   useEffect(() => {
     const loadVideos = async () => {
@@ -48,7 +57,7 @@ export const PracticeView = ({ token, topic }: practiceViewProps): JSX.Element =
 
   return (
     <div className='practi-app'>
-      <div className='content-container-practice'>
+        <div className='content-container' style={{ maxHeight: contentContainerHeight }}>
         <HeaderTwo />
         <div className='video-container'>
           <h1 className="big-title">{Drill}</h1>
