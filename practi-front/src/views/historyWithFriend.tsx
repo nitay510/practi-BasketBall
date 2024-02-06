@@ -57,13 +57,13 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
 
   
   useEffect(() => {
-    // Detect if the app is running as a standalone app or in a browser
-    const isStandaloneApp = window.matchMedia('(display-mode: standalone)').matches;
-
-    // Set the content container height based on the environment
-    setContentContainerHeight(isStandaloneApp ? '93vh' : '82vh');
+    // Check if the app is running in fullscreen mode
+  const isFullscreen = window.innerHeight + 100 < window.outerHeight ;
+   alert(window.outerHeight);
+   alert(window.innerHeight);
+    // Set the content container height based on whether the app is in fullscreen mode
+    setContentContainerHeight(isFullscreen ? '82vh' : '93vh');
   }, []);
-
   // Toggle expanded state for an opponent
   const toggleOpponent = (opponent: string) => {
     setExpandedOpponent(expandedOpponent === opponent ? null : opponent);
@@ -117,7 +117,6 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
     <div className="history-page">
       <div className='content-container' style={{ maxHeight: contentContainerHeight }}>
         <HeaderTwo />
-
         {drills.length > 0 ? (
           <div className="drill-list">
             {uniqueOpponents.map((opponent) => (
