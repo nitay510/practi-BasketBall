@@ -101,8 +101,8 @@ export const PractiApp = ({ token, firstname, setTopic, topic, loginStatus, setL
 
   useEffect(() => {
     // Check if the app is running in fullscreen mode
-  const isFullscreen = window.innerHeight + 100 < window.outerHeight ;
-   alert(window.outerHeight);
+  const isFullscreen = window.innerHeight  < window.screen.height ;
+   alert(window.screen.height);
    alert(window.innerHeight);
     // Set the content container height based on whether the app is in fullscreen mode
     setContentContainerHeight(isFullscreen ? '82vh' : '93vh');

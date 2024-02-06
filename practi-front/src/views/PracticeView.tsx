@@ -30,7 +30,8 @@ export const PracticeView = ({ token, topic }: practiceViewProps): JSX.Element =
   
   useEffect(() => {
     // Check if the app is running in fullscreen mode
-  const isFullscreen = window.innerHeight + 100 < window.outerHeight ;
+  const isFullscreen = window.innerHeight < window.screen.height ;
+  alert( window.screen.height);
    alert(window.outerHeight);
    alert(window.innerHeight);
     // Set the content container height based on whether the app is in fullscreen mode
