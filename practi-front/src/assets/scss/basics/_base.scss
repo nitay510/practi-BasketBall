@@ -23,14 +23,14 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: 82vh; 
+    max-height: 93vh; 
     overflow-y: auto; 
   }
   .content-container-practice {
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: 82vh; 
+    max-height: 93vh; 
     overflow-y: auto; 
   }
 
@@ -301,8 +301,10 @@ input {
   text-align: right; /* Align text to the right */
 }
 
-.custom-input-container input {
-  width: calc(100% - 30px);
+
+
+.custom-input-container input{
+  width: 100%;
   padding: 15px;
   font-size: 16px;
   border: none;
@@ -326,7 +328,7 @@ input {
 }
 
 .custom-input-container input:focus + label,
-.custom-input-container input:not(:placeholder-shown) + label {
+.custom-input-container input:not(:placeholder-shown) + label{
   font-size: 14px;
   top: 5px;
   color: #fff;
