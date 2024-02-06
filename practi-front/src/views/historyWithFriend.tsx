@@ -58,9 +58,7 @@ function HistoryPageDouble({ token,setTopic }: HistoryPageDoubleProps) {
   
   useEffect(() => {
     // Check if the app is running in fullscreen mode
-  const isFullscreen = window.innerHeight + 100 < window.outerHeight ;
-   alert(window.outerHeight);
-   alert(window.innerHeight);
+  const isFullscreen = window.innerHeight + 120 < window.screen.height ;
     // Set the content container height based on whether the app is in fullscreen mode
     setContentContainerHeight(isFullscreen ? '82vh' : '93vh');
   }, []);
