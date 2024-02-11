@@ -106,7 +106,7 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
       alert('מספר טלפון כבר נמצא במערכת');
     }
 
-    
+
   };
   return (
     <div className="signupPage">
@@ -126,7 +126,7 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
             />
             <label htmlFor="fullName">שם מלא</label>
           </div>
-          
+
           <div className="custom-input-container">
             <input
               type="text"
@@ -165,18 +165,18 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
           </div>
           <div className="privacy">
             <label>
-              <input
-                type="checkbox"
-                checked={privacyChecked}
-                onChange={handlePrivacyCheck}
-              />
-            , אני מאשר שקראתי את
-              <span
-                className="green"
-                onClick={handlePrivacyPolicyClick}
-              >
-                תנאי הפרטיות
-              </span>
+            <input
+    type="checkbox"
+    checked={privacyChecked}
+    onChange={handlePrivacyCheck}
+/>
+<span>אני מאשר שקראתי את </span>
+<span
+    className="green"
+    onClick={handlePrivacyPolicyClick}
+>
+    תנאי הפרטיות
+</span>
             </label>
           </div>
           <button className="signup-button" onClick={handleSignup}>
