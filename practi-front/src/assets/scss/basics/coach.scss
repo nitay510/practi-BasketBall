@@ -1,0 +1,218 @@
+.practi-app-manager {
+    background-color: black;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    direction: rtl; // Right to left layout for Hebrew
+    .cta-container {
+        position: relative;
+        z-index: 100;
+        .PractiDisc {
+            line-height: 1;
+            font-size: 16px;
+            margin-bottom: 100px;
+        }
+        p {
+            color: #fff;
+            font-size: 20px;
+        }
+        .last-drill-btn {
+            margin-top: 5px;
+            color: #e32652;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 5px 20px;
+            background: white;
+            cursor: pointer;
+        }
+    }
+    .hero-manager {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 1;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%); // Black and white filter
+        }
+    }
+
+    .add-team-button, .confirm-button {
+        align-items: center;
+        justify-content: center;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin: 10px 0;
+        z-index: 2;
+        &:hover {
+            background-color: #45a049;
+        }
+
+        &.confirm-button {
+            background-color: #f44336;
+            &:hover {
+                background-color: #d32f2f;
+            }
+        }
+    }
+
+    .add-team-popup-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 200;
+    }
+
+    .add-team-popup {
+        position: fixed;
+        top: 10%; // Higher position on the screen
+        left: 50%;
+        transform: translate(-50%, -10%);
+        width: 80%; // Increased width for better layout
+        max-width: 500px; // Increased max width for better aesthetics
+        background-color: #999;
+        padding: 30px; // Increased padding for better spacing
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        z-index: 1000; // Ensuring modal is always on top
+        h2 {
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 12px; // Larger padding for bigger input
+            margin-bottom: 20px; // Increased spacing
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: black;
+            font-size: 18px; // Larger font size for better readability
+
+            &:focus {
+                outline: none;
+                border-color: #e32652;
+            }
+        }
+        button {
+            font-size: 18px;
+            color: #fff;
+            background-color: #e32652;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block; // Ensures that the button takes full width
+            margin: auto; // Center the button horizontally
+
+            &:hover {
+                background-color: darken(#e32652, 10%);
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+        .close {
+                position: absolute;
+                top: 2px;
+                right: -15px;
+                font-size: 16px;
+                color: black;
+                background: none;
+                border: none;
+                cursor: pointer;
+    
+                &:hover {
+                    color: darken(#fff, 10%);
+                }
+        }
+    }
+    .team-list {
+        margin-top: 50px;
+        padding: 0 20px;
+        position: relative;
+        z-index: 200;
+    
+        .team-item {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 16px;
+    .player-info {
+        margin-top: 15px;
+        font-size: 24px;
+
+        .expend-more{
+        position: relative;
+    right: 40%;
+        }
+    }
+    p {
+        font-size: 20px;
+        margin-bottom: 0;
+        margin-top: 5px;
+        cursor: pointer;
+    }
+            .player-list {
+                display: flex;
+                flex-direction: column;
+            }
+    
+            .player-row {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    height: auto;
+                    border-bottom: 0;
+                    margin-bottom: 15px;
+                
+                .player-name {
+                    width: 80%; // Assign a fixed width to ensure consistent alignment
+                    font-size: 20px;
+                    margin-right: 20px;
+                    text-align: right;
+                }
+                .go-to-player {
+                    width: 80%; // Assign a fixed width to ensure consistent alignment
+                    font-size: 20px;
+                    border-bottom: 1px solid;
+                    margin-left: 8px;
+                }
+                .go-to-player-arrow {
+                   margin-top: 12px;
+                }
+ 
+    
+                .delete-player-button {
+         
+                    font-size: 16px;
+                    margin-top: 6px;
+    
+                 
+                }
+            }
+        }
+    }
+}    

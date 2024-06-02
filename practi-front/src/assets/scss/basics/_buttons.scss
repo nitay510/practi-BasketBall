@@ -5,7 +5,6 @@ button {
     cursor: pointer;
     font-family: Rubik;
 }
-
 .start-drill-btn {
     border: 2px solid #ccc;
     border-radius: 10px;
@@ -58,6 +57,7 @@ button {
     bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
+    color: #fff;
 
     .cta-bar {
         color: $clr4;
@@ -124,4 +124,7 @@ button {
         top: 0; 
         right: 2px;
     
+  }
+  .slide-buttons {
+    margin-top: 8px;
   }

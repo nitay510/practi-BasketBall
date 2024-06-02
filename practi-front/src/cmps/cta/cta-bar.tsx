@@ -1,5 +1,5 @@
 import { MdHistory } from 'react-icons/md'
-import { MdPeople } from 'react-icons/md'
+import { MdPeople,MdPerson } from 'react-icons/md'
 import { MdHome } from 'react-icons/md'
 
 
@@ -23,6 +23,11 @@ export const CtaBar = (): JSX.Element => {
             < NavLink to={'/historyFriends'}>
             <div className='ic-container'>
            <MdPeople/>
+            </div>
+            </NavLink>
+            < NavLink to={'/profile'}>
+            <div className='ic-container'>
+           <MdPerson/>
             </div>
             </NavLink>
         </div>

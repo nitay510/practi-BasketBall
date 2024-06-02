@@ -4,6 +4,9 @@ header {
     align-items: center;
     background-color: $clr1;
     height: 46px;
+    direction: ltr;
+    z-index: 2;
+    color: black;
 
     .menu-btn {
         color: aliceblue;
@@ -24,7 +27,6 @@ header {
         
     }
     .back-button {
-        color: black;
         background-color: white;
         padding: 5px 10px; 
         border: 1px solid #ccc; /* Optional: Add a border */

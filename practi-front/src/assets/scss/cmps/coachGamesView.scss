@@ -1,0 +1,482 @@
+.coach-games {
+    color: white;
+    background-color: black;
+    direction: rtl;
+
+    .content-container {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+
+        .title-container {
+            border-bottom: thin solid white;
+
+            .filter-buttons {
+                color: #fff;
+                position: relative;
+                display: flex;
+                right: 2vw;
+                width: 5vw;
+
+                .filter-button {
+                    margin-left: 5vw;
+                }
+                .add-button{
+                    position: relative;
+                    left: -290px;
+                }
+            }
+
+            .filter-buttons button {
+                font-size: 5vw;
+            }
+
+            .dropdown-menu {
+                position: absolute;
+                z-index: 1;
+                top: 100%; // This will position the dropdown right below the button
+                background-color: #fff;
+                color: #e32652;
+                align-content: center;
+                width: 30vw;
+                border: thin solid #e32652;
+                right: 5vw;
+
+                .dropdown-option {
+                    border-bottom: thin solid #e32652;
+                    font-size: 1.5em;
+                }
+            }
+
+            h2 {
+                padding: 2vw 4vw;
+             
+                font-weight: bold;
+                color: #fff;
+                padding-bottom: 3vw;
+                margin: 2vw;
+            }
+        }
+
+        .add-new-game {
+            margin-bottom: 5vh;
+            font-size: 18px;
+            color: #fff;
+            background-color: #e32652;
+            border: thin solid white;
+            border-radius: 20px;
+            padding: 10px 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-self: center;
+            display: block;
+
+            &:hover {
+                background-color: darken(#e32652, 10%);
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .new-game-modal {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -10%);
+            width: 80%;
+            max-width: 500px;
+            background-color: #999;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+
+            h4 {
+                margin-bottom: 20px;
+                font-size: 22px;
+            }
+
+            input,
+            select {
+                width: 100%;
+                padding: 12px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                background-color: white;
+                color: black;
+                font-size: 18px;
+
+                &:focus {
+                    outline: none;
+                    border-color: #e32652;
+                }
+            }
+
+            button {
+                margin-right: 5.5vh;
+                font-size: 18px;
+                color: #fff;
+                background-color: #e32652;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 30px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                align-self: center;
+                display: block;
+
+                &:hover {
+                    background-color: darken(#e32652, 10%);
+                }
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            .modal-close-button {
+                margin-right: 0;
+                position: absolute;
+                top: 2px;
+                right: -15px;
+                font-size: 16px;
+                color: black;
+                background: none;
+                border: none;
+                cursor: pointer;
+
+                &:hover {
+                    color: darken(#fff, 10%);
+                }
+            }
+        }
+
+        .filter-modal {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -10%);
+            width: 80%;
+            max-width: 500px;
+            background-color: #999;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            text-align: right;
+        
+            .modal-title, .modal-sub-title {
+                border-radius: 10vw;
+                padding: 1vh 2vw;
+                margin-bottom: 1vh;
+                font-size: 1.5em;
+            }
+        
+            .modal-title {
+                font-weight: bold;
+                text-align: center;
+                background-color: #808284;
+            }
+        
+            .modal-sub-title {
+                font-size: 1.25em;
+            }
+        
+            input, select, button {
+                border-radius: 5px;
+                font-size: 18px;
+                &:focus {
+                    outline: none;
+                }
+            }
+        
+            input, select {
+                width: 100%;
+                padding: 12px;
+                margin-bottom: 20px;
+                border: 1px solid #ccc;
+                background-color: white;
+                color: black;
+                &:focus {
+                    border-color: #e32652;
+                }
+            }
+        
+            button {
+                margin-right: 5.5vh;
+                color: #fff;
+                background-color: #e32652;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 30px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                align-self: center;
+                display: block;
+                &:hover {
+                    background-color: darken(#e32652, 10%);
+                }
+            }
+        
+            .modal-close-button {
+                margin-right: 0;
+                position: absolute;
+                top: 2px;
+                right: -15px;
+                font-size: 16px;
+                color: black;
+                background: none;
+                border: none;
+                cursor: pointer;
+                &:hover {
+                    color: darken(#fff, 10%);
+                }
+            }
+        
+            .by-team-title, .select-all-label {
+                display: flex;
+                align-items: center;
+                margin-bottom: 1vh;
+            }
+        
+            .select-all-label {
+                position: relative;
+                padding: 0 2vw;
+                white-space: nowrap;
+                margin-right: 5vw;
+                span{
+                    margin: 1vh 1vw;
+                }
+                input {
+                    margin: 0 0.5vw 0 1vw;
+                    &:checked ~ .border {
+                        border-color: #007bff;
+                    }
+                
+                }
+                .border {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border: 1vw solid #808284;
+                }
+            }
+            
+            .checkbox-label {
+                background-color: #2C2F33;
+                padding: 1vh 3vw;
+                border-radius: 2em;
+                display: flex;
+                align-items: center;
+                white-space: nowrap;
+                input {
+                    margin-left: 0.5em;
+                }
+            }
+        
+            .checkbox-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+        
+        
+            .checkbox-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+
+                .team-name {
+                    margin-left: 1vw;
+                    white-space: normal;
+                    /* This will allow the text to wrap */
+                    word-wrap: break-word;
+                    /* This will break words to the next line */
+                }
+
+            }
+            .checkbox-label {
+                flex-basis: calc(50% - 10px);
+                /* This will create 2 columns, adjust as needed */
+                margin-bottom: 2vh;
+                /* Adjust as needed */
+            }
+        }
+
+        .card {
+            width: 96vw;
+            border: 1vw solid #ccc;
+            border-radius: 5vw;
+            margin: 3vh 2vw;
+            height: 18vh;
+            color: black;
+            padding: 1vw;
+            box-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.1);
+            background-color: #808284;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card.win {
+            border-color: #4caf50;
+        }
+
+        .card.loss {
+            border-color: #f44336;
+        }
+
+        .card-content {
+            position: relative;
+            /* Added */
+            flex: 1;
+            /* Added */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            h2 {
+                color: white;
+                font-size: .75em;
+                padding: 1vh 0;
+                text-align: right;
+                margin-right: 5vw;
+            }
+
+            position: absolute;
+            top: 0vw;
+            /* Adjusted */
+
+            width: 100%;
+            border-radius: 10vw;
+            background-color: #2C2F33;
+        }
+
+        .team-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Center horizontally */
+            justify-content: center;
+            /* Center vertically */
+            position: relative;
+            width: 30vw;
+            max-width: 30vw;
+            padding: .5vh 2vw;
+            top: 80%;
+
+            /* Ensure positioning context for absolute positioning of image */
+            img {
+
+                position: absolute;
+                /* Position the image absolutely within the .team-info container */
+                bottom: 0;
+                /* Move the image 50% from the top */
+                transform: translateY(-50%);
+                /* Adjust vertically to center */
+                width: 12vw;
+
+                height: 12vw;
+                margin-bottom: 1vh;
+                /* Adjust margin as needed */
+            }
+        }
+
+
+        .team-info.left {
+            align-items: flex-end;
+
+            img {
+                margin-left: 5vw;
+            }
+
+            h2 {
+                font-size: .75em;
+                color: white;
+                width: 30vw;
+                align-self: center;
+            }
+
+            border-radius: 5vw;
+
+            background-color: #2C2F33;
+            position: absolute;
+            left: 2vw;
+
+            /* Adjusted for the right team */
+        }
+
+        .team-info.right {
+            align-items: flex-start;
+
+            img {
+                margin-right: 5vw;
+            }
+
+            h2 {
+                font-size: .75em;
+                color: white;
+                width: 100%;
+            }
+
+            border-radius: 5vw;
+
+            background-color: #2C2F33;
+
+            position: absolute;
+            right: 5vw;
+            /* Adjusted for the left team */
+        }
+
+        .card-actions {
+            position: absolute;
+            /* Added */
+            top: 1.5vw;
+            /* Adjusted */
+            left: 2vw;
+            /* Adjusted */
+            display: flex;
+
+            .row-button {
+                color: wheat;
+                font-size: 1em;
+                /* Adjusted */
+            }
+        }
+
+        .scoreboard {
+            background-color: #999;
+            padding: 1vh 3vw;
+            border-radius: 5vw;
+            position: absolute;
+            left: 50%;
+            top: 60%;
+            transform: translate(-50%, -50%);
+            /* Added */
+        }
+
+    }
+}
+
+.team-games {
+    .team-title {
+        border-bottom: thin solid #e32652;
+        font-weight: bold;
+        background-color: #ccc;
+        padding: 4vw 0vw;
+
+        .name-container {
+            background-color: #645858;
+            font-size: 4vw;
+            padding: 2vw;
+            border-radius: 10vw;
+        }
+    }
+}

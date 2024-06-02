@@ -8,8 +8,9 @@
 // basics
 @import "./basics/helpers";
 @import "./basics/base";
+@import "./basics/coach";
 @import "./basics/buttons";
-
+@import "./basics/player-profile";
 //VIEWS
 // general
 
@@ -27,9 +28,9 @@
 @import "./cmps/video-app";
 @import "./cmps/video-preview";
 @import "./cmps/subvideo-preview";
-
-
-
+@import "./cmps/game-score";
+@import "./cmps/coachGamesView";
+@import "./cmps/calender";
 
 
 
@@ -51,10 +52,12 @@ img {
     filter: grayscale(100%);
     margin-left: 2px;
 }
+
 .video-hero2 {
     height: 93vh;
     margin-left: 2px;
 }
+
 .cta-bar-container {
     position: fixed;
     bottom: 0;
@@ -66,10 +69,13 @@ img {
     z-index: 1000;
     color: $clr4;
     background: transparent;
+    
   }
   
 
-  .cta-bar {
+
+
+.cta-bar {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -81,23 +87,26 @@ img {
     background: #333;
     color: #fff;
     z-index: 1000;
+    direction: ltr;
+
     .ic-container {
         &.ic-active {
             border-bottom: 2px solid white;
             font-weight: bold;
-          }
+        }
+    }
 }
-  }
-  .cta-container {
+
+.cta-container {
     position: relative;
-    
+
 }
 
 .ic-container svg {
     margin-top: 8px;
     font-size: 30px;
 }
-  
+
 
 .home-page {
     display: flex;

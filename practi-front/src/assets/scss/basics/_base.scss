@@ -20,20 +20,19 @@ body {
 }
 
 .content-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto; 
-}
-
-.content-container-fullscreen {
-  max-height: 93vh;
-}
-
-.content-container-browser {
-  max-height: 82vh;
-}
-
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: 93vh; 
+    overflow-y: auto; 
+  }
+  .content-container-practice {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: 93vh; 
+    overflow-y: auto; 
+  }
 
 img {
     width: 100%;
@@ -295,17 +294,29 @@ input {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
-
 .custom-input-container {
   position: relative;
   margin-bottom: 70px;
   text-align: right; /* Align text to the right */
 }
 
+.custom-input-container .input-wrapper {
+  width: calc(100% - 30px);
+}
 
-
-.custom-input-container input{
+.custom-input-container input {
   width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border: none;
+  border-bottom: 2px solid #fff;
+  background-color: #000;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.3s ease, color 0.3s ease;
+  direction: rtl; /* Right-to-left direction */
+}
+.custom-input-container select {
   padding: 15px;
   font-size: 16px;
   border: none;
@@ -329,16 +340,20 @@ input {
 }
 
 .custom-input-container input:focus + label,
-.custom-input-container input:not(:placeholder-shown) + label{
+.custom-input-container input:not(:placeholder-shown) + label,
+.custom-input-container select:focus + label,
+.custom-input-container select:not(:placeholder-shown) + label {
   font-size: 14px;
   top: 5px;
   color: #fff;
   transform: translateY(-150%);
 }
 
-.custom-input-container input:focus {
+.custom-input-container input:focus,
+.custom-input-container select:focus {
   border-color: #fff;
 }
+
 
 .signup-button {
   width: calc(100% - 30px);
@@ -409,7 +424,4 @@ input {
 .Subpreview-wrap{
   position: relative;
   z-index: 1;
-}
-.privacy {
-  color: white;
 }

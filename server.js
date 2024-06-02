@@ -19,11 +19,17 @@ app.use(bodyParser.json({ limit: '10mb' }))
 // Import routes
 const userRoutes = require('./routes/user')
 const drillRoutes = require('./routes/drills')
+const gameRoutes = require('./routes/game')
+const teamsRoutes = require('./routes/teams')
 const videosRoutes = require('./routes/videos')
 const subVideosRoutes = require('./routes/subVideos')
+const eventsRoutes = require('./routes/events')
+const sendDrillRoutes = require('./routes/sendDrill')
 app.use(express.static(path.join(__dirname, 'public')))
 customEnv.env(process.env.NODE_ENV, './config')
 console.log(process.env.CONNECTION_STRING)
+
+
 mongoose.connect(process.env.CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -32,9 +38,13 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 
 // Routes
 app.use('/api', userRoutes)
+app.use('/api', gameRoutes)
 app.use('/api', subVideosRoutes)
 app.use('/api', videosRoutes)
 app.use('/api', drillRoutes)
+app.use('/api', teamsRoutes)
+app.use('/api', eventsRoutes)
+app.use('/api', sendDrillRoutes)
 
 // Serve static files from the "build" folder
 app.use(express.static(path.join(__dirname, 'build')))
@@ -50,6 +60,7 @@ app.use(express.static(path.join(__dirname, 'build')))
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
+
 // Start the server
 const PORT = process.env.port
 server.listen(PORT, () => {})

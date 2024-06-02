@@ -1,0 +1,192 @@
+.profile-page {
+    color: white;
+    background-color: black; // Assuming the overall background should be black
+    direction: rtl;
+    .content-container {
+        max-width: 600px;
+        margin: 0 auto; // Centers the container
+        text-align: center;
+
+        .joinTeamButton{
+            margin-top: 5vh;
+            font-size: 18px; // Increased font size
+            color: #fff;
+            background-color: #e32652;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 30px; // Larger padding for a more substantial button
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-self: center; // Ensure the button is centered
+            display: block; // Block display for full width
+
+            &:hover {
+                background-color: darken(#e32652, 10%);
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+        h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        p {
+            font-size: 18px;
+            margin: 10px 0; // Uniform margin for vertical spacing
+            display: flex;
+            justify-content: center;
+            align-items: center;
+      
+            .leave-icon {
+              margin-right: 20px; // Space between the team name and the icon
+              cursor: pointer;
+              color: #e32652; // Icon color to match theme
+      
+              &:hover {
+                color: darken(#e32652, 10%);
+              }
+            }
+        }
+
+        .join-team {
+            font-size: 20px;
+            color: #e32652;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 5px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+                background-color: #f8f8f8; // Slight change on hover for visibility
+            }
+        }
+    }
+
+    .modal {
+        position: fixed;
+        top: 10%; // Higher position on the screen
+        left: 50%;
+        transform: translate(-50%, -10%);
+        width: 80%; // Increased width for better layout
+        max-width: 500px; // Increased max width for better aesthetics
+        background-color: #999;
+        padding: 30px; // Increased padding for better spacing
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        z-index: 1000; // Ensuring modal is always on top
+
+        h4 {
+            margin-bottom: 20px; // Increased bottom margin
+            font-size: 22px; // Larger font size
+        }
+
+        input,select {
+            width: 100%;
+            padding: 12px; // Larger padding for bigger input
+            margin-bottom: 20px; // Increased spacing
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: black;
+            font-size: 18px; // Larger font size for better readability 
+            margin-bottom: 25px;
+
+            &:focus {
+                outline: none;
+                border-color: #e32652;
+            }
+        }
+        .modal-join-button {
+            margin-right: 8vh;
+            font-size: 18px;
+            color: #fff;
+            background-color: #e32652;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block; // Ensures that the button takes full width
+            margin: auto; // Center the button horizontally
+
+            &:hover {
+                background-color: darken(#e32652, 10%);
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+        button {
+            font-size: 18px; // Increased font size
+            color: #fff;
+            background-color: #e32652;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 30px; // Larger padding for a more substantial button
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-self: center; // Ensure the button is centered
+            display: block; // Block display for full width
+
+            &:hover {
+                background-color: darken(#e32652, 10%);
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        // Close button specifically for the modal
+        .modal-close-button {
+            margin-right: 0;
+            position: absolute;
+            top: 2px;
+            right: -15px;
+            font-size: 16px;
+            color: black;
+            background: none;
+            border: none;
+            cursor: pointer;
+
+            &:hover {
+                color: darken(#fff, 10%);
+            }
+        }
+        
+    }
+    
+.game-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    th, td {
+        border: 1px solid #ddd;
+        text-align: center;
+        padding: 5px;
+    }
+
+    th {
+        background-color: #645858;
+    }
+
+    tr.win td:nth-child(2) { // Score column for wins
+        color: #31eb31
+    }
+
+    tr.loss td:nth-child(2) { // Score column for losses
+        color: red;
+    }
+}
+}

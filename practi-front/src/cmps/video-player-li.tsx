@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setVideoPlayerRef, setVideoState } from "../store/slicers/selectedVideo.slice";
 import { selectedVideoState } from "../store/store";
@@ -11,7 +11,6 @@ interface VideoPlayerProps {
 export const VideoPlayerLi = ({ onSetVideoStatus }: VideoPlayerProps) => {
   const selectedVideo = useSelector(selectedVideoState);
   const dispatch = useDispatch();
-  const [isFullScreen, setFullScreen] = useState(false);
 
   const onPlayerStateChange = (event: any) => {
     // Handle player state changes
@@ -19,7 +18,6 @@ export const VideoPlayerLi = ({ onSetVideoStatus }: VideoPlayerProps) => {
     dispatch(setVideoState(isPlaying));
     onSetVideoStatus(isPlaying);
   };
-
   const opts = {
     height: "100%",
     width: "100%",
@@ -29,37 +27,15 @@ export const VideoPlayerLi = ({ onSetVideoStatus }: VideoPlayerProps) => {
       suggestedQuality: "hd720", // Set default quality to 720p
     },
   };
-
   const onReady = (event: any) => {
     // Save the player reference in the Redux store
     dispatch(setVideoPlayerRef(event.target));
   };
 
-  useEffect(() => {
-    const handleFullScreenChange = () => {
-      setFullScreen(document.fullscreenElement !== null);
-    };
-
-    const handlePopState = () => {
-      if (isFullScreen) {
-        // Exit full-screen mode when the back button is pressed
-        document.exitFullscreen();
-      }
-    };
-
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [isFullScreen]);
-
   return (
     <div className="video-player">
       <YouTube
-        videoId={selectedVideo.url}
+        videoId={selectedVideo.url} 
         opts={opts}
         onReady={onReady}
         onStateChange={onPlayerStateChange}

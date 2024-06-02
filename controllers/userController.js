@@ -1,19 +1,20 @@
 const jwt = require('jsonwebtoken');
 const userService = require('../services/userService');
+const bcrypt = require('bcrypt');
 
 /**
  * Creates a new user based on the provided data.
  */
 exports.createUser = async (req, res) => {
   try {
-    const { fullName, cityOfLiving, age, username } = req.body;
-
+    const { fullName, username,password,isCoach,clubName } = req.body;
     const user = await userService.createUser({
-      fullName, cityOfLiving, age, username
+      fullName, username,password,isCoach,clubName
     });
 
     res.status(200).send('User saved successfully');
   } catch (error) {
+    console.log(error);
     res.status(500).send('Error saving user');
   }
 };
@@ -39,8 +40,8 @@ exports.getUser = async (req, res) => {
         } else {
           // Token is valid
           if (username === decoded.username) {
-            const { fullName, cityOfLiving, age, username } = user;
-            res.json({fullName, cityOfLiving, age, username });
+            const { fullName,isCoach,club } = user;
+            res.json({fullName, isCoach,club });
           } else {
             res.status(401).json({ error: 'Invalid token' });
           }
@@ -59,20 +60,27 @@ exports.getUser = async (req, res) => {
  */
 exports.authenticateUser = async (req, res) => {
   try {
-    const { username} = req.body;
+    const { username, password } = req.body;
     // Find the user in the database
     const user = await userService.getUserByUsername(username);
 
     if (user) {
-      // Check if the provided password matches the user's password
+      // Check if the provided password matches the user's hashed password
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (passwordMatch) {
         // Generate a JWT token
         const token = jwt.sign({ username: user.username }, 'your-secret-key');
         // Return the token as the response
         res.json({ token });
+      } else {
+        res.status(401).json({ error: 'Invalid password' });
+      }
     } else {
       res.status(404).json({ error: 'User not found' });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-};
+}

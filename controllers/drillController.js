@@ -96,6 +96,19 @@ exports.getAllDrillsDouble = async (req, res) => {
   }
 };
 
+exports.getAllDrillsSingleByCoach = async (req, res) => {
+  try {
+    const {currentUser} = req.body;
+    console.log(currentUser);
+    const {category } = req.params;
+    const drills = await drillService.getAllDrillsSingle(currentUser,category);
+    console.log(drills);
+    res.send(drills);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 /**
  * Gets the high score for a specific drill and mission.
  */

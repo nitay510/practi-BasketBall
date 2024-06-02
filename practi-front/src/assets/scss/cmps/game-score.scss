@@ -1,0 +1,528 @@
+/* Global styles */
+.game-scores-page {
+
+    >div.top-fixed-header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+    }
+
+    >div.content-area {
+        padding-top: 3em;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+}
+
+.scoreboard-header {
+    position: fixed;
+    width: 100%;
+    max-height: 47vw;
+    z-index: 100;
+    background-color: #000000;
+    padding: 2vw;
+    color: white;
+}
+
+
+
+/* Other existing styles remain unchanged */
+
+/* Scoreboard container */
+
+/* Scoreboard title */
+.scoreboard-title {
+    margin-bottom: 2vw;
+    text-align: center;
+    background-color: #636363;
+    font-size: 5vw;
+    padding: 1vw;
+    border-radius: 1vw;
+}
+
+/* Scoreboard teams */
+.scoreboard-teams {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Team styles */
+.scoreboard-teams {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-height: 40vw;
+    /* Align items at the start of the container */
+}
+
+.scoreboard-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 5vw;
+    max-height: 40vw; // Don'
+    img {
+        width: 12vw;
+        height: 12vw;
+        margin-bottom: 4vw;
+    }
+
+    h2 {
+        color: white;
+        background-color: gray;
+        border-radius: 10px;
+        font-size: 4vw;
+        padding: 2vw;
+        width: 100%;
+    }
+
+    input {
+        width: 10vw;
+        font-size: 4vw;
+        text-align: center;
+        margin-top: 3vw;
+        border: 0.5vw solid #ccc;
+    }
+}
+
+/* Scoreboard buttons */
+.scoreboard-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    bottom: 18vw;
+    transform: translateY(-50%);
+    left: 21vw;
+
+    button {
+        margin-bottom: 5px;
+        padding: 1.5vw 4vw;
+        font-size: 4vw;
+        background-color: #a3850e;
+        border: thin solid white;
+        border-radius: 100vw;
+        cursor: pointer;
+        color: white;
+
+        &.small {
+            padding: 1vw 3vw;
+            font-size: 3vw;
+            background-color: #b59410;
+            border-radius: 5vw;
+            margin-top: 0.5vw;
+            margin-bottom: 6vw;
+        }
+
+    }
+}
+
+.star-container {
+    position: relative;
+    width: 20vw;
+    height: 20vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ccc;
+    /* Background color of the container */
+    margin-top: 3vw;
+
+    /* Adjust margin-top as needed */
+    /* Adjust margin-bottom as needed */
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    /* Border radius to match the scoreboard */
+}
+
+.star-button {
+    width: 7vw;
+    height: 11vw;
+    font-size: 5vw;
+    /* Increase font size to make the button bigger */
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    cursor: pointer;
+}
+
+/* Scoreboard scores */
+.scoreboard-scores {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+    border-radius: 2vw;
+    min-height: fit-content;
+    margin-top: 20vw;
+    padding: 1vw;
+    margin-left: 15vw;
+    border: thin solid #ccc;
+
+    >div {
+
+        background-color: gray;
+        border-radius: 10px;
+        padding: 5px;
+        margin-bottom: 1vw;
+        text-align: center;
+        min-width: 15vw;
+
+        h2 {
+            font-size: 5vw;
+            margin: 0;
+            color: white;
+        }
+    }
+
+    /* Center the scores within the scoreboard rectangle */
+    position: relative;
+}
+/* Scoreboard scores */
+.scoreboard-scores-after {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: gray;
+    border-radius: 2vw;
+    min-height: fit-content;
+    margin-top: 20vw;
+    padding: 1vw;
+    margin-left: 0;
+    border: thin solid #ccc;
+
+    >div {
+
+        background-color: gray;
+        border-radius: 10px;
+        padding: 5px;
+        margin-bottom: 1vw;
+        text-align: center;
+        min-width: 15vw;
+
+        h2 {
+            font-size: 5vw;
+            margin: 0;
+            color: white;
+        }
+    }
+
+    /* Center the scores within the scoreboard rectangle */
+    position: relative;
+}
+
+/* Player row */
+.player-row {
+    border-bottom: 1vw solid #ccc;
+    height: 15vw;
+    align-items: center;
+
+    td {
+        text-align: center;
+        border-right: 1px solid #ccc;
+        position: relative;
+        background-color: #f2f2f2;
+
+
+        &.name-column {
+            font-size: large;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        input {
+            font-size: 5vw;
+            width: 10vw;
+            text-align: center;
+        }
+
+        .increment,
+        .decrement {
+            width: 10vw;
+            position: relative;
+        }
+
+        .decrement {
+            bottom: 1vw;
+        }
+
+        .increment {
+            top: 1vw;
+        }
+    }
+}
+
+/* Player table modal */
+.player-table-modal {
+    direction: rtl;
+
+    .modal {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%, -10%);
+        width: 80%;
+        max-width: 500px;
+        background-color: #999999;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: black;
+            font-size: 18px;
+
+            &:focus {
+                outline: none;
+                border-color: #e32652;
+            }
+        }
+
+        button {
+            font-size: 18px;
+            color: #fff;
+            background-color: #e32652;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            margin: auto;
+
+            &:hover {
+                background-color: darken(#e32652, 10%);
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .modal-close-button {
+            position: absolute;
+            top: -35px;
+            right: -30px;
+            font-size: 16px;
+            color: black;
+            background: none;
+            border: none;
+            cursor: pointer;
+
+            &:hover {
+                color: darken(#fff, 10%);
+            }
+        }
+    }
+}
+
+/* styles.css */
+.player-table {
+    background-color: #adadad;
+    border: 1vw solid #000000;
+    border-radius: 2vw;
+    margin-bottom: 2vw;
+    top: 32vw;
+    margin: 0 auto;
+    overflow-y: auto;
+    position: relative;
+    /* Set position relative to contain absolutely positioned children */
+    height: 70vh;
+    /* Set a fixed height */
+}
+
+
+.player-table h2 {
+    text-align: center;
+    margin: 1vw;
+    margin-bottom: 5vw;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 5vw;
+    text-decoration: underline;
+}
+
+.player-table table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    background-color: #ffffff;
+    position: relative;
+    /* Ensure proper stacking context */
+}
+
+.player-table th {
+    width: 10vw;
+    border-bottom: .25vw solid #000000;
+    border-right: .25vw solid #ccc;
+    background-color: #f2f2f2;
+    position: sticky;
+    top: 0;
+    /* Stick the header to the top */
+    z-index: 1;
+    /* Ensure the header stays above other content */
+}
+
+.player-table th:not(.name-column):not(.num-column) {
+    width: 15vw;
+}
+
+.player-table th.name-column {
+    width: 40vw;
+}
+
+.player-table th.num-column {
+    width: 3vw;
+}
+
+
+.player-table button {
+    border: thin solid rgb(0, 0, 0);
+    background-color: rgb(75, 75, 75);
+    width: 40%;
+    height: 50%;
+    border-radius: .25vw;
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.buttom-buttons {
+    width: 95vw;
+    height: 22vw;
+    position: fixed;
+    bottom: 2vw;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    /* Center items horizontally */
+    align-items: center;
+}
+
+.buttom-buttons button {
+    text-align: center;
+    /* Center the text horizontally */
+    width: auto;
+    /* Let the text determine the button's width */
+}
+
+.add-player {
+    color: #fff!important;
+    font-size: 20px!important;
+    border: 1px solid #ccc!important;
+    border-radius: 20px!important;
+    padding: 5px 20px!important;
+    background-color: #e32652!important;
+    cursor: pointer!important;
+
+}
+
+.save-button {
+    color: #e32652!important;
+    font-size: 20px!important;
+    border: 1px solid #ccc!important;
+    border-radius: 20px!important;
+    padding: 5px 20px!important;
+    background: white!important;
+    cursor: pointer!important;
+}
+
+.player-table .increment::after {
+    content: '+';
+    /* Set content to '+' for increment button */
+    position: relative;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color: #fff;
+}
+
+.player-table .decrement::after {
+    content: '-';
+    position: relative;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color: #fff;
+}
+
+.headerGS {
+    text-align: center;
+    background-color: #626464;
+    padding: 1vw 4vw;
+    border-radius: 5vw;
+    margin: 1vw;
+    color: #FFFFFF;
+    font-size: 5vw;
+}
+
+.quit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    /* Ensure it's on top of other elements */
+
+    .modal-content {
+        position: relative;
+        /* Position relative to the parent */
+        width: 80%;
+        max-width: 500px;
+        background-color: #999999;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+        h2 {
+            margin-bottom: 4vw;
+            font-size: 6vw;
+            font-weight:bold;
+        }
+
+        h3 {
+            margin-bottom: 20px;
+            font-size: 5vw;
+        }
+
+
+        .button-container {
+            display: flex;
+        }
+
+        button {
+            font-size: 5vw;
+            color: #fff;
+            background-color: #e32652;
+            border: none;
+            border-radius: 5vw;
+            padding: 3vw 7vw;
+            cursor: pointer;
+            display: block;
+            margin: auto;
+
+        }
+
+    }
+}

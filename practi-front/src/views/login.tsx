@@ -2,20 +2,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HeroLogin } from '../cmps/cta/hero-login';
-import { Header } from '../cmps/header';
+import { Header } from '../cmps/headers/header';
 
 // Define the properties expected by the Login component
 interface LoginProps {
   setToken: (token: string) => void; // Function to set the authentication token
   setFirstname: (username: string) => void; // Function to set the user's first name
   setLoginStatus: (loginStatus: boolean) => void; // Function to set the login status
+  setClub: (club: string) => void;
+  setMaster:(master:boolean) => void;
 }
 
 // Define the Login component
-export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): JSX.Element {
+export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster }: LoginProps): JSX.Element {
   // State variable to manage the username input
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
+  const gm = [
+ '1357'
+  ];
   // UseNavigate hook to navigate programmatically
   const navigate = useNavigate();
 
@@ -38,6 +44,7 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
 
     const userLogin = {
       username,
+      password,
     };
 
     try {
@@ -78,13 +85,23 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
 
     if (getUserResponse.ok) {
       const userJson = await getUserResponse.json();
-      const { fullName } = userJson;
+      const { fullName,isCoach,club } = userJson;
 
       // Set user details and login status
+     
       setFirstname(fullName);
       setLoginStatus(true);
+      setClub(club)
       // Navigate to the app page
+      if(isCoach){
+      if(gm.includes(username))
+      setMaster(true);
+      else
+      setMaster(false);
+      navigate('/app-manager'); 
+      }else{
       navigate('/app');
+      }
     } else {
       alert(getUserResponse.status);
     }
@@ -113,6 +130,15 @@ export function Login({ setToken, setFirstname, setLoginStatus }: LoginProps): J
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
+            <div className='input-container'>
+           <label htmlFor='password'>סיסמה</label>
+          <input
+          type='password' // Change the type to 'password'
+          id='password'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+            />
+        </div>
             {/* Button to trigger the login process */}
             <button type="submit">התחבר</button>
           </form>

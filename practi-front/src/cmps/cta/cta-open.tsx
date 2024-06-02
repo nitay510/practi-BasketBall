@@ -8,6 +8,7 @@ import { getVideos } from '../video/functions';
 import { startVideo } from '../../store/slicers/selectedVideo.slice';
 import { setVideos } from '../../store/slicers/videos.slice';
 import { setSelectedVideo, setVideoState } from '../../store/slicers/selectedVideo.slice';
+import { MdClose } from 'react-icons/md'; // For the modal close button
 
 /* 
   This component is the first info about the user in the opening screen.
@@ -34,13 +35,11 @@ export function CtaOpen({
   nextDrill,
   ctaBarContainerRef,
 }: CtaOpenProps) {
-  const videoPlayerRef = useSelector(videoElState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const loadVideosForLastDrill = async (filterBy: string) => {
     const videos = await getVideos(filterBy, token);
-    dispatch( setVideos(videos));
+    dispatch(setVideos(videos));
   };
 
   const onStartDrill = () => {
@@ -57,6 +56,7 @@ export function CtaOpen({
       dispatch(startVideo()); // Dispatch the startVideo action
     }, 1500);
   };
+
   return (
     <section className="cta-container">
       <Hero />
@@ -72,17 +72,17 @@ export function CtaOpen({
           </div>
         </div>
         {latestDrillName !== '' ? (
-          <button className="last-drill-btn" onClick={onStartDrill}>
-             המשך תרגול
-          </button>
+            <button className="last-drill-btn" onClick={onStartDrill}>
+               המשך תרגול
+            </button>
         ):
-        <button className="last-drill-btn" onClick={onNextDrillClick}>
-           המשך תרגול
-      </button>
+            <button className="last-drill-btn" onClick={onNextDrillClick}>
+               המשך תרגול
+            </button>
         }
-        <button className="next-drill-btn" onClick={onNextDrillClick}>
-          לאימון הבא
-        </button>
+          <button className="next-drill-btn" onClick={onNextDrillClick}>
+            לאימון הבא
+          </button>
         <p></p>
       </div>
     </section>

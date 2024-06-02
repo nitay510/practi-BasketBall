@@ -1,5 +1,5 @@
 const Users = require('../models/user');
-
+const bcrypt = require('bcrypt');
 /**
  * Creates a new user in the database.
  * @param {Object} userData - User data including firstName, lastName, cityOfLiving, age, username, and password.
@@ -7,19 +7,27 @@ const Users = require('../models/user');
  */
 exports.createUser = async (userData) => {
   try {
-    const { fullName, cityOfLiving, age, username } = userData;
+    const { fullName, username, isCoach, password,clubName} = userData;
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new User document
     const user = new Users({
-      fullName, cityOfLiving, age, username
+      fullName,
+      club:clubName,
+      username,
+      isCoach,
+      password: hashedPassword, // Save the hashed password
     });
-
+    console.log(user);
     // Save the user document to the database
     await user.save();
 
     return user;
   } catch (error) {
     console.log(error);
+    console.error(error);
     throw error;
   }
 };

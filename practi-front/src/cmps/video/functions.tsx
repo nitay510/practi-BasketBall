@@ -1,10 +1,11 @@
 //use the server to get the videos and return them
 export  const getVideos = async (filterBy: any,token: any) => {
+  const storedToken = localStorage.getItem('authToken')
     const res = await fetch(`https://practi-web.onrender.com/api/videos/${filterBy}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${storedToken}`,
       },
     });
 
@@ -17,11 +18,12 @@ export  const getVideos = async (filterBy: any,token: any) => {
   }
   //use the server to get the Subvideos and return them
   export  const getSubVideos = async (filterBy: any,token: any) => {
+    const storedToken = localStorage.getItem('authToken')
     const res = await fetch(`https://practi-web.onrender.com/api/subVideos/${filterBy}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${storedToken}`,
       },
     });
 
@@ -34,11 +36,12 @@ export  const getVideos = async (filterBy: any,token: any) => {
   }
     //use the server to get the next category(by order) for the next drill
 export const getNextCategory = async (category: any, token: any) => {
+  const storedToken = localStorage.getItem('authToken')
     const res = await fetch(`https://practi-web.onrender.com/api/nextCategory/${category}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${storedToken}`,
       },
     });
   
@@ -54,6 +57,7 @@ export const getNextCategory = async (category: any, token: any) => {
   
   //use the server to get the next video in category(by order) for the next drill
   export const getNextVideoInCategory = async (category: any, videoName: any, token: any) => {
+    const storedToken = localStorage.getItem('authToken')
     // Check if videoName is null or undefined
     const actualVideoName = videoName !== null ? videoName : "null";
     const params = new URLSearchParams({
@@ -67,7 +71,7 @@ export const getNextCategory = async (category: any, token: any) => {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${storedToken}`,
         },
       });
   

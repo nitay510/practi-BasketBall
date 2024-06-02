@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
-import { HeaderTwo } from '../cmps/headertwo';
 import { useNavigate } from 'react-router-dom';
+
 interface LoginProps {
-  setToken: (token: string) => void; // Function to set the authentication token
-  setFirstname: (username: string) => void; // Function to set the user's first name
-  setLoginStatus: (loginStatus: boolean) => void; // Function to set the login status
+  setToken: (token: string) => void;
+  setFirstname: (username: string) => void;
+  setLoginStatus: (loginStatus: boolean) => void;
+  setClub: (club: string) => void;
 }
-export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): JSX.Element {
+
+export function Signup({ setToken, setFirstname, setLoginStatus,setClub }: LoginProps): JSX.Element {
   const [fullName, setFullName] = useState('');
-  const [cityOfLiving, setCityOfLiving] = useState('');
-  const [age, setAge] = useState('');
-  const [privacyChecked, setPrivacyChecked] = useState(false);
   const [username, setUsername] = useState('');
+  const [clubName, setClubName] = useState(''); // State for club selection
+  const [password, setPassword] = useState('');
+  const [isCoach, setIsCoach] = useState(false);
+  const [role, setRole] = useState(''); 
   const navigate = useNavigate();
+
+  const clubs = [
+    'מכבי חיפה',
+    'מכבי תל אביב',
+    'הפועל תל אביב',
+    'הפועל גליל עליון',
+    'מכבי חדרה'
+  ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,25 +31,59 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
       case 'fullName':
         setFullName(value);
         break;
-      case 'cityOfLiving':
-        setCityOfLiving(value);
-        break;
-      case 'age':
-        setAge(value);
-        break;
       case 'username':
         setUsername(value);
+        break;
+      case 'password':
+        setPassword(value);
         break;
       default:
         break;
     }
   };
-  const handlePrivacyCheck = () => {
-    setPrivacyChecked(!privacyChecked);
+
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRole(e.target.value);
+    setIsCoach(e.target.value === 'מאמן');
   };
-  const handlePrivacyPolicyClick = () => {
-    navigate('/privacy');
+
+  const handleSignup = async () => {
+    const newUser = {
+      fullName,
+      username,
+      password,
+      isCoach,
+      clubName
+    };
+
+    const res = await fetch('https://practi-web.onrender.com/api/Users', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newUser),
+    });
+
+    if (res.ok) {
+      const userLogin = { username, password };
+      const tokenRes = await fetch('https://practi-web.onrender.com/api/Tokens', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userLogin),
+      });
+
+      const newToken = await tokenRes.text();
+      localStorage.setItem('authToken', newToken);
+      localStorage.setItem('userName', username);
+      await setToken(newToken);
+      fetchUserDetails(newToken, username);
+    } else {
+      alert('Error during signup');
+    }
   };
+
   const fetchUserDetails = async (token: string, username: string) => {
     const getUserResponse = await fetch(`https://practi-web.onrender.com/api/Users/${username}`, {
       method: 'get',
@@ -50,67 +95,21 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
 
     if (getUserResponse.ok) {
       const userJson = await getUserResponse.json();
-      const { fullName } = userJson;
-
-      // Set user details and login status
+      const { fullName,isCoach,club } = userJson;
       setFirstname(fullName);
+      setClub(club)
       setLoginStatus(true);
-      // Navigate to the app page
+      if(isCoach)
+      navigate('/app-manager'); //here need to nevigate to coachApp when there will be one 
+      else
       navigate('/app');
     } else {
       alert(getUserResponse.status);
     }
   };
 
-  const handleSignup = async () => {
-    if (!privacyChecked) {
-      alert('נא לאשר מידיניות פרטיות');
-      return;
-    }
-    var newUser = {
-      fullName: fullName,
-      cityOfLiving: cityOfLiving,
-      age: age,
-      username: username
-    };
-    const res = await fetch('https://practi-web.onrender.com/api/Users', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newUser),
-    });
-
-    if (res.ok) {
-      const userLogin = {
-        username,
-      };
-      //get the token after signup
-        const res = await fetch('https://practi-web.onrender.com/api/Tokens', {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userLogin),
-        });
-          const newToken = await res.text();
-          // Save the token and username in localStorage
-          localStorage.setItem('authToken', newToken);
-          localStorage.setItem('userName', username);
-          // Await the completion of setToken before proceeding
-          await setToken(newToken);
-          // Fetch user details using the obtained token
-          fetchUserDetails(newToken, username);
-    } else {
-      // Handle error cases
-      alert('מספר טלפון כבר נמצא במערכת');
-    }
-
-
-  };
   return (
     <div className="signupPage">
-         <HeaderTwo/>
       <section className="signup-container">
         <div className="signup-form">
           <h2>הרשמה</h2>
@@ -126,31 +125,6 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
             />
             <label htmlFor="fullName">שם מלא</label>
           </div>
-
-          <div className="custom-input-container">
-            <input
-              type="text"
-              id="cityOfLiving"
-              name="cityOfLiving"
-              value={cityOfLiving}
-              onChange={handleInputChange}
-              placeholder={!cityOfLiving ? 'עיר מגורים' : ''}
-              required
-            />
-            <label htmlFor="cityOfLiving">עיר מגורים</label>
-          </div>
-          <div className="custom-input-container">
-            <input
-              type="number"
-              id="age"
-              name="age"
-              value={age}
-              onChange={handleInputChange}
-              placeholder={!age ? 'גיל' : ''}
-              required
-            />
-            <label htmlFor="age">גיל</label>
-          </div>
           <div className="custom-input-container">
             <input
               type="text"
@@ -163,25 +137,36 @@ export function Signup({ setToken, setFirstname, setLoginStatus }: LoginProps): 
             />
             <label htmlFor="username">מספר טלפון</label>
           </div>
-          <div className="privacy">
-            <label>
-            <input
-    type="checkbox"
-    checked={privacyChecked}
-    onChange={handlePrivacyCheck}
-/>
-<span>אני מאשר שקראתי את </span>
-<span
-    className="green"
-    onClick={handlePrivacyPolicyClick}
->
-    תנאי הפרטיות
-</span>
-            </label>
+          <div className="custom-input-container">
+            <select id="club" name="club" value={clubName} onChange={(e) => setClubName(e.target.value)} required>
+              <option value="">בחר מועדון</option>
+              {clubs.map(club => (
+                <option key={club} value={club}>{club}</option>
+              ))}
+            </select>
+            <label htmlFor="club">מועדון</label>
           </div>
-          <button className="signup-button" onClick={handleSignup}>
-            הרשמה
-          </button>
+          <div className="custom-input-container">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={handleInputChange}
+              placeholder={!password ? 'סיסמה' : ''}
+              required
+            />
+            <label htmlFor="password">סיסמה</label>
+          </div>
+          <div className="custom-input-container">
+            <select id="role" name="role" onChange={handleRoleChange} required>
+              <option value="">בחר תפקיד</option>
+              <option value="מאמן">מאמן</option>
+              <option value="שחקן">שחקן</option>
+            </select>
+            <label htmlFor="role">מאמן או שחקן?</label>
+          </div>
+          <button className="signup-button" onClick={handleSignup}>הרשמה</button>
         </div>
       </section>
     </div>

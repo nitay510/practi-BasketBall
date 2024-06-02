@@ -1,4 +1,4 @@
-import hero from '../../assets/images/start-screen.jpg'
+import hero from '../../assets/images/screen-try-1.jpg'
 
 
 export function Hero() {

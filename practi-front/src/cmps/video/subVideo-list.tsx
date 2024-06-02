@@ -11,7 +11,7 @@ interface SubVideoListProps {
     videoRef: any
     token:string
     topic:string
-    drillName:string
+    drillName:string|undefined
 }
 
 /* 
