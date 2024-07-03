@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const sendDrillController = require('../controllers/sendDrillController')
-router.post('/Drills/:drillId', sendDrillController.addDrill);
-router.delete('/Drills/:drillId', sendDrillController.deleteDrill);
-router.get('/Drills/user/:username', sendDrillController.getDrillsByUser);
-router.get('/Drills/coach/:username', sendDrillController.getDrillsByCoach);
+router.post('/SendDrills/:drillId', sendDrillController.addDrill);
+router.delete('/SendDrills/:drillId', sendDrillController.deleteDrill);
+router.get('/SendDrills/user', sendDrillController.getDrillsByUser);
+router.get('/SendDrills/coach', sendDrillController.getDrillsByCoach);
 
 module.exports = router

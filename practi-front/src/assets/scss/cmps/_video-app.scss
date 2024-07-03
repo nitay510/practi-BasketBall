@@ -27,8 +27,11 @@
 
 }
 .blue-bg-btn {
-    background-color: blue !important; /* Use !important to ensure the style takes precedence */
-    color: white; /* Set the text color to white for better visibility */
+    background: rgba(255, 162, 74, 1) !important; /* Use !important to ensure the style takes precedence */
+    color: black; 
+    width: 40px;
+height: 38.48px;
+
     /* Add other button styles as needed */
   }
   

@@ -1,0 +1,96 @@
+.userTrainings {
+    text-align: center;
+    font-family: Lato;
+    margin: 20px;
+  
+    h1 {
+      height: 43px;
+      font-family: Lato;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 43.2px;
+      margin-bottom: 2vh;
+    }
+  
+    h2 {
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 20px;
+      letter-spacing: 0.75px;
+      margin-bottom: 2vh;
+    }
+  
+    .underline {
+      width: 297px;
+      margin: 0 auto 20px;
+      border: none;
+      border-top: 1.56px solid rgba(210, 60, 85, 1);
+    }
+  
+    .notifications {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+  
+    .notification {
+      position: relative;
+      width: 326px;
+      height: 94px;
+      background: rgba(34, 35, 38, 1);
+      border: 1px solid rgba(255, 255, 255, 1);
+      border-radius: 10px;
+      box-shadow: 0px 8px 16px 0px rgba(255, 255, 255, 0);
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      direction: ltr; /* Change direction to LTR to position icon on the left */
+  
+      .notification-icon {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        background-color: #e32652; 
+        order: -1; /* Ensure the icon appears on the left */
+      }
+      .completed-icon {
+        color: green; /* Change to desired color */
+        margin-left: 5px; /* Adjust spacing */
+        font-size: 36px;
+      }
+      
+      .notification-date {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+  
+      .notification-text {
+        flex: 1;
+        text-align: right; /* Align text to the right */
+        direction: rtl; /* Maintain RTL direction for the text */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+  
+        p {
+          margin: 0;
+        }
+  
+        .drillDetails {
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 20px;
+          letter-spacing: 0.75px;
+          text-align: right;
+        }
+      }
+    }
+  }
+  

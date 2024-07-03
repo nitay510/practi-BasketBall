@@ -4,11 +4,9 @@ import React, { useState,useEffect } from 'react';
 import { HeaderCoach } from '../../cmps/headers/headerCoach';
 import { HeroManager } from '../../cmps/cta/hero-manager';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
-import { MdClose } from 'react-icons/md';
+
 import TeamList from '../../cmps/team/team-list'; 
-import { MdAdd } from 'react-icons/md'; 
 import { useNavigate } from 'react-router-dom';
-import { CtaOpenManager } from '../../cmps/cta/cta-open-mananger';
 interface PractiViewProps {
   token: string;
   setToken: (token: string) => void;

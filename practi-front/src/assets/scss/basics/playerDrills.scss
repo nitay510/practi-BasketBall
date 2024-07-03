@@ -1,0 +1,33 @@
+.playerDrills {
+    color: white;
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+      
+        th, td {
+          border: 1px solid #ddd;
+          padding: 8px;
+        }
+      
+        th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #4CAF50;
+          color: white;
+        }
+      
+        tr:hover {
+          background-color: #f1f1f1;
+        }
+      }
+      
+      .select {
+        width: 100%;
+        padding: 8px;
+        margin: 4px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+}

@@ -19,7 +19,7 @@ export function CtaOpenManager({ token }: CtaOpenProps) {
   // Function to fetch the last game result
   const fetchLastGame = async () => {
     try {
-      const response = await fetch('https://practi-web.onrender.com/api/games/coachLastGame', {
+      const response = await fetch('http://localhost:5000/api/games/coachLastGame', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

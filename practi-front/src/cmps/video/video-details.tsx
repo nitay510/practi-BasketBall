@@ -47,7 +47,7 @@ export const VideoDetails = ({
       drillName: drillName,
     });
 
-    const res = await fetch(`https://practi-web.onrender.com/api/Drills/highScore/${title}?${params.toString()}`, {
+    const res = await fetch(`http://localhost:5000/api/Drills/highScore/${title}?${params.toString()}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export const VideoDetails = ({
       target: target,
     };
     try {
-      const res1 = await fetch(`https://practi-web.onrender.com/api/Drills/${drillId}`, {
+      const res1 = await fetch(`http://localhost:5000/api/Drills/${drillId}`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',

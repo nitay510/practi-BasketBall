@@ -28,11 +28,11 @@ const TeamList = ({ token,setToken,club,master }: TeamListProps) => {
     let response;
   
     if (master) {
-      response = await fetch(`https://practi-web.onrender.com/api/teams/club?clubName=${encodeURIComponent(club)}`, {
+      response = await fetch(`http://localhost:5000/api/teams/club?clubName=${encodeURIComponent(club)}`, {
         headers: { Authorization: authToken }
       });
     } else {
-      response = await fetch('https://practi-web.onrender.com/api/teams', {
+      response = await fetch('http://localhost:5000/api/teams', {
         headers: { Authorization: authToken }
       });
     }
@@ -42,7 +42,7 @@ const TeamList = ({ token,setToken,club,master }: TeamListProps) => {
     const teamsWithPlayersAndResults = await Promise.all(
       teamsData.map(async (team: { teamName: any; }) => {
         // Fetch players data for each team
-        const playersResponse = await fetch('https://practi-web.onrender.com/api/teams/players', {
+        const playersResponse = await fetch('http://localhost:5000/api/teams/players', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const TeamList = ({ token,setToken,club,master }: TeamListProps) => {
         const playersData = await playersResponse.json();
   
         // Fetch win-loss data for each team
-        const winLossResponse = await fetch(`https://practi-web.onrender.com/api/games/team/${team.teamName}/wins-losses`, {
+        const winLossResponse = await fetch(`http://localhost:5000/api/games/team/${team.teamName}/wins-losses`, {
           headers: { Authorization: authToken }
         });
   
@@ -79,7 +79,7 @@ const TeamList = ({ token,setToken,club,master }: TeamListProps) => {
       try {
       const storedToken = localStorage.getItem('authToken')
       setToken(storedToken);
-        const response = await fetch(`https://practi-web.onrender.com/api/teams/`, {
+        const response = await fetch(`http://localhost:5000/api/teams/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ const TeamList = ({ token,setToken,club,master }: TeamListProps) => {
 
   const deletePlayer = async (username: string, teamName: string) => {
     try {
-      const response = await fetch(`https://practi-web.onrender.com/api/teams/removePlayerByCoach`, {
+      const response = await fetch(`http://localhost:5000/api/teams/removePlayerByCoach`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

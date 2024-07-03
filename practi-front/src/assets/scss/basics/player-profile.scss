@@ -1,4 +1,5 @@
 .profile-page {
+    font-family: Lato;
     color: white;
     background-color: black; // Assuming the overall background should be black
     direction: rtl;
@@ -6,7 +7,49 @@
         max-width: 600px;
         margin: 0 auto; // Centers the container
         text-align: center;
+// מאזן
+        .team-stats {
+            gap: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Lato;
+            margin-bottom: 5vh;
+            .stat-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                
+        .rectangle{
+width: 62.23px;
+height: 77.68px;
+background: rgba(34, 35, 38, 1);
+border: 1.52px solid rgba(210, 60, 85, 1);
+font-size: 48.37px;
+font-weight: 700;
+border-radius: 25px;
+        }
 
+.label {
+    font-family: Lato;
+    font-size: 15.74px;
+    font-weight: 400;
+    line-height: 19.67px;
+    
+  }
+}
+        
+        .slash {
+width: 36.46px;
+height: 43.36px;
+font-size: 48.37px;
+font-weight: 700;
+line-height: 60.46px;
+
+        }
+    }
+
+    //join team
         .joinTeamButton{
             margin-top: 5vh;
             font-size: 18px; // Increased font size
@@ -28,33 +71,53 @@
                 outline: none;
             }
         }
-        h3 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-        p {
-            font-size: 18px;
-            margin: 10px 0; // Uniform margin for vertical spacing
-            display: flex;
-            justify-content: center;
-            align-items: center;
-      
-            .leave-icon {
-              margin-right: 20px; // Space between the team name and the icon
-              cursor: pointer;
-              color: #e32652; // Icon color to match theme
-      
-              &:hover {
-                color: darken(#e32652, 10%);
-              }
-            }
-        }
 
+        //headlines
+        //name
+        h3 {
+            width: 336.92px;
+            height: 21.39px;
+            font-size: 23.86px;
+            font-weight: 700;
+            line-height: 29.83px;
+            letter-spacing: 0.8947937488555908px;
+            text-align: right;
+            margin-right: 2vh;
+            margin-bottom: 4vh;
+        }
+        //team
+        h2 {
+            color: #fff;
+            width: 333.98px;
+            height: 12.47px;
+            font-family: Lato;
+            font-size: 17.81px;
+            font-weight: 400;
+            line-height: 22.27px;
+            letter-spacing: 0.6679540872573853px;
+            text-align: right;
+            margin-right: 2vh;
+            margin-bottom: 7vh;
+          .leave-icon {
+            margin-right: 5vh;
+          }  
+        }
+        //לוח משחקים
+        .header-container {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            margin-bottom: 20px;
+          }
+        h1 {
+            width: 194.96px;
+            height: 25.84px;
+            font-size: 28.82px;
+            font-weight: 700;
+            line-height: 36.03px;
+            letter-spacing: 1.080759882926941px;
+        }
+//join team model
         .join-team {
             font-size: 20px;
             color: #e32652;
@@ -165,28 +228,70 @@
         }
         
     }
+    // avg stats
+    .game-stats {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px; 
+        margin-bottom: 3vh;
+        .stat-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      
+          .rectangle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 98.69px;
+            height: 77.79px;
+            background: rgba(34, 35, 38, 1);
+            border: 1.52px solid rgba(255, 162, 74, 1);
+            border-radius: 20px;
+font-size: 32.35px;
+font-weight: 700;
+line-height: 40.43px;
+
+          }
+      
+          .label {
+            font-size: 15.74px;
+            font-weight: 400;
+            line-height: 19.67px;
+            letter-spacing: 0.5902165770530701px;
+            
+          }
+        }
+      }
+
+      // table for games
+      .game-stats-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 5px;
+        }
     
-.game-stats-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 30px;
-    margin-bottom: 20px;
-    th, td {
-        border: 1px solid #ddd;
-        text-align: center;
-        padding: 5px;
+        th {
+            background-color: #645858;
+        }
+    
+        tr.win td:nth-child(2) { // Score column for wins
+            color: #31eb31
+        }
+    
+        tr.loss td:nth-child(2) { // Score column for losses
+            color: red;
+        }
     }
-
-    th {
-        background-color: #645858;
+    .playerName {
+        font-size: 26px;
+        margin-bottom: 50px;
+        font-weight: 700;
     }
-
-    tr.win td:nth-child(2) { // Score column for wins
-        color: #31eb31
-    }
-
-    tr.loss td:nth-child(2) { // Score column for losses
-        color: red;
-    }
-}
 }

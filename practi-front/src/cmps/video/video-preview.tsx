@@ -42,7 +42,7 @@ export const VideoPreview = ({
         setTimeout(() => {
           onSetVideoStatus(true);
           dispatch(startVideo()); // Dispatch the startVideo action
-        }, 1500);
+        }, 1000);
       } else {
         onSetVideoStatus(true);
         dispatch(startVideo()); // Dispatch the startVideo action

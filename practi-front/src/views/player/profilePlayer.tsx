@@ -25,13 +25,13 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
       const authToken = `Bearer ${storedToken || token}`;
       setToken(storedToken || token);
       try {
-        const response = await fetch('https://practi-web.onrender.com/api/teams/player', {
+        const response = await fetch('http://localhost:5000/api/teams/player', {
           headers: { Authorization: authToken }
         });
         const data = await response.json();
         if (data.length > 0) {
           setTeamName(data[0].teamName);
-          const winLossResponse = await fetch(`https://practi-web.onrender.com/api/games/team/${data[0].teamName}/wins-losses`, {
+          const winLossResponse = await fetch(`http://localhost:5000/api/games/team/${data[0].teamName}/wins-losses`, {
             headers: { Authorization: authToken }
           });
           const { wins, losses } = await winLossResponse.json();
@@ -50,7 +50,7 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
     const fetchTeamsInClub = async () => {
       const storedToken = localStorage.getItem('authToken');
       try {
-        const response = await fetch(`https://practi-web.onrender.com/api/teams/club?clubName=${encodeURIComponent(club)}`, {
+        const response = await fetch(`http://localhost:5000/api/teams/club?clubName=${encodeURIComponent(club)}`, {
           headers: { Authorization: `Bearer ${storedToken || token}` }
         });
         if (response.ok) {
@@ -69,7 +69,7 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
   const joinTeam = async () => {
     try {
       const storedToken = localStorage.getItem('authToken');
-      const response = await fetch('https://practi-web.onrender.com/api/teams/join', {
+      const response = await fetch('http://localhost:5000/api/teams/join', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
     if (window.confirm('אתה בטוח שברצונך לעזוב את הקבוצה?')) {
       try {
         const storedToken = localStorage.getItem('authToken');
-        const response = await fetch('https://practi-web.onrender.com/api/teams/removePlayerByPlayer', {
+        const response = await fetch('http://localhost:5000/api/teams/removePlayerByPlayer', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -121,10 +121,18 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
         <h3>שלום, {firstName}</h3>
         {teamName ? (
           <>
-            <p>משחק בקבוצת: {teamName} <MdExitToApp className="leave-icon" onClick={leaveTeam} /></p>
-            <p>
-        מאזן: נצחונות: {teamWins} - הפסדים: {teamLosses} 
-      </p>
+            <h2>משחק בקבוצת: {teamName} <MdExitToApp className="leave-icon" onClick={leaveTeam} /></h2>
+            <div className="team-stats">
+      <div className="stat-container">
+        <div className="rectangle wins">{teamWins}</div>
+        <div className="label">נצחונות</div>
+      </div>
+      <div className="slash">/</div>
+      <div className="stat-container">
+        <div className="rectangle losses">{teamLosses}</div>
+        <div className="label">הפסדים</div>
+      </div>
+    </div>
             <PlayerGameStats playerName={firstName} teamName={teamName} />
           </>
         ) : (

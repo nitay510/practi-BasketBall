@@ -148,3 +148,19 @@ exports.getWinLose = async (currentUser, opponentName) => {
     return 0;
   }
 };
+/**
+ * Checks if a user has done a specific drill.
+ * @param {string} username - Username of the user.
+ * @param {string} drillName - Name of the drill.
+ * @returns {Promise<boolean>} - Returns true if the user has done the drill, otherwise false.
+ */
+exports.hasUserDoneDrill = async (username, drillName) => {
+  try {
+    const drill = await Drill.findOne({ user: username, drillName: drillName });
+    if(drill)
+    return true;
+    return false;
+  } catch (error) {
+    throw error;
+  }
+};

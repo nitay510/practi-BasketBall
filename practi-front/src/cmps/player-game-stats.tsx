@@ -19,7 +19,7 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName 
 
             try {
                 // Fetch games data for a specific player and team
-                const response = await fetch(`https://practi-web.onrender.com/api/games/team/${encodeURIComponent(teamName)}/player/${encodeURIComponent(playerName)}`, {
+                const response = await fetch(`http://localhost:5000/api/games/team/${encodeURIComponent(teamName)}/player/${encodeURIComponent(playerName)}`, {
                     headers: {
                         'Authorization': `Bearer ${storedToken}`,
                         'Content-Type': 'application/json'
@@ -58,23 +58,23 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName 
         <div>
         
             {/* Average Stats Table */}
-            <table className="game-stats-table">
-                <thead>
-                    <tr>
-                        <th>ממוצע נקודות</th>
-                        <th>ממוצע ריבאונדים</th>
-                        <th>ממוצע אסיסטים</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{averageStats.score}</td>
-                        <td>{averageStats.rebounds}</td>
-                        <td>{averageStats.assists}</td>
-                    </tr>
-                </tbody>
-            </table>
-        <h3> לוח משחקים </h3>
+            <div className="game-stats">
+      <div className="stat-container">
+        <div className="rectangle">{averageStats.score}</div>
+        <div className="label">נקודות</div>
+      </div>
+      <div className="stat-container">
+        <div className="rectangle">{averageStats.rebounds}</div>
+        <div className="label">ריבאונדים</div>
+      </div>
+      <div className="stat-container">
+        <div className="rectangle">{averageStats.assists}</div>
+        <div className="label">אסיסטים</div>
+      </div>
+    </div>
+    <div className="header-container">
+        <h1> לוח משחקים </h1>
+        </div>
             {/* Individual Games Stats Table */}
             <table className="game-stats-table">
                 <thead>

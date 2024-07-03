@@ -41,7 +41,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
   const fetchTeams = async () => {
     const storedToken = localStorage.getItem('authToken') || token;
     try {
-      const response = await fetch('https://practi-web.onrender.com/api/teams', {
+      const response = await fetch('http://localhost:5000/api/teams', {
         headers: { Authorization: `Bearer ${storedToken}` },
       });
       if (response.ok) {
@@ -124,7 +124,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
     };
     const storedToken = localStorage.getItem('authToken');
     try {
-      const response = await fetch('https://practi-web.onrender.com/api/events', {
+      const response = await fetch('http://localhost:5000/api/events', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',

@@ -4,6 +4,10 @@ import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { Game } from '../InGameStats/game';
 import { EventModal } from './EventModal'; // Import the EventModal component
+import { EventCard } from '../EventList/EventCard'; // Import the EventCard component
+import { MdAdd, MdClose, MdFilterAlt, MdSort } from 'react-icons/md';
+import DropdownMenu from '../CoachGames/DropdownMenu';
+import EventFilterModal from '../EventList/EventFilterModal';
 
 interface WeeklyCalendarProps {
   token: string,
@@ -22,14 +26,6 @@ interface Event {
   tasks: string[]; // list of tasks
 }
 
-function getWeekNumber(d: Date): [number, number] {
-  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
-  return [d.getUTCFullYear(), weekNo];
-}
-
 const getWeekDates = (weekOffset: number) => {
   const currentDate = new Date();
   const dayOfWeek = currentDate.getDay();
@@ -45,35 +41,27 @@ const getWeekDates = (weekOffset: number) => {
   return weekDates;
 };
 
-const getWeekStartAndEnd = (weekOffset: number) => {
-  const currentDate = new Date();
-  const startOfWeek = new Date(currentDate);
-  startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (weekOffset * 7));
-
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + 6);
-
-  return {
-    startDate: startOfWeek,
-    endDate: endOfWeek
-  };
-};
-
 export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): JSX.Element {
-  const [currentWeek, setCurrentWeek] = useState(0);
+  const [teams, setTeams] = useState<{ teamName: string }[]>([]);
+  const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
   const [events, setEvents] = useState<Event[]>([]);
   const [games, setGames] = useState<Game[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
   const navigate = useNavigate();
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [sortingOptionsOpen, setSortingOptionsOpen] = useState(false);
+  const [sortingOption, setSortingOption] = useState<string>('alphabetical');
+  const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    const fetchEvents = async (startDate: Date, endDate: Date) => {
+    const fetchEvents = async () => {
       const storedToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `https://practi-web.onrender.com/api/events/date-range?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`,
+          `http://localhost:5000/api/events`,
           {
             headers: {
               Authorization: `Bearer ${storedToken}`,
@@ -95,7 +83,7 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
 
           if (event.type === 'game' && eventDate < now) {
             const gameResponse = await fetch(
-              `https://practi-web.onrender.com/api/games/date/${event.date}/team/${event.teamName}/rivalTeam/${event.eventName}`,
+              `http://localhost:5000/api/games/date/${event.date}/team/${event.teamName}/rivalTeam/${event.eventName}`,
               {
                 headers: {
                   Authorization: `Bearer ${storedToken}`,
@@ -123,96 +111,58 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
       }
     };
 
-    const { startDate, endDate } = getWeekStartAndEnd(currentWeek);
-    fetchEvents(startDate, endDate);
-  }, [currentWeek, token]);
-
-  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const hours = Array.from({ length: 10 }, (_, i) => 14 + i);
-  const weekDates = getWeekDates(currentWeek);
-  const now = new Date();
-  const today = now.getDay();
-  const currentHour = now.getHours();
-
-  const isCurrentTime = (dayIndex: number, hour: number) => {
-    return dayIndex === today && hour === currentHour;
-  };
-
-  const changeWeek = (direction: number) => {
-    setCurrentWeek(prevWeek => prevWeek + direction);
-  };
-
-  const isThereEvent = (dayIndex: number, hour: number) => {
-    return events.some(event => {
-      const eventDate = new Date(event.date);
-      return eventDate.getDate() === weekDates[dayIndex].getDate() && isHourInsideEvent(dayIndex, hour);
-    });
-  }
-
-  const getColor = (dayIndex: number, hour: number) => {
-    if (isHourInsideEvent(dayIndex, hour)) return 'red';
-    if (isCurrentTime(dayIndex, hour)) return 'yellow';
-    return 'transparent';
-  }
-
-  const getName = (dayIndex: number, hour: number) => {
-    let result = '';
-    const checkHour = `${hour}:00`;
-    events.forEach(event => {
-      const eventDate = new Date(event.date);
-      if (eventDate.getDate() === weekDates[dayIndex].getDate() && event.startTime === checkHour) {
-        result = event.eventName;
+    const fetchTeams = async () => {
+      try {
+        const storedToken = localStorage.getItem('authToken') || token;
+        let response;
+          response = await fetch('http://localhost:5000/api/teams', {
+            headers: { 'Authorization': `Bearer ${storedToken}` }
+          });
+        
+        if (response.ok) {
+          const teamsData = await response.json();
+          setTeams(teamsData);
+          setSelectedTeams(teamsData.map((team: { teamName: any; }) => team.teamName)); // Select all teams by default
+        } else {
+          console.error('Failed to fetch teams');
+        }
+      } catch (error) {
+        console.error('Error fetching teams:', error);
       }
-    });
-    return result;
-  }
+    };
+    fetchTeams();
 
-  const calculateEndTime = (startTime: string, duration: number) => {
-    const startTimeArray = startTime.split(':');
-    const startHour = parseInt(startTimeArray[0]);
-    const startMinute = parseInt(startTimeArray[1]);
-
-    const endMinute = (startMinute + duration) % 60;
-    const endHour = startHour + Math.floor((startMinute + duration) / 60);
-
-    return `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
-  };
-
-  const isHourInsideEvent = (dayIndex: number, hour: number) => {
-    return events.some(event => {
-      const eventDate = new Date(event.date);
-      return eventDate.getDate() === weekDates[dayIndex].getDate() && parseInt(event.startTime) <= hour && parseInt(event.startTime) + event.duration / 60 > hour;
-    });
-  }
-
-  const handleEmptyCellClick = (date: string, startTime: string) => {
-    setSelectedDate(date);
-    setSelectedTime(startTime);
-    setModalOpen(true);
-  };
-
-  const handleCellClick = (dayIndex: number, hour: number) => {
-    const date = weekDates[dayIndex].toISOString().split('T')[0];
-    const startTime = `${hour.toString().padStart(2, '0')}:00`;
-    const event = events.find(event => {
-      const eventDate = new Date(event.date);
-      return eventDate.getDate() === weekDates[dayIndex].getDate() && event.startTime === startTime;
-    });
-
-    if (event) {
-      if (event.type === 'game') {
-        navigate(`/gameEvent/${event._id}`);
-      } else {
-        navigate(`/event/${event._id}`);
-      }
-    } else {
-      handleEmptyCellClick(date, startTime);
-    }
-  }
+    fetchEvents();
+    setSelected();
+  }, [token]);
 
   const handleGameClick = (game: Game) => {
     navigate('/after-game-boxScore', { state: { game } });
   }
+
+  const setSelected = () => {
+    if(startDate === '' && endDate === '') {
+      setSelectedEvents(events.filter(event => selectedTeams.includes(event.teamName)));
+    } else if(startDate === '') {
+      setSelectedEvents(events.filter(event => selectedTeams.includes(event.teamName) && new Date(event.date) <= new Date(endDate)));
+    }
+    else if(endDate === '') {
+      setSelectedEvents(events.filter(event => selectedTeams.includes(event.teamName) && new Date(event.date) >= new Date(startDate)));
+    }
+    else
+    {
+      setSelectedEvents(events.filter(event => selectedTeams.includes(event.teamName) && new Date(event.date) >= new Date(startDate) && new Date(event.date) <= new Date(endDate)));
+    }
+  }
+
+  const handleApplyFilters = (start: string, end: string, selectedTeams: string[]) => {
+    // Close the modal and keep the selected filters local until they are applied
+    setStartDate(start);
+    setEndDate(end);
+    setSelectedTeams(selectedTeams);
+    setSelected();
+    setFilterModalOpen(false); // Close the modal after applying filters
+  };
 
   const handleNewEventClick = () => {
     const now = new Date();
@@ -242,100 +192,104 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
     navigate(`/newGameEvent?date=${encodeURIComponent(date)}&startTime=${encodeURIComponent(startTime)}`);
   };
 
-  const handleModalNewEvent = () => {
-    navigate(`/newEvent?date=${encodeURIComponent(selectedDate)}&startTime=${encodeURIComponent(selectedTime)}`);
+  // Function to sort games alphabetically by team's name
+  const sortGamesByName = () => {
+    setGames(prevGames => {
+      const sortedGames = [...prevGames].sort((a, b) => {
+        if (a.teamName < b.teamName) {
+          return -1;
+        }
+        if (a.teamName > b.teamName) {
+          return 1;
+        }
+        // If team names are equal, continue comparing by other properties
+        return 0;
+      });
+      return sortedGames;
+    });
   };
 
-  const handleModalNewGame = () => {
-    navigate(`/newGameEvent?date=${encodeURIComponent(selectedDate)}&startTime=${encodeURIComponent(selectedTime)}`);
+  const sortGamesByDate = () => {
+    setGames(prevGames => {
+      const sortedGames = [...prevGames].sort((a, b) => {
+        return new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime();
+      });
+      return sortedGames;
+    });
+  }
+
+  const handleSortingOptionChange = (option: string) => {
+    setSortingOption(option);
+    setSortingOptionsOpen(false);
+    if (option === 'לפי שם') {
+      console.log("Sorting by name");
+      sortGamesByName(); // Call the sort function if sorting by name is selected
+    }
+    else if (option === 'לפי זמן') {
+      sortGamesByDate();
+    }
   };
 
   return (
-    <div className='calendarPage'>
-      <HeaderThree />
-    
-        <div className='calendar'>
-          <div className='calendarHeader'>
-            לוז שבועי
+    <div className='coach-games'>
+      <div className='content-container'>
+        <HeaderThree />
+        <div className='title-container'>
+          <h2>אירועים</h2>
+          <div className='filter-buttons'>
+            <button onClick={() => setFilterModalOpen(true)}>
+              <MdFilterAlt className='filter-button' />
+            </button>
+            <button onClick={() => setSortingOptionsOpen(!sortingOptionsOpen)}>
+              <MdSort className='sort-button' />
+            </button>
+            {sortingOptionsOpen && (
+              <DropdownMenu
+                options={['לפי שם', 'לפי זמן']}
+                onSelectOption={(option) => handleSortingOptionChange(option)}
+                selectedOption={sortingOption} // Pass selectedOption prop
+              />
+            )}
           </div>
-          <div>
-          <button onClick={() => changeWeek(-1)}>שבוע קודם</button>
-          <button onClick={() => changeWeek(1)}>שבוע הבא</button>
-          </div>
-          <div>
-          <button onClick={handleNewEventClick}>הוסף אימון</button>
-          <button onClick={handleNewGameClick}>הוסף משחק</button>
-          </div>
+          <button className="add-new-game" onClick={() => setModalOpen(true)}>
+            הוסף אירוע חדש
+          </button>
           {modalOpen && (
-        <div className="add-team-popup-container">
-          <div className="add-team-popup">
-            <EventModal
-              isOpen={modalOpen}
-              onClose={() => setModalOpen(false)}
-              onNewEvent={handleModalNewEvent}
-              onNewGame={handleModalNewGame}
-            />
-          </div>
+            <div className="new-game-modal">
+              <div className="add-team-popup">
+                <button className="modal-close-button" onClick={() => setModalOpen(false)}>
+                  <MdClose size={24} />
+                </button>
+                <h2>בחר סוג אירוע</h2>
+                <button onClick={handleNewEventClick}>אימון חדש</button> <br />
+                <button onClick={handleNewGameClick}>משחק חדש</button>
+              </div>
+            </div>)}
+         
         </div>
-      )}
-          <table>
-            <thead>
-              <tr>
-                <th>Time</th>
-                {weekDates.map((date, index) => (
-                  <th key={index}>
-                    {daysOfWeek[index]}<br />
-                    {date.toLocaleDateString()}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {hours.map((hour) =>
-                <tr key={hour}>
-                  <th>{hour}:00</th>
-                  {weekDates.map((date, index) => {
-                    const eventsForThisHour = events.filter((event) => {
-                      const eventDate = new Date(event.date);
-                      return eventDate.getDate() === date.getDate() && parseInt(event.startTime) === hour;
-                    });
-
-                    console.log(games)
-                    const gamesForThisHour = games.filter((game) => {
-                      const gameDate = new Date(game.gameDate);
-                      const gameHour = gameDate.getHours(); // Get the hour portion from the game date
-                      return gameDate.getDate() === date.getDate() && gameHour === hour;
-                    });
-
-                    const cellColor = getColor(index, hour);
-                    const cellName = getName(index, hour);
-
-                    return (
-                      <td key={`${index}-${hour}`} style={{ backgroundColor: cellColor }} onClick={() => handleCellClick(index, hour)}>
-                        {eventsForThisHour.map((event) => (
-                          <div key={event._id} style={{ color: 'white' }}>
-                            {cellName} <br />
-                            {event.startTime} - {calculateEndTime(event.startTime, event.duration)} <br />
-                          </div>
-                        ))}
-                        {gamesForThisHour.map((game) => (
-                          <div key={game.gameDate.toString()} style={{ color: 'white' }} onClick={() => handleGameClick(game)}>
-                            {game.teamName} - {game.rivalTeamName} <br />
-                            {game.myTeamScore} - {game.otherTeamScore} <br />
-                          </div>
-                        ))}
-                      </td>
-                    );
-                  })}
-                </tr>
-              )}
-            </tbody>
-          </table>
+        <div className="game-cards-container">
+          {selectedEvents.map((event, index) => (
+            <EventCard key={index} event={event} token={token} />
+          ))}
         </div>
+        <EventFilterModal
+          teams={teams}
+          selectedTeams={selectedTeams}
+          setSelectedTeams={setSelectedTeams}
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          isOpen={filterModalOpen}
+          onClose={() => setFilterModalOpen(false)}
+          onApplyFilters={handleApplyFilters}
+        />
+      </div>
+      
+
       <div className='cta-bar-container'>
         <CtaBarManager />
       </div>
-
     </div>
   );
 }

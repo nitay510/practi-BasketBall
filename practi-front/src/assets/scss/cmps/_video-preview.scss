@@ -1,4 +1,5 @@
 .video-preview {
+    font-family: Lato;
     background-color: #222326;
     &.playing {
         border: 1px solid white; /* Dashed red border when playing */
@@ -6,11 +7,18 @@
 
     .preview-wrap {
         width: 100%;
+        height: 68.71px;
         display: flex;
         align-items: center;
+        margin-top: 25px;
+        font-size: 20px;
         justify-content: space-between;
         padding: 10px;
-        margin-bottom: 8px;
+        margin-bottom: 20px;
+        border: 3.12px solid rgba(210, 60, 85, 1);
+        border-radius: 20px;
+        background: rgb(34, 35, 38);
+
     }
 
     .action-heading-container {
@@ -22,9 +30,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 30px;
-            height: 30px;
-            background-color: #e32652; 
+            width: 40px;
+            height: 38.48px;
+            font-size: 25px;
+            color:black;
+            background: rgba(210, 60, 85, 1); 
+            border: 0.71px solid rgba(0, 0, 0, 1);
             margin-left: 10px;
 
           

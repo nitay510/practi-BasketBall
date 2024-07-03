@@ -1,6 +1,7 @@
 
 const SendDrill = require('../models/sendDrill');
 const Users = require('../models/user');
+const moment = require('moment');
 
 exports.addDrill = async (drillId, user,coach, drillName, topic) => {
     try {
@@ -41,13 +42,16 @@ exports.deleteDrill = async (drillId) => {
   // New getDrillsByUser function
   exports.getDrillsByUser = async (username) => {
     try {
-      const drills = await SendDrill.find({ userPlayer: username });
-      return drills;
+        const twoWeeksAgo = moment().subtract(2, 'weeks').toDate();
+        const drills = await SendDrill.find({
+            userPlayer: username,
+            date: { $gte: twoWeeksAgo }
+        });
+        return drills;
     } catch (error) {
-      throw error;
+        throw error;
     }
-  };
-  
+};
   // New getDrillsByCoach function
   exports.getDrillsByCoach = async (username) => {
     try {

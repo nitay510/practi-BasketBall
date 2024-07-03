@@ -2,12 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import VideoModel from '../../Models/VideoModel';
 import { Header } from '../../cmps/headers/header';
-import { CtaOpen } from '../../cmps/cta/cta-open';
+import { useLocation } from 'react-router-dom';
 import { CtaBar } from '../../cmps/cta/cta-bar';
 import { NavBar } from '../../cmps/nav-bar';
 import { VideoList } from '../../cmps/video/video-list';
 import { VideoPlayerLi } from '../../cmps/video-player-li';
-import { getNextCategory, getNextVideoInCategory, getVideos } from '../../cmps/video/functions';
+import {  startVideo } from '../../store/slicers/selectedVideo.slice';
+import {  getNextVideoInCategory, getVideos, getVideoByName } from '../../cmps/video/functions';
 import { setVideos } from '../../store/slicers/videos.slice';
 import { setSelectedVideo, setVideoState } from '../../store/slicers/selectedVideo.slice';
 import { selectedVideoState, selectedVideosState } from '../../store/store';
@@ -20,34 +21,38 @@ interface PractiViewProps {
   topic: string;
   setTopic: (topic: string) => void;
   loginStatus: boolean;
-  setLoginStatus:(isLogin: boolean) => void;
+  setLoginStatus: (isLogin: boolean) => void;
+  lastLogin: Date;
 }
 
-export const PractiApp = ({ token,setToken, firstname, setTopic, topic, loginStatus,setLoginStatus }: PractiViewProps): JSX.Element => {
+export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginStatus, setLoginStatus, lastLogin }: PractiViewProps): JSX.Element => {
   // State
-  const [latestDrillName, setLatestDrillName] = useState('');
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [nextDrill, setNextDrill] = useState<VideoModel | null>(null);
   const [nextDrillTopic, setNextDrillTopic] = useState("כדרור");
   const videos = useSelector(selectedVideosState);
-  const [filterBy, setFilterBy] = useState("כדרור");
+  const [filterBy, setFilterBy] = useState(topic);
   const selectedVideo = useSelector(selectedVideoState);
   const navBarRef = useRef<null | HTMLDivElement>(null);
   const ctaBarContainerRef = useRef<HTMLDivElement>(null);
-  
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { drillToDo } = location.state || {};
 
   useEffect(() => {
     // Fetch data on component mount or when filterBy or token changes
     const fetchData = async () => {
-      setFilterBy(topic);
-      await findLastDrill();
       await loadVideos();
     };
-
     fetchData();
-  }, [filterBy, token,]);
+  }, [filterBy]);
 
+  useEffect(() => {
+    if (!drillToDo) {
+      findLastDrill();
+    }
+  }, [token]);
 
   useEffect(() => {
     // Redirect to login page when loginStatus is false
@@ -57,10 +62,41 @@ export const PractiApp = ({ token,setToken, firstname, setTopic, topic, loginSta
   }, [loginStatus]);
 
   const loadVideos = async () => {
-    // Fetch videos based on filterBy and set them in the Redux store
-    const fetchedVideos = await getVideos(filterBy, token);
-    dispatch(setVideos(fetchedVideos));
-    dispatch(setSelectedVideo(fetchedVideos[0]));
+    console.log('loadVideos')
+    try {
+      // Fetch videos based on filterBy and set them in the Redux store
+      const fetchedVideos = await getVideos(filterBy, token);
+      dispatch(setVideos(fetchedVideos));
+      if (!isFirstLoad) {
+        console.log('not first load');
+        dispatch(setSelectedVideo(fetchedVideos[0]));
+      } else {
+        setIsFirstLoad(false);
+        if (drillToDo) {
+          // Fetch the video by name asynchronously
+          const videoToDo = await getVideoByName(drillToDo);
+          // Ensure the video is found before setting nextDrill
+          if (videoToDo) {
+            dispatch(setSelectedVideo(videoToDo));
+            setTimeout(() => {
+              onSetVideoStatus(true);
+              dispatch(startVideo()); // Dispatch the startVideo action
+            }, 1500);
+          } else {
+            console.log('Video not found');
+          }
+        } else {
+          if (nextDrill) {
+            dispatch(setSelectedVideo(nextDrill));
+          } else {   
+            console.log('NextDrill is null or undefined');
+            dispatch(setSelectedVideo(fetchedVideos[0]));
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error loading videos:', error);
+    }
   };
 
   const onSetVideoStatus = (isPlaying: boolean): void => {
@@ -74,30 +110,33 @@ export const PractiApp = ({ token,setToken, firstname, setTopic, topic, loginSta
   };
 
   const findLastDrill = async () => {
-    const storedToken = localStorage.getItem('authToken');
-    // Fetch information about the last drill
-    const getUserResponse = await fetch(`https://practi-web.onrender.com/api/LastDrill/`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${storedToken}`
-      }
-    });
-    if (getUserResponse.ok&&getUserResponse.json!=null) {
-      const userJson = await getUserResponse.json();
-      const { drillName, topic } = userJson;
-      setLatestDrillName(drillName);
-      const nextVideo = getNextVideoInCategory(topic, drillName, token);
-      if (await nextVideo) {
-        setNextDrill(await nextVideo);
-        setNextDrillTopic(topic);
+    try {
+      const storedToken = localStorage.getItem('authToken');
+      // Fetch information about the last drill
+      const getUserResponse = await fetch(`http://localhost:5000/api/LastDrill/`, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${storedToken}`
+        }
+      });
+      if (getUserResponse.ok) {
+        const userJson = await getUserResponse.json();
+        const { drillName, topic } = userJson;
+        const nextVideo = await getNextVideoInCategory(topic, drillName, token);
+        if (nextVideo) {
+          setNextDrill(nextVideo);
+          setIsFirstLoad(true);
+          setTopic(topic);
+          setFilterBy(topic);
+        } else {
+          setNextDrill(null);
+        }
       } else {
-        const newCategory = getNextCategory(topic, token);
-        setNextDrillTopic(await newCategory);
-        setNextDrill(await getNextVideoInCategory(await newCategory, null, token));
+        setNextDrill(null);
       }
-    } else {
-      setNextDrill(await getNextVideoInCategory(nextDrillTopic, null, token));
+    } catch (error) {
+      console.error('Error finding last drill:', error);
     }
   };
 
@@ -106,18 +145,7 @@ export const PractiApp = ({ token,setToken, firstname, setTopic, topic, loginSta
   return (
     <div className='practi-app'>
       <div className='content-container'>
-        <Header 
-        setLoginStatus={setLoginStatus}/>
-        <CtaOpen
-          token={token}
-          firstname={firstname}
-          latestDrillName={latestDrillName}
-          nextDrillName={nextDrill ? nextDrill.title : ''}
-          nextDrillTopic={nextDrillTopic}
-          setTopic={setTopic}
-          nextDrill={nextDrill}
-          ctaBarContainerRef={ctaBarContainerRef}
-        />
+        <Header setLoginStatus={setLoginStatus} />
         <section ref={navBarRef}>
           <NavBar setTopic={setTopic} topic={topic} setFilterBy={setFilterBy} />
           <div className='video-container'>
@@ -135,7 +163,10 @@ export const PractiApp = ({ token,setToken, firstname, setTopic, topic, loginSta
         </section>
       </div>
       <div className="cta-bar-container">
-        <CtaBar  />
+        <CtaBar />
+      </div>
+      <div className="cta-bar-container">
+        <CtaBar />
       </div>
     </div>
   );

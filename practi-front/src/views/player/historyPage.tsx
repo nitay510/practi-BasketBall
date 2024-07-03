@@ -38,7 +38,7 @@ function HistoryPage({ token,setToken, setTopic }: HistoryPageProps) {
   const getDrills = async () => {
     
     const storedToken = localStorage.getItem('authToken')
-    const res = await fetch(`https://practi-web.onrender.com/api/Drills/${category}`, {
+    const res = await fetch(`http://localhost:5000/api/Drills/${category}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -81,5 +81,8 @@ function HistoryPage({ token,setToken, setTopic }: HistoryPageProps) {
     </div>
   );
 }
+
+
+
 
 export default HistoryPage;

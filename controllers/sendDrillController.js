@@ -10,14 +10,12 @@ exports.addDrill = async (req, res) => {
     const { drillName, topic, user } = req.body;
     const { drillId } = req.params;
     const token = req.headers.authorization.split(' ')[1];
-
     const parsedToken = JSON.parse(token);
     const tokenValue = parsedToken.token;
 
     const decoded = await promisify(jwt.verify)(tokenValue, 'your-secret-key');
 
     const coach = decoded.username;
-
 
     const addDrill = await sendDrillService.addDrill(drillId, user,coach,  drillName, topic);
     if (addDrill) {
@@ -50,7 +48,12 @@ exports.deleteDrill = async (req, res) => {
   // New getDrillsByUser function
   exports.getDrillsByUser = async (req, res) => {
     try {
-      const { username } = req.params;
+      const token = req.headers.authorization.split(' ')[1];
+      const parsedToken = JSON.parse(token);
+      const tokenValue = parsedToken.token;
+      const decoded = await promisify(jwt.verify)(tokenValue, 'your-secret-key');
+
+      const username = decoded.username;
       const drills = await sendDrillService.getDrillsByUser(username);
       res.status(200).json(drills);
     } catch (error) {
@@ -62,7 +65,11 @@ exports.deleteDrill = async (req, res) => {
   // New getDrillsByCoach function
   exports.getDrillsByCoach = async (req, res) => {
     try {
-      const { username } = req.params;
+      const token = req.headers.authorization.split(' ')[1];
+      const parsedToken = JSON.parse(token);
+      const tokenValue = parsedToken.token;
+      const decoded = await promisify(jwt.verify)(tokenValue, 'your-secret-key');
+      const username = decoded.username;
       const drills = await sendDrillService.getDrillsByCoach(username);
       res.status(200).json(drills);
     } catch (error) {

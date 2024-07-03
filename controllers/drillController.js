@@ -165,3 +165,21 @@ exports.getWinLose = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+/**
+ * Checks if a user has done a specific drill.
+ */
+exports.checkUserDrill = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const parsedToken = JSON.parse(token);
+    const tokenValue = parsedToken.token;
+    const decoded = await promisify(jwt.verify)(tokenValue, 'your-secret-key');
+    const currentUser = decoded.username;
+    const { drillName } = req.query;
+    const hasDoneDrill = await drillService.hasUserDoneDrill(currentUser, drillName);
+    res.json({ hasDoneDrill });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

@@ -33,6 +33,21 @@ exports.getVideos = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+  exports.getVideoByName = async (req, res) => {
+    try {
+      const { videoName } = req.params;
+  
+      const token = req.headers.authorization.split(' ')[1];
+      const parsedToken = JSON.parse(token);
+      const tokenValue = parsedToken.token;
+      const decoded = await promisify(jwt.verify)(tokenValue, 'your-secret-key');
+      const video = await videoService.getVideoByName(videoName);
+      res.send(video);
+    } catch (error) {
+        console.log(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
   
     
 exports.getNextCategory = async (req, res) => {

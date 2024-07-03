@@ -103,7 +103,7 @@ export const SubVideoPreview = ({
         if (currentlyOpenDetails != video._id) {
           setCurrentlyOpenDetails(video._id);
         }
-      },1500);
+      },1000);
     } else {
       onSetVideoStatus(true);
       dispatch(startVideo());
@@ -171,9 +171,9 @@ export const SubVideoPreview = ({
   <div className="popup-container">
     <div className="popup">
       <img
-        src={`${process.env.PUBLIC_URL}/pop-up.jpg`}
+        src={`${process.env.PUBLIC_URL}/Trophy.png`}
         alt="Celebrity"
-        style={{ width: '100%', maxWidth: '400px', marginBottom: '10px' }}
+        style={{ width: '138.33px', height: '139.18px', marginBottom: '10px' }}
       />
           <div className="popup-message">
               שיא חדש:
@@ -191,6 +191,7 @@ export const SubVideoPreview = ({
     </div>
   </div>
 )}
+      <div className="preview-wrap-details">
       <div className="preview-wrap">
         <div className="details-container">
           {video.haveForm && (
@@ -211,6 +212,7 @@ export const SubVideoPreview = ({
         </div>
 </div>
       {detailsComponent}
+      </div>
     </article>
 
   );

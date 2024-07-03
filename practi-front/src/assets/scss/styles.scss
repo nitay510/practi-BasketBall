@@ -11,6 +11,8 @@
 @import "./basics/coach";
 @import "./basics/buttons";
 @import "./basics/player-profile";
+@import "./basics/playerDrills";
+@import "./basics/notificaitions";
 //VIEWS
 // general
 
@@ -31,7 +33,7 @@
 @import "./cmps/game-score";
 @import "./cmps/coachGamesView";
 @import "./cmps/calender";
-
+@import "./cmps/assignDrill";
 
 
 // @import "./views/template-edit2";
@@ -74,24 +76,34 @@ img {
   
 
 
-
-.cta-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 7vh;
-    display: flex;
-    justify-content: center;
-    justify-content: space-around;
-    background: #333;
-    color: #fff;
-    z-index: 1000;
-    direction: ltr;
+    .cta-bar {
+        background: rgba(255, 255, 255, 1);
+        border: 0.94px solid;
+        border-image-source: linear-gradient(91.95deg, #E8E8E8 3.07%, rgba(215, 215, 215, 0) 104.48%);
+        border-radius: 10px;
+        position: fixed;
+        bottom: 10px;
+        padding: 10px;
+        left: 20px;
+        width: 90%;
+        height: 7vh;
+        display: flex;
+        justify-content: center;
+        justify-content: space-around;
+        justify-content: space-around;
+        align-items: center;
+        /* background: #333; */
+        color: #fff;
+        z-index: 1000;
+        direction: ltr;
+        color: rgba(133, 132, 132, 1);
 
     .ic-container {
+        display: flex;
+        flex-direction: column;
+        line-height: 1;
         &.ic-active {
-            border-bottom: 2px solid white;
+            border-bottom: 2px solid rgb(210, 60, 85);
             font-weight: bold;
         }
     }

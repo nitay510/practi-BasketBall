@@ -1,36 +1,44 @@
-import { MdHistory } from 'react-icons/md'
-import { MdPeople,MdPerson } from 'react-icons/md'
-import { MdHome } from 'react-icons/md'
-
-
-
-import { NavLink } from "react-router-dom"
-/* this component is the down menu of the app, click oon each icon move you to another place */
+import { MdHistory, MdPeople, MdPerson, MdVideoLibrary, MdNotifications } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export const CtaBar = (): JSX.Element => {
+    const navigate = useNavigate();
+
+    const handleAppClick = () => {
+        navigate('/app', { state: { drillToDo: null } });
+    };
+
     return (
         <div className="cta-bar">
-               < NavLink to={'/app'}>
-            <div className='ic-container'>
-              <MdHome/>
+            <div className='ic-container' onClick={handleAppClick}>
+                <MdVideoLibrary />
+                <span className="icon-label">אימונים</span>
             </div>
-         </NavLink>
-            < NavLink to={'/history'}>
-            <div className='ic-container'>
-                <MdHistory />
-            </div>
+            <NavLink to="/history">
+                <div className='ic-container'>
+                    <MdHistory />
+                    <span className="icon-label">היסטוריה</span>
+                </div>
             </NavLink>
-            < NavLink to={'/historyFriends'}>
-            <div className='ic-container'>
-           <MdPeople/>
-            </div>
+            <NavLink to="/historyFriends">
+                <div className='ic-container'>
+                    <MdPeople />
+                    <span className="icon-label">חברים</span>
+                </div>
             </NavLink>
-            < NavLink to={'/profile'}>
-            <div className='ic-container'>
-           <MdPerson/>
-            </div>
+            <NavLink to="/notifications">
+                <div className='ic-container'>
+                    <MdNotifications />
+                    <span className="icon-label">התראות</span>
+                </div>
+            </NavLink>
+            <NavLink to="/profile">
+                <div className='ic-container'>
+                    <MdPerson />
+                    <span className="icon-label">פרופיל</span>
+                </div>
             </NavLink>
         </div>
-
     );
-};
+}

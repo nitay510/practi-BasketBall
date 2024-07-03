@@ -22,7 +22,7 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({ myTeamName, myTeamScor
     useEffect(() => {
         async function fetchPlayers() {
             const storedToken = localStorage.getItem('authToken');
-            const response = await fetch(`https://practi-web.onrender.com/api/teams/players`, {
+            const response = await fetch(`http://localhost:5000/api/teams/players`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${storedToken}`,
@@ -125,7 +125,7 @@ const saveGame = async () => {
   
     try {
       // Post the game information to the server
-      const response = await fetch('https://practi-web.onrender.com/api/games', {
+      const response = await fetch('http://localhost:5000/api/games', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${storedToken}`, // Use the stored token for authorization
@@ -147,7 +147,7 @@ const saveGame = async () => {
         };
   
         // Post the new event information
-        const eventResponse = await fetch('https://practi-web.onrender.com/api/events', {
+        const eventResponse = await fetch('http://localhost:5000/api/events', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

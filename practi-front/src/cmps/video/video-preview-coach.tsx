@@ -51,7 +51,7 @@ export const VideoPreviewCoach = ({
   
     // Navigate to the practice view when the "התחל אימון" button is clicked
     const onStartDrill = () => {
-      navigate(`/PracticeViewCoach/${video.title}`);
+      navigate(`/player-drills/${video.title}`);
     };
   
     // Handle the click event on the video preview, just choose this video.
@@ -71,11 +71,10 @@ export const VideoPreviewCoach = ({
         <div className="preview-wrap">
         <div className="details-container">
         {/* Show "התחל אימון" button only if the selected video equals the current video */}
-        {video.haveSub && selectedVideo._id === video._id && (
-          <button className={`start-drill-btn ${selectedVideo.isPlaying ?  'playing' : ''}`} onClick={onStartDrill}>
-            התחל תרגול
+          <button className='start-drill-btn' onClick={onStartDrill}>
+            שלח אימון
           </button>
-        )}
+
       </div>
           <div className="action-heading-container">
             <span>{video.title}</span>

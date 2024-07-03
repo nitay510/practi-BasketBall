@@ -1,17 +1,33 @@
 .subvideo-preview {
     position: relative;
     background-color: #222326;
-    &.playing {
-        border: 1px solid white; /* Dashed red border when playing */
-    }
-
-    .preview-wrap {
+    
+    .preview-wrap-details {
         width: 100%;
-        display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 10px;
         margin-bottom: 8px;
+        border: 3.12px solid rgba(255, 162, 74, 1);
+        background: rgba(34, 35, 38, 1);
+        border-radius: 20px;
+        margin-bottom: 20px;
+        margin-top: 25px;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 25px;
+        letter-spacing: 0.75px;
+        text-align: center;
+
+
+    }
+    .preview-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+
     }
 
     .action-heading-container {
@@ -23,9 +39,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 30px;
-            height: 30px;
-            background-color: #e32652; 
+            width: 40px;
+            height: 38.48px;
+            border: 0.71px solid rgba(0, 0, 0, 1);
+            font-size: 26px;
             margin-left: 10px;
 
           

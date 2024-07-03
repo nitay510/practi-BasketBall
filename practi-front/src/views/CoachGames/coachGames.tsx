@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MdClose, MdFilterAlt, MdSort,MdAdd } from 'react-icons/md';
+import { MdClose, MdFilterAlt, MdSort, MdAdd } from 'react-icons/md';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import CoachGameCard from './CoachGameCard';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +28,7 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
   const [endDate, setEndDate] = useState('');
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
   const [selectedGames, setSelectedGames] = useState<Game[]>([]); // New state for selected games
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -52,11 +53,11 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
         const storedToken = localStorage.getItem('authToken') || token;
         let response;
         if (master) {
-          response = await fetch(`https://practi-web.onrender.com/api/teams/club?clubName=${encodeURIComponent(club)}`, {
+          response = await fetch(`http://localhost:5000/api/teams/club?clubName=${encodeURIComponent(club)}`, {
             headers: { Authorization: `Bearer ${storedToken}` }
           });
         } else {
-          response = await fetch('https://practi-web.onrender.com/api/teams', {
+          response = await fetch('http://localhost:5000/api/teams', {
             headers: { 'Authorization': `Bearer ${storedToken}` }
           });
         }
@@ -80,9 +81,9 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
       if (!storedToken) {
         storedToken = token;
       }
-  
+
       try {
-        const response = await fetch('https://practi-web.onrender.com/api/games/coach', {
+        const response = await fetch('http://localhost:5000/api/games/coach', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${storedToken}`,
@@ -91,19 +92,30 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
         });
         if (!response.ok) throw new Error('Failed to fetch games');
         const data = await response.json();
-        setGames(data.sort((a: { gameDate: Date; }, b: { gameDate:  Date; }) => new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime())); // Sort by date initially
+        setGames(data.sort((a: { gameDate: Date; }, b: { gameDate: Date; }) => new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime())); // Sort by date initially
       } catch (error) {
         console.error('Error fetching games:', error);
       }
     };
     fetchGames();
   }, []);
-
   const addGame = () => {
+    let missingFields = [];
+    if (!myTeamName) {
+      missingFields.push('הקבוצה שלך');
+    }
+    if (!rivalTeamName) {
+      missingFields.push('קבוצת היריב');
+    }
+    if (missingFields.length > 0) {
+      setErrorMessage(`לא מילאת את: ${missingFields.join(', ')}`);
+      return;
+    }
     navigate(`/gameScores/${encodeURIComponent(myTeamName)}/${encodeURIComponent(rivalTeamName)}`);
   };
-  const isDateInRange = (gameDate: Date, startDate: Date | null, endDate: Date | null) => {
 
+
+  const isDateInRange = (gameDate: Date, startDate: Date | null, endDate: Date | null) => {
     if (!startDate && !endDate) {
       return true;
     } else if (!startDate && endDate) {
@@ -114,8 +126,6 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
       return gameDate >= startDate && gameDate <= endDate;
     }
   };
-
-
 
   // Function to sort games alphabetically by team's name
   const sortGamesByName = () => {
@@ -133,7 +143,7 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
       return sortedGames;
     });
   };
-  
+
   const sortGamesByDate = () => {
     setGames(prevGames => {
       const sortedGames = [...prevGames].sort((a, b) => {
@@ -142,7 +152,6 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
       return sortedGames;
     });
   }
-
 
   const handleSortingOptionChange = (option: string) => {
     setSortingOption(option);
@@ -178,7 +187,10 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
             <button onClick={() => setSortingOptionsOpen(!sortingOptionsOpen)}>
               <MdSort className='sort-button' />
             </button>
-            <button onClick={() => setStartNewGameModal(true)}>
+            <button onClick={() => {
+              setErrorMessage('');
+              setStartNewGameModal(true);
+            }}>
               <MdAdd className='add-button' />
             </button>
             {sortingOptionsOpen && (
@@ -196,17 +208,27 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
           ))}
         </div>
 
-
-        <button className='add-new-game' onClick={() => setStartNewGameModal(true)}>
+        <button className='add-new-game' onClick={() => {
+          setErrorMessage('');
+          setStartNewGameModal(true);
+        }}>
           הוסף משחק חדש
         </button>
         {startNewGameModal && (
           <div className='new-game-modal'>
-            <button className='modal-close-button' onClick={() => setStartNewGameModal(false)}>
+            <button className='modal-close-button' onClick={() => {
+              setStartNewGameModal(false);
+              setErrorMessage('');
+            }}>
               <MdClose />
             </button>
             <h4>הוסף משחק חדש</h4>
-            <select value={myTeamName} onChange={(e) => setMyTeamName(e.target.value)} placeholder='הקבוצה שלך'>
+            <select
+              value={myTeamName}
+              onChange={(e) => setMyTeamName(e.target.value)}
+              placeholder='הקבוצה שלך'
+              style={{ borderColor: !myTeamName && errorMessage ? 'red' : '' }}
+            >
               <option value=''>בחר קבוצה</option>
               {teams.map((team, index) => (
                 <option key={index} value={team.teamName}>
@@ -219,8 +241,23 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
               value={rivalTeamName}
               onChange={(e) => setRivalTeamName(e.target.value)}
               placeholder='שם הקבוצה היריבה'
+              style={{ borderColor: !rivalTeamName && errorMessage ? 'red' : '' }}
             />
             <button onClick={addGame}>הוסף משחק</button>
+            {errorMessage && (
+              <p style={{
+                color: 'red',
+                fontSize: '1.25em',
+                marginTop: '10px',
+               // backgroundColor: '#ffe6e6',
+                //padding: '10px',
+                //borderRadius: '5em',
+                textAlign: 'center'
+              }}>
+                {errorMessage}
+              </p>
+            )}
+
           </div>
         )}
         {/* Filter Modal */}

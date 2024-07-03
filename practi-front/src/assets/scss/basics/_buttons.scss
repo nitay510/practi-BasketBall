@@ -6,14 +6,20 @@ button {
     font-family: Rubik;
 }
 .start-drill-btn {
-    border: 2px solid #ccc;
+    background: rgb(255, 162, 74);
     border-radius: 10px;
-    color: #fff;
-    cursor: pointer;
-    font-size: bold;
-    /* font-weight: 600; */
-    margin-top: 4px;
-    padding: 5px;
+    color: rgba(6, 6, 6, 1);
+    border: 0.81px solid rgb(0, 0, 0);
+    box-shadow: 0px 6.47px 12.94px 0px rgba(255, 255, 255, 0);
+    width: 100px;
+    height: 37.2px;
+    font-family: Lato;
+    font-size: 16px;
+    font-weight: 700;
+    /* line-height: 16.26px; */
+    letter-spacing: 0.6098130941px;
+    text-align: center;
+    
 
     &.playing {
         /* Add styles when the video is playing */
@@ -23,8 +29,10 @@ button {
 }
 .expendMore {
     color: white;
-    font-size: 20px;
+    font-size: 30px;
     border: none;
+    margin-left: 20px;
+    margin-right: 10px;
     cursor: pointer;
   }
 .last-drill-btn {

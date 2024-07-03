@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HeroLogin } from '../cmps/cta/hero-login';
-import { Header } from '../cmps/headers/header';
+
 
 // Define the properties expected by the Login component
 interface LoginProps {
@@ -11,10 +11,11 @@ interface LoginProps {
   setLoginStatus: (loginStatus: boolean) => void; // Function to set the login status
   setClub: (club: string) => void;
   setMaster:(master:boolean) => void;
+  setLastLogin:(lastLogin:Date)=>void;
 }
 
 // Define the Login component
-export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster }: LoginProps): JSX.Element {
+export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster,setLastLogin }: LoginProps): JSX.Element {
   // State variable to manage the username input
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -29,11 +30,18 @@ export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster
     // Check if there is a stored token in localStorage
     const storedToken = localStorage.getItem('authToken');
     const storedUsername = localStorage.getItem('userName');
+    const storedLastLogin = localStorage.getItem('lastLogin');
 
     if (storedToken && storedUsername) {
       // If a token is found, set the token and fetch user details
       setToken(storedToken);
       setUsername(storedUsername);
+    if (storedLastLogin) {
+      // Set the last login date from localStorage
+      setLastLogin(new Date(storedLastLogin));
+      console.log(storedLastLogin);
+      localStorage.setItem('lastLogin', new Date().toString());
+    }
       fetchUserDetails(storedToken, storedUsername);
     }
   }, []);
@@ -48,7 +56,7 @@ export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster
     };
 
     try {
-      const res = await fetch('https://practi-web.onrender.com/api/Tokens', {
+      const res = await fetch('http://localhost:5000/api/Tokens', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -61,6 +69,13 @@ export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster
         // Save the token and username in localStorage
         localStorage.setItem('authToken', newToken);
         localStorage.setItem('userName', username);
+        const storedLastLogin = localStorage.getItem('lastLogin');
+        if (storedLastLogin) {
+          // Set the last login date from localStorage
+          setLastLogin(new Date(storedLastLogin));
+          console.log(storedLastLogin);
+          localStorage.setItem('lastLogin', new Date().toString());
+        }
         // Await the completion of setToken before proceeding
         await setToken(newToken);
         // Fetch user details using the obtained token
@@ -75,7 +90,7 @@ export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster
 
   // Function to fetch user details using the authentication token
   const fetchUserDetails = async (token: string, username: string) => {
-    const getUserResponse = await fetch(`https://practi-web.onrender.com/api/Users/${username}`, {
+    const getUserResponse = await fetch(`http://localhost:5000/api/Users/${username}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -86,9 +101,7 @@ export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster
     if (getUserResponse.ok) {
       const userJson = await getUserResponse.json();
       const { fullName,isCoach,club } = userJson;
-
       // Set user details and login status
-     
       setFirstname(fullName);
       setLoginStatus(true);
       setClub(club)
@@ -100,7 +113,7 @@ export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster
       setMaster(false);
       navigate('/app-manager'); 
       }else{
-      navigate('/app');
+        navigate('/app', { state: { drillToDo: null } });
       }
     } else {
       alert(getUserResponse.status);

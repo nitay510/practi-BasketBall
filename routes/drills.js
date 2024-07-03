@@ -10,4 +10,5 @@ router.post('/Drills/:drillId', drillController.addDrill)
  router.get('/Drills/highScore/:missionName', drillController.getHighScore)
  router.get('/Drills/howManyWins/:opponentName', drillController.getWinLose)
  router.get('/LastDrill/', drillController.getLastDrills)
+ router.get('/checkUserDrill', drillController.checkUserDrill);
 module.exports = router

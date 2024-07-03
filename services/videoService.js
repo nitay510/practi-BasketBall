@@ -62,6 +62,17 @@ exports.getVideos = async (category) => {
       }
     }
   };
+  exports.getVideoByName = async (videoName) => {
+    for (const category in videos) {
+        const videoList = videos[category];
+        for (const video of videoList) {
+            if (video.title === videoName) {
+                return video;
+            }
+        }
+    }
+    return null;  // Return null if the video is not found
+};
   exports.getNextCategory = async (category) => {
     const categories = [
       'חדירות',
