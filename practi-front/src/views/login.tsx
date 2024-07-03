@@ -56,7 +56,7 @@ export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster
     };
 
     try {
-      const res = await fetch('http://localhost:5000/api/Tokens', {
+      const res = await fetch('https://practi-web.onrender.com/api/Tokens', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export function Login({ setToken, setFirstname, setLoginStatus,setClub,setMaster
 
   // Function to fetch user details using the authentication token
   const fetchUserDetails = async (token: string, username: string) => {
-    const getUserResponse = await fetch(`http://localhost:5000/api/Users/${username}`, {
+    const getUserResponse = await fetch(`https://practi-web.onrender.com/api/Users/${username}`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',

@@ -30,7 +30,7 @@ export function GameEventEdit({ token }: { token: string }): JSX.Element {
     const fetchEvent = async () => {
       const storedToken = localStorage.getItem('authToken') || token;
       try {
-        const response = await fetch(`http://localhost:5000/api/events/id/${eventId}`, {
+        const response = await fetch(`https://practi-web.onrender.com/api/events/id/${eventId}`, {
           headers: {
             Authorization: `Bearer ${storedToken}`
           }
@@ -101,7 +101,7 @@ export function GameEventEdit({ token }: { token: string }): JSX.Element {
   const handleDeleteEvent = async () => {
     const storedToken = localStorage.getItem('authToken') || token;
     try {
-      const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+      const response = await fetch(`https://practi-web.onrender.com/api/events/${eventId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${storedToken}`
@@ -138,7 +138,7 @@ export function GameEventEdit({ token }: { token: string }): JSX.Element {
 
     const storedToken = localStorage.getItem('authToken') || token;
     try {
-      const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+      const response = await fetch(`https://practi-web.onrender.com/api/events/${eventId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

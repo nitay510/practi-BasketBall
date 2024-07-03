@@ -113,7 +113,7 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
     try {
       const storedToken = localStorage.getItem('authToken');
       // Fetch information about the last drill
-      const getUserResponse = await fetch(`http://localhost:5000/api/LastDrill/`, {
+      const getUserResponse = await fetch(`https://practi-web.onrender.com/api/LastDrill/`, {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',

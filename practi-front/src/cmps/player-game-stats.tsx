@@ -19,7 +19,7 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName 
 
             try {
                 // Fetch games data for a specific player and team
-                const response = await fetch(`http://localhost:5000/api/games/team/${encodeURIComponent(teamName)}/player/${encodeURIComponent(playerName)}`, {
+                const response = await fetch(`https://practi-web.onrender.com/api/games/team/${encodeURIComponent(teamName)}/player/${encodeURIComponent(playerName)}`, {
                     headers: {
                         'Authorization': `Bearer ${storedToken}`,
                         'Content-Type': 'application/json'

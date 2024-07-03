@@ -61,7 +61,7 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
       const storedToken = localStorage.getItem('authToken');
       try {
         const response = await fetch(
-          `http://localhost:5000/api/events`,
+          `https://practi-web.onrender.com/api/events`,
           {
             headers: {
               Authorization: `Bearer ${storedToken}`,
@@ -83,7 +83,7 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
 
           if (event.type === 'game' && eventDate < now) {
             const gameResponse = await fetch(
-              `http://localhost:5000/api/games/date/${event.date}/team/${event.teamName}/rivalTeam/${event.eventName}`,
+              `https://practi-web.onrender.com/api/games/date/${event.date}/team/${event.teamName}/rivalTeam/${event.eventName}`,
               {
                 headers: {
                   Authorization: `Bearer ${storedToken}`,
@@ -115,7 +115,7 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
       try {
         const storedToken = localStorage.getItem('authToken') || token;
         let response;
-          response = await fetch('http://localhost:5000/api/teams', {
+          response = await fetch('https://practi-web.onrender.com/api/teams', {
             headers: { 'Authorization': `Bearer ${storedToken}` }
           });
         

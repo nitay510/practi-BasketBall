@@ -53,11 +53,11 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
         const storedToken = localStorage.getItem('authToken') || token;
         let response;
         if (master) {
-          response = await fetch(`http://localhost:5000/api/teams/club?clubName=${encodeURIComponent(club)}`, {
+          response = await fetch(`https://practi-web.onrender.com/api/teams/club?clubName=${encodeURIComponent(club)}`, {
             headers: { Authorization: `Bearer ${storedToken}` }
           });
         } else {
-          response = await fetch('http://localhost:5000/api/teams', {
+          response = await fetch('https://practi-web.onrender.com/api/teams', {
             headers: { 'Authorization': `Bearer ${storedToken}` }
           });
         }
@@ -83,7 +83,7 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/games/coach', {
+        const response = await fetch('https://practi-web.onrender.com/api/games/coach', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${storedToken}`,

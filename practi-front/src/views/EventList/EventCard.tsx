@@ -39,7 +39,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, token }) => {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/events/${event._id}`, {
+      const response = await fetch(`https://practi-web.onrender.com/api/events/${event._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

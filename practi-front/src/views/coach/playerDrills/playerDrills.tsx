@@ -59,11 +59,11 @@ const PlayerDrills: React.FC<PlayerDrillsProps> = ({ token, club, master }) => {
     let response;
 
     if (master) {
-      response = await fetch(`http://localhost:5000/api/teams/club?clubName=${encodeURIComponent(club)}`, {
+      response = await fetch(`https://practi-web.onrender.com/api/teams/club?clubName=${encodeURIComponent(club)}`, {
         headers: { Authorization: authToken }
       });
     } else {
-      response = await fetch('http://localhost:5000/api/teams', {
+      response = await fetch('https://practi-web.onrender.com/api/teams', {
         headers: { Authorization: authToken }
       });
     }
@@ -72,7 +72,7 @@ const PlayerDrills: React.FC<PlayerDrillsProps> = ({ token, club, master }) => {
 
     const teamsWithPlayers = await Promise.all(
       teamsData.map(async (team: { teamName: string }) => {
-        const playersResponse = await fetch('http://localhost:5000/api/teams/players', {
+        const playersResponse = await fetch('https://practi-web.onrender.com/api/teams/players', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ const PlayerDrills: React.FC<PlayerDrillsProps> = ({ token, club, master }) => {
 
     try {
       for (const assignment of drillAssignments) {
-        await fetch(`http://localhost:5000/api/SendDrills/${assignment.drillId}`, {
+        await fetch(`https://practi-web.onrender.com/api/SendDrills/${assignment.drillId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

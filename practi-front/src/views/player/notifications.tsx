@@ -31,7 +31,7 @@ const Notifications: React.FC<UserTrainingsProps> = ({ setLoginStatus, setTopic 
   const fetchDrills = async () => {
     try {
       const storedToken = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:5000/api/SendDrills/user', {
+      const response = await fetch('https://practi-web.onrender.com/api/SendDrills/user', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ const Notifications: React.FC<UserTrainingsProps> = ({ setLoginStatus, setTopic 
     try {
       const storedToken = localStorage.getItem('authToken');
       const responses = await Promise.all(drills.map(drill => 
-        fetch(`http://localhost:5000/api/checkUserDrill?drillName=${drill.drillName}`, {
+        fetch(`https://practi-web.onrender.com/api/checkUserDrill?drillName=${drill.drillName}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

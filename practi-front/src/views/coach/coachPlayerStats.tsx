@@ -16,7 +16,7 @@ import { HeaderThree } from '../../cmps/headers/headerThree';
             if(teamName && playerName){
             const storedToken = localStorage.getItem('authToken'); // Assume the token is stored in localStorage
             try {
-                const response = await fetch(`http://localhost:5000/api/games/team/${encodeURIComponent(teamName)}/player/${encodeURIComponent(playerName)}`, {
+                const response = await fetch(`https://practi-web.onrender.com/api/games/team/${encodeURIComponent(teamName)}/player/${encodeURIComponent(playerName)}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

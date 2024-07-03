@@ -37,7 +37,7 @@ function HistoryPageForCoach({ token,setToken }: HistoryPageCoachProps) {
 
   const getDrills = async () => {
     const storedToken = localStorage.getItem('authToken')
-    const res = await fetch(`http://localhost:5000/api/DrillsByCoach/${category}`, {
+    const res = await fetch(`https://practi-web.onrender.com/api/DrillsByCoach/${category}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -23,7 +23,7 @@ const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token }) => {
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/games/date/${game.gameDate}/team/${game.teamName}/rivalTeam/${game.rivalTeamName}`, {
+      const response = await fetch(`https://practi-web.onrender.com/api/games/date/${game.gameDate}/team/${game.teamName}/rivalTeam/${game.rivalTeamName}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
