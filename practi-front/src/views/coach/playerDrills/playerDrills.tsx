@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { drillsData } from './drillsData';
-import { useNavigate } from 'react-router-dom';
 import { CtaBarManager } from '../../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../../cmps/headers/headerThree';
+
 interface Player {
   fullName: string;
   username: string;
@@ -36,6 +36,7 @@ const PlayerDrills: React.FC<PlayerDrillsProps> = ({ token, club, master }) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedDrill, setSelectedDrill] = useState<Drill | null>(null);
   const [selectedPlayers, setSelectedPlayers] = useState<{ [key: string]: boolean }>({});
+  const [assignAllClicked, setAssignAllClicked] = useState(false);
 
   useEffect(() => {
     fetchTeams();
@@ -103,12 +104,20 @@ const PlayerDrills: React.FC<PlayerDrillsProps> = ({ token, club, master }) => {
   };
 
   const handleAssignToTeam = () => {
-    const allSelected = players.reduce((acc, player) => {
-      acc[player.username] = true;
-      return acc;
-    }, {} as { [key: string]: boolean });
+    if (assignAllClicked) {
+      // If already clicked, unselect all players
+      setSelectedPlayers({});
+      setAssignAllClicked(false);
+    } else {
+      // If not clicked, select all players
+      const allSelected = players.reduce((acc, player) => {
+        acc[player.username] = true;
+        return acc;
+      }, {} as { [key: string]: boolean });
 
-    setSelectedPlayers(allSelected);
+      setSelectedPlayers(allSelected);
+      setAssignAllClicked(true);
+    }
   };
 
   const handleSubmit = async () => {
@@ -150,47 +159,55 @@ const PlayerDrills: React.FC<PlayerDrillsProps> = ({ token, club, master }) => {
       alert('הקצאת האימונים נכשלה');
     }
   };
+
   return (
     <div className='playerDrills'>
-         <HeaderThree/>
-        <div className='content-container'>
-      <h1> {drillName}</h1>
-      <div className='team-selection'>
-        <h2>בחר קבוצה</h2>
-        <select value={selectedTeam} onChange={(e) => setSelectedTeam(e.target.value)}>
-          {teams.map((team) => (
-            <option key={team.teamName} value={team.teamName}>
-              {team.teamName}
-            </option>
-          ))}
-        </select>
-      </div>
-      <button className='assign-team-button' onClick={handleAssignToTeam}>הקצה לכל הקבוצה</button>
-      <table className='players-table'>
-        <thead>
-          <tr>
-            <th>שם השחקן</th>
-            <th>הקצאה</th>
-          </tr>
-        </thead>
-        <tbody>
-          {players.map((player) => (
-            <tr key={player.username}>
-              <td>{player.fullName}</td>
-              <td>
-                <input
-                  type='checkbox'
-                  checked={selectedPlayers[player.username] || false}
-                  onChange={(e) => handlePlayerSelectChange(player.username, e.target.checked)}
-                />
-              </td>
+      <HeaderThree />
+      <div className='content-container'>
+        <h1>{drillName}</h1>
+        <hr className="underline" />
+        <div className='team-selection'>
+          <h2>בחר קבוצה</h2>
+          <select value={selectedTeam} onChange={(e) => setSelectedTeam(e.target.value)}>
+            {teams.map((team) => (
+              <option key={team.teamName} value={team.teamName}>
+                {team.teamName}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button
+          className={`assign-team-button ${assignAllClicked ? 'clicked' : ''}`}
+          onClick={handleAssignToTeam}
+        >
+          הקצה לכל הקבוצה
+        </button>
+        <table className='players-table'>
+          <thead>
+            <tr>
+              <th>שם השחקן</th>
+              <th>הקצאה</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <button className='submit-button' onClick={handleSubmit}>שלח</button>
-    </div>
-    <div className="cta-bar-container">
+          </thead>
+          <tbody>
+            {players.map((player) => (
+              <tr key={player.username}>
+                <td>{player.fullName}</td>
+                <td>
+                  <input
+                    type='checkbox'
+                    checked={selectedPlayers[player.username] || false}
+                    onChange={(e) => handlePlayerSelectChange(player.username, e.target.checked)}
+                    style={{ marginRight: "40%" }}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button className='submit-button' onClick={handleSubmit}>שלח</button>
+      </div>
+      <div className="cta-bar-container">
         <CtaBarManager />
       </div>
     </div>

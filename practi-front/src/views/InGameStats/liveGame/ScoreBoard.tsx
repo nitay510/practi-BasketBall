@@ -13,16 +13,6 @@ interface ScoreBoardProps {
 
 export const ScoreBoard: React.FC<ScoreBoardProps> = ({ myTeamName, rivalTeamName, myTeamScore, setMyTeamScore, rivalTeamScore, setRivalTeamScore }) => {
 
-    const handleIncrementOne = () => {
-        setRivalTeamScore(rivalTeamScore + 1);
-    };
-
-    const handleIncrementTwo = () => {
-        setRivalTeamScore(rivalTeamScore + 2);
-    };
-    const handleIncrementThree = () => {
-        setRivalTeamScore(rivalTeamScore + 3);
-    };
 
     return (
         <div className="scoreboard-container">
@@ -49,18 +39,8 @@ export const ScoreBoard: React.FC<ScoreBoardProps> = ({ myTeamName, rivalTeamNam
                             }
                         }}
                     />
-                    <div className="scoreboard-buttons">
-                            <button  onClick={handleIncrementThree}>+3</button>
-                        <button onClick={handleIncrementTwo}>+2</button>
-                        <button  onClick={handleIncrementOne}>+1</button>
-                    </div>
                 </div>
-                {/* Scores */}
-                <div className="scoreboard-scores">
-                    <div>
-                        <h2>{rivalTeamScore} : {myTeamScore}</h2>
-                    </div>
-                </div>
+     
                 {/* Team B */}
                 <div className="scoreboard-team team-b">
                     <img src={teamBLogo} alt="Team B Logo" />

@@ -69,9 +69,15 @@ export const VideoPreviewCoach = ({
         onClick={() => handleClick(video._id)}
       >
         <div className="preview-wrap">
-        <div className="details-container">
+        <div
+      className="details-container"
+      style={{
+        background: "rgba(0, 0, 0, 1)",
+        border: "0.81px solid rgba(255, 162, 74, 1)",
+        borderRadius: "10px"
+      }}>
         {/* Show "התחל אימון" button only if the selected video equals the current video */}
-          <button className='start-drill-btn' onClick={onStartDrill}>
+          <button className='send-drill-button' onClick={onStartDrill}>
             שלח אימון
           </button>
 

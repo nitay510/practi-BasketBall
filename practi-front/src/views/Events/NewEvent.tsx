@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
-
+import { MdClose } from 'react-icons/md'; // Importing the close icon
+import { FaPlus } from 'react-icons/fa'; // Importing the plus icon
 
 interface NewEventProps {
   token: string; // Function to set the authentication token
@@ -12,30 +13,32 @@ interface Team {
   teamName: string;
 }
 
-
 export function NewEvent({ token }: NewEventProps): JSX.Element {
   const [teams, setTeams] = useState<Team[]>([]);
   const [selectedTeam, setSelectedTeam] = useState('');
   const [type, setType] = useState('practice');
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [duration, setDuration] = useState('90');
-  const [tasks, setTasks] = useState<string[]>([]);
-  const [taskInput, setTaskInput] = useState('');
+  const [startHour, setStartHour] = useState('10');
+  const [startMinute, setStartMinute] = useState('00');
+  const [tasks, setTasks] = useState<string[]>(['', '', '']); // Initialize with three blank spaces
+  const [isEventNameFocused, setIsEventNameFocused] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
-
   useEffect(() => {
     fetchTeams();
-
-     // Parse URL query parameters
-     const params = new URLSearchParams(location.search);
-     const urlDate = params.get('date');
-     const urlStartTime = params.get('startTime');
-     if (urlDate) setDate(urlDate);
-     if (urlStartTime) setStartTime(urlStartTime);
+    // Parse URL query parameters
+    const params = new URLSearchParams(location.search);
+    const urlDate = params.get('date');
+    const urlStartTime = params.get('startTime');
+    if (urlDate) setDate(urlDate);
+    if (urlStartTime) {
+      const [hour, minute] = urlStartTime.split(':');
+      setStartHour(hour);
+      setStartMinute(minute);
+    }
   }, []);
 
   const fetchTeams = async () => {
@@ -64,17 +67,10 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
       case 'date':
         setDate(value);
         break;
-      case 'startTime':
-        setStartTime(value);
-        break;
-      case 'duration':
-        setDuration(value);
-        break;
       default:
         break;
     }
   };
-
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedType = e.target.value;
@@ -83,24 +79,21 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
     // Update event name placeholder based on the type
     if (selectedType === 'game') {
       setEventName(''); // Clear the event name for games
-      setDuration('120'); // Set default duration for games
     }
 
     if (selectedType === 'practice') {
       setEventName('אימון'); // Set default event name for practices
-      setDuration('90'); // Set default duration for practices
     }
   };
 
-  const handleTaskInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskInput(e.target.value);
+  const handleTaskInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const newTasks = [...tasks];
+    newTasks[index] = e.target.value;
+    setTasks(newTasks);
   };
 
   const handleAddTask = () => {
-    if (taskInput.trim()) {
-      setTasks([...tasks, taskInput]);
-      setTaskInput('');
-    }
+    setTasks([...tasks, '']);
   };
 
   const handleRemoveTask = (index: number) => {
@@ -108,10 +101,13 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
   };
 
   const handleNewEvent = async () => {
-    if (!selectedTeam || !eventName || !date || !startTime || !duration) {
-      alert('Please fill in all required fields.');
+    const startTime = `${startHour}:${startMinute}`;
+    if (!selectedTeam || !eventName || !date || !startTime) {
+      setErrorMessage('.יש למלא את כל השדות הנדרשים');
       return;
     }
+
+    const updatedTasks = tasks.map(task => (task.trim() === '' ? null : task));
 
     const newEvent = {
       teamName: selectedTeam,
@@ -119,8 +115,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
       eventName,
       date,
       startTime,
-      duration,
-      tasks,
+      tasks: updatedTasks,
     };
     const storedToken = localStorage.getItem('authToken');
     try {
@@ -140,101 +135,134 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
         throw result.error || 'Error creating event';
       }
     } catch (err) {
-      throw 'Failed to connect to the server.';
+      setErrorMessage('נכשל בחיבור לשרת.');
     }
   };
 
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const hourOptions = Array.from({ length: 11 }, (_, i) => (i + 10).toString());
+  const minuteOptions = ['00', '15', '30', '45'];
+
   return (
     <div className="newEventPage">
-               <HeaderThree />
       <div className="signup-form">
-        <h2>אירוע חדש</h2>
-        <div className="custom-input-container">
-          <select
-            id="teamSelect"
-            name="teamSelect"
-            value={selectedTeam}
-            onChange={(e) => setSelectedTeam(e.target.value)}
-            required
-          >
-            <option value="">בחר קבוצה</option>
-            {teams.map((team, index) => (
-              <option key={index} value={team.teamName}>
-                {team.teamName}
-              </option>
-            ))}
-          </select>
-          
-        </div>
-        <div className="custom-input-container">
-          <input
-            type="text"
-            id="eventName"
-            name="eventName"
-            value={eventName}
-            onChange={handleInputChange}
-            placeholder={'שם האימון'}
-            required
-          />
-        </div>
-        <div className="custom-input-container">
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={date}
-            onChange={handleInputChange}
-            placeholder={!date ? 'תאריך' : ''}
-            required
-          />
-          <label htmlFor="date">תאריך</label>
-        </div>
-        <div className="custom-input-container">
-          <input
-            type="time"
-            id="startTime"
-            name="startTime"
-            value={startTime}
-            onChange={handleInputChange}
-            placeholder={!startTime ? 'שעת התחלה' : ''}
-            required
-          />
-          <label htmlFor="startTime">שעת התחלה</label>
-        </div>
-        <div className="custom-input-container">
-          <input
-            type="number"
-            id="duration"
-            name="duration"
-            value={duration}
-            onChange={handleInputChange}
-            placeholder={!duration ? 'משך זמן' : ''}
-            required
-          />
-          <label htmlFor="duration">משך זמן</label>
-        </div>
-        {type === 'practice' && (
+        <HeaderThree />
+        <div className="form-content">
+          <h2>אירוע חדש</h2>
           <div className="custom-input-container">
-            {tasks.map((task, index) => (
-              <div key={index} style={{ color: 'white', marginBottom: '10px' }}>
-                {task} <button onClick={() => handleRemoveTask(index)}>מחק</button>
-              </div>
-            ))}
+            <p className="input-label">שם הקבוצה</p>
+            <div className="select-container">
+              <select
+                id="teamSelect"
+                name="teamSelect"
+                value={selectedTeam}
+                onChange={(e) => setSelectedTeam(e.target.value)}
+                required
+              >
+                <option value="" disabled hidden>
+                  בחר קבוצה
+                </option>
+                {teams.map((team, index) => (
+                  <option key={index} value={team.teamName}>
+                    {team.teamName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="custom-input-container">
+            <p className="input-label">שם האימון</p>
             <input
               type="text"
-              value={taskInput}
-              onChange={handleTaskInputChange}
-              placeholder="משימה חדשה"
+              id="eventName"
+              name="eventName"
+              value={eventName}
+              onChange={handleInputChange}
+              onFocus={() => setIsEventNameFocused(true)}
+              onBlur={() => setIsEventNameFocused(false)}
+              placeholder={!isEventNameFocused && !eventName ? 'שם היריבה' : ''}
               required
             />
-            <button className="signup-button" onClick={handleAddTask}>
-              משימה חדשה
-            </button>
           </div>
-        )}
-        <button className="signup-button" onClick={handleNewEvent}>
+          <div className="custom-input-container">
+            <p className="input-label">תאריך</p>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              min={getCurrentDate()} // Set the minimum date to today
+              required
+            />
+          </div>
+          <div className="custom-input-container">
+            <p className="input-label hour">שעת התחלה</p>
+            <div className="time-selector">
+              <select
+                id="startHour"
+                name="startHour"
+                value={startHour}
+                onChange={(e) => setStartHour(e.target.value)}
+                required
+              >
+                {hourOptions.map((hour) => (
+                  <option key={hour} value={hour}>
+                    {hour}
+                  </option>
+                ))}
+              </select>
+              <span> : </span>
+              <select
+                id="startMinute"
+                name="startMinute"
+                value={startMinute}
+                onChange={(e) => setStartMinute(e.target.value)}
+                required
+              >
+                {minuteOptions.map((minute) => (
+                  <option key={minute} value={minute}>
+                    {minute}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          {type === 'practice' && (
+            <div className="custom-input-container">
+              <p className="input-label">מערך אימון</p>
+              <ul className="task-list">
+                {tasks.map((task, index) => (
+                  <li key={index} className="task-item">
+                    <span>{index + 1}</span>
+                    <input
+                      type="text"
+                      value={task}
+                      onChange={(e) => handleTaskInputChange(e, index)}
+                      placeholder="משימה חדשה"
+                      required
+                    />
+                    <MdClose className="delete-icon" onClick={() => handleRemoveTask(index)} />
+                  </li>
+                ))}
+              </ul>
+              <div className="task-input-container">
+                <FaPlus className="add-icon" onClick={handleAddTask} />
+              </div>
+            </div>
+          )}
+        </div>
+        <button className="new-event-button" onClick={handleNewEvent}>
           צור אימון
         </button>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
       <div className="cta-bar-container">
         <CtaBarManager />

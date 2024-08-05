@@ -113,6 +113,10 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({ myTeamName, myTeamScor
 
 // Function to save the game details and create a corresponding event
 const saveGame = async () => {
+    if(myTeamScore == 0 || rivalTeamScore == 0) {
+        alert('הכנס תוצאת סיום')
+    }
+    else {
     const storedToken = localStorage.getItem('authToken');
     const gameDetails = {
       gameDate: new Date(), // Current date and time for the game
@@ -175,11 +179,11 @@ const saveGame = async () => {
       console.error('Failed to connect to the server:', error);
       alert('Failed to save game due to an error.');
     }
+    }
   };
   
     return (
         <div className="player-table">
-            <h2>{myTeamName}</h2>
             <table>
                 <thead>
                     <tr>

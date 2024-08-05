@@ -13,6 +13,7 @@ import { PracticeView } from './views/player/PracticeView';
 import {WeeklyCalendar} from './views/Events/WeeklyCalendar';
 import { NewEvent } from './views/Events/NewEvent';
 import { AfterGameScoresPage } from './views/InGameStats/afterGame/afterGameScorePage';
+import {EditGameScoresPage} from './views/InGameStats/editGame/editGameScoresPage';
 import HistoryPageForCoach from './views/coach/historyPageForCoach';
 import Profile from './views/player/profilePlayer';
 import { CoachVideo } from './views/coach/coachVideo';
@@ -45,6 +46,7 @@ export function App() {
       <Route path="/player-drills/:drillName" element={<PlayerDrills token={token} master={master} club= {club} />} />
       <Route path="/coach-games" element={<CoachGames token={token} master={master} club= {club} />} />
       <Route path="/after-game-boxScore" element={<AfterGameScoresPage token={token} />} />
+      <Route path="/editGame" element={<EditGameScoresPage token={token} />} />
       <Route path="/coach-video" element={<CoachVideo token={token}  topic={topic} setTopic={setTopic}  setLoginStatus={setLoginStatus} />} />
         <Route path="/app" element={<PractiApp token={token} setToken={setToken} firstname= {firstname} topic={topic} setTopic={setTopic} loginStatus={loginStatus} setLoginStatus={setLoginStatus} lastLogin={lastLogin} />} />
         <Route path="/app-manager" element={<PractiAppManager token={token} setToken={setToken} loginStatus={loginStatus} setLoginStatus={setLoginStatus} club={club} master={master}/>} />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MdOutlineExpandMore, MdDelete , MdClose, MdAdd,MdArrowBack,MdPeople } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import { FiUser } from 'react-icons/fi';
 
 interface TeamListProps {
     token: string;
@@ -157,18 +158,19 @@ const TeamList = ({ token,setToken,club,master }: TeamListProps) => {
       </div>
           {team.expanded && (
             <div className="player-list">
-       <p className="wins-loses" style={{ marginBottom: '30px' }}>
+       <p className="wins-loses" >
         נצחונות: {team.wins} / הפסדים: {team.losses}
       </p>
-      <p className="player-list" style={{ fontWeight: 'bold',marginBottom: '20px' }}>
+      <p className="player-list" style={{ fontSize: '24px',marginBottom: '25px',fontWeight: '700',
+    letterSpacing:'0.75' }}>
         רשימת שחקנים
       </p>
               {team.players.map((player: Player, playerIndex: React.Key) => (
                 <div key={playerIndex} className="player-row">
-                 <button className="delete-player-button" onClick={() => handleDeletePlayer(player.username, team.teamName)}><MdDelete /></button>
                   <p className="player-name" onClick={() => handlePlayerClickGames(team.teamName,player.fullName,player.username)}>{player.fullName}</p>
-                  <p className="go-to-player" onClick={() => handlePlayerClickGames(team.teamName,player.fullName,player.username)}>לפרטי השחקן</p>
-                  <p className='go-to-player-arrow'  onClick={() => handlePlayerClickGames(team.teamName,player.fullName,player.username)} ><MdArrowBack/></p>
+                  <p className="go-to-player" onClick={() => handlePlayerClickGames(team.teamName, player.fullName, player.username)}>
+        <FiUser />
+      </p>
                 </div>
               ))}
             </div>
@@ -185,7 +187,6 @@ const TeamList = ({ token,setToken,club,master }: TeamListProps) => {
               <button className="close" onClick={() => setShowAddTeamModal(false)}>
                 <MdClose size={24} />
               </button>
-              <h2>הוסף קבוצה חדשה</h2>
               <input
                 type="text"
                 value={teamName}

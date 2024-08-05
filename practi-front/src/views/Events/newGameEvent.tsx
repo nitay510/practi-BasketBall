@@ -3,7 +3,6 @@ import { HeaderThree } from '../../cmps/headers/headerThree';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 
-
 interface NewEventGameProps {
   token: string; // Function to set the authentication token
 }
@@ -12,28 +11,26 @@ interface Team {
   teamName: string;
 }
 
-
 export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
   const [teams, setTeams] = useState<Team[]>([]);
   const [selectedTeam, setSelectedTeam] = useState('');
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
-  const [duration, setDuration] = useState('120');
+  const [duration] = useState('120'); // Fixed duration set to 120
   const [tasks, setTasks] = useState<string[]>([]);
+  const [isEventNameFocused, setIsEventNameFocused] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-
-
   useEffect(() => {
     fetchTeams();
-     // Parse URL query parameters
-     const params = new URLSearchParams(location.search);
-     const urlDate = params.get('date');
-     const urlStartTime = params.get('startTime');
-     if (urlDate) setDate(urlDate);
-     if (urlStartTime) setStartTime(urlStartTime);
+    // Parse URL query parameters
+    const params = new URLSearchParams(location.search);
+    const urlDate = params.get('date');
+    const urlStartTime = params.get('startTime');
+    if (urlDate) setDate(urlDate);
+    if (urlStartTime) setStartTime(urlStartTime);
   }, []);
 
   const fetchTeams = async () => {
@@ -65,21 +62,16 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
       case 'startTime':
         setStartTime(value);
         break;
-      case 'duration':
-        setDuration(value);
-        break;
       default:
         break;
     }
   };
-
 
   const handleNewEvent = async () => {
     if (!selectedTeam || !eventName || !date || !startTime || !duration) {
       alert('Please fill in all required fields.');
       return;
     }
-
 
     const newEvent = {
       teamName: selectedTeam,
@@ -114,7 +106,7 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
 
   return (
     <div className="newEventPage">
-              <HeaderThree />
+      <HeaderThree />
       <div className="signup-form">
         <h2>משחק חדש</h2>
         <div className="custom-input-container">
@@ -132,7 +124,7 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
               </option>
             ))}
           </select>
-          <label htmlFor="fullName">שם הקבוצה</label>
+          <label htmlFor="teamSelect">שם הקבוצה</label>
         </div>
         <div className="custom-input-container">
           <input
@@ -141,12 +133,14 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
             name="eventName"
             value={eventName}
             onChange={handleInputChange}
-            placeholder={'שם היריבה'}
+            onFocus={() => setIsEventNameFocused(true)}
+            onBlur={() => setIsEventNameFocused(false)}
+            placeholder={!isEventNameFocused && !eventName ? 'שם היריבה' : ''}
             required
           />
-          <label htmlFor="eventName">
-            {'שם היריבה'}
-          </label>
+          {(isEventNameFocused || eventName) && (
+            <label htmlFor="eventName">שם היריבה</label>
+          )}
         </div>
         <div className="custom-input-container">
           <input
@@ -154,8 +148,9 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
             id="date"
             name="date"
             value={date}
-            onChange={handleInputChange}
-            placeholder={!date ? 'תאריך' : ''}
+            onChange={(e) => setDate(e.target.value)}
+            placeholder="Start Date"
+            style={{ backgroundColor: '#f8f8f8', border: '1px solid #ccc', padding: '10px', borderRadius: '4px', color: 'black' }}
             required
           />
           <label htmlFor="date">תאריך</label>
@@ -168,23 +163,14 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
             value={startTime}
             onChange={handleInputChange}
             placeholder={!startTime ? 'שעת התחלה' : ''}
+            style={{ backgroundColor: '#f8f8f8', border: '1px solid #ccc', padding: '10px', borderRadius: '4px', color: 'black' }}
             required
+            step="60" // Optional: set step to 60 for minute intervals, or 1 for second intervals
           />
           <label htmlFor="startTime">שעת התחלה</label>
         </div>
-        <div className="custom-input-container">
-          <input
-            type="number"
-            id="duration"
-            name="duration"
-            value={duration}
-            onChange={handleInputChange}
-            placeholder={!duration ? 'משך זמן' : ''}
-            required
-          />
-          <label htmlFor="duration">משך זמן</label>
-        </div>
-        
+
+        <input type="hidden" id="duration" name="duration" value={duration} />
         <button className="signup-button" onClick={handleNewEvent}>
           צור אירוע
         </button>

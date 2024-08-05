@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AfterPlayerRow } from './afterPlayerRow';
 import { Player } from '../Player';
+import { useNavigate } from 'react-router-dom';
 import { Game } from '../game';
 interface PlayerTableProps {
     myTeamName: string; // Your team
@@ -8,7 +9,10 @@ interface PlayerTableProps {
 }
 
 export const AfterPlayerTable: React.FC<PlayerTableProps> = ({ myTeamName, game }) => {
-
+    const navigate = useNavigate();
+    const editGame= () =>{
+        navigate('/editGame', { state: { game } });
+    };
     return (
         <div className="player-table"  style={{ top: '38vw', height:'100%'}}>
             <h2>טבלת שחקנים</h2>
@@ -32,7 +36,9 @@ export const AfterPlayerTable: React.FC<PlayerTableProps> = ({ myTeamName, game 
                     ))}
                 </tbody>
             </table>
-      
+            <div className='buttom-buttons' style={{ textAlign: 'center', marginTop: '2vw' }}>
+            <button className='save-button' onClick={editGame} style={{ marginLeft: '10px' }}>ערוך</button>
+            </div>
         </div>
     );
 };

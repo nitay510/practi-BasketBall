@@ -147,7 +147,7 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
             <select
               value={newTeamName}
               onChange={(e) => setNewTeamName(e.target.value)}
-              placeholder="בחר קבוצה"
+              
             >
               <option value="">בחר קבוצה</option>
               {availableTeams.map((team, index) => (

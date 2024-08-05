@@ -47,9 +47,9 @@
     .add-team-button, .confirm-button {
         align-items: center;
         justify-content: center;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
+        background: rgba(210, 60, 85, 1);
+        color: black;
+        border: 1px solid rgba(255, 255, 255, 1);
         padding: 10px 20px;
         border-radius: 5px;
         font-size: 16px;
@@ -57,10 +57,7 @@
         transition: background-color 0.3s;
         margin: 10px 0;
         z-index: 2;
-        &:hover {
-            background-color: #45a049;
-        }
-
+ 
         &.confirm-button {
             background-color: #f44336;
             &:hover {
@@ -89,8 +86,9 @@
         transform: translate(-50%, -10%);
         width: 80%; // Increased width for better layout
         max-width: 500px; // Increased max width for better aesthetics
-        background-color: #999;
+        background: rgba(34, 35, 38, 1);
         padding: 30px; // Increased padding for better spacing
+        border: 1px solid rgba(255, 255, 255, 1);
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         z-index: 1000; // Ensuring modal is always on top
@@ -102,7 +100,7 @@
             padding: 12px; // Larger padding for bigger input
             margin-bottom: 20px; // Increased spacing
             border-radius: 5px;
-            border: 1px solid #ccc;
+            border: 3px solid rgba(210, 60, 85, 1);
             background-color: white;
             color: black;
             font-size: 18px; // Larger font size for better readability
@@ -114,15 +112,15 @@
         }
         button {
             font-size: 18px;
-            color: #fff;
-            background-color: #e32652;
-            border: none;
+            color: black;
+            background: rgb(210, 60, 85);
+            border: 1px solid rgb(255, 255, 255);
             border-radius: 20px;
-            padding: 10px 30px;
+            padding: 5px 20px;
             cursor: pointer;
             transition: background-color 0.3s;
-            display: block; // Ensures that the button takes full width
-            margin: auto; // Center the button horizontally
+            display: block;
+            margin: auto;
 
             &:hover {
                 background-color: darken(#e32652, 10%);
@@ -137,7 +135,7 @@
                 top: 2px;
                 right: -15px;
                 font-size: 16px;
-                color: black;
+                color: white;
                 background: none;
                 border: none;
                 cursor: pointer;
@@ -152,6 +150,7 @@
         padding: 0 20px;
         position: relative;
         z-index: 200;
+
     
         .team-item {
             background-color: rgba(0, 0, 0, 0.6);
@@ -160,6 +159,8 @@
             border-radius: 5px;
             margin-bottom: 10px;
             font-size: 16px;
+            border: 1px solid rgb(255, 255, 255);
+            border-radius: 15px;
     .player-info {
         margin-top: 15px;
         font-size: 24px;
@@ -179,7 +180,17 @@
                 display: flex;
                 flex-direction: column;
             }
-    
+    .wins-loses {
+        border: 3px solid rgba(210, 60, 85, 1);
+        background: rgba(255, 255, 255, 1);
+        color: black;
+        font-family: Lato;
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+
+
+    }
             .player-row {
                     display: flex;
                     align-items: center;
@@ -187,18 +198,25 @@
                     height: auto;
                     border-bottom: 0;
                     margin-bottom: 15px;
+                    border: 1.28px solid rgba(255, 162, 74, 1);
+                    border-radius: 10px;
+                    background: rgba(0, 0, 0, 1);
+
                 
                 .player-name {
                     width: 80%; // Assign a fixed width to ensure consistent alignment
                     font-size: 20px;
                     margin-right: 20px;
                     text-align: right;
+                    color: rgba(255, 162, 74, 1);
+                    font-size: 21.83px;
+                    font-weight: 700;
+                    line-height: 27.29px;
+                    letter-spacing: 0.8185518980026245px;
+
                 }
                 .go-to-player {
-                    width: 80%; // Assign a fixed width to ensure consistent alignment
                     font-size: 20px;
-                    border-bottom: 1px solid;
-                    margin-left: 8px;
                 }
                 .go-to-player-arrow {
                    margin-top: 12px;

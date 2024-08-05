@@ -44,7 +44,7 @@ exports.getEventsForWeek = async (username, year, week) => {
  */
 exports.getUpcomingEvents = async (username) => {
   const currentDate = new Date();
-
+  currentDate.setDate(currentDate.getDate() - 30);
   try {
     return await Event.find({
       username: username,

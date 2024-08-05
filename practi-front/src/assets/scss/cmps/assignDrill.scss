@@ -1,66 +1,115 @@
 .playerDrills {
     margin: 0 auto;
-    background-color: #333;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     color: #fff;
+    direction: rtl;
+
+    .underline{
+      width: 297px;
+      margin: 0 auto 20px;
+      border: none;
+      border-top: 1.56px solid white;
+      margin-bottom: 45px;
+    }
   }
   
   .playerDrills h1 {
+    font-family: Lato;
+    font-size: 32.42px;
+    font-weight: 700;
+    line-height: 40.52px;
+    letter-spacing: 1.2156862020492554px;
     text-align: center;
     color: #fff;
   }
   
   .team-selection {
+    margin-left: 15%;
+    margin-right: 15%;
+    border: 0.88px solid rgb(222, 73, 110);
+    border-radius: 10px;
+    background: rgb(34, 35, 38);
+    box-shadow: 0px 7.02px 14.03px 0px rgba(255, 255, 255, 0);
     margin-bottom: 20px;
+    padding: 10px;
   }
   
   .team-selection h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    color:white;
+    font-family: Lato;
+    font-size: 24.22px;
+    font-weight: 700;
+    line-height: 30.28px;
+    
   }
   
   .team-selection select {
-    width: 100%;
+    width: 90%;
     padding: 8px;
-    border: 1px solid #555;
+    border: 0.88px solid rgb(222, 73, 110);
     border-radius: 4px;
     font-size: 16px;
-    background-color: #444;
+    background: rgb(34, 35, 38);
     color: #fff;
   }
   
-  .assign-team-button,
-  .submit-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
+  .assign-team-button
+  {
+    margin-left: 25%;
+    margin-right: 25%;
+    background: rgb(0, 0, 0);
+    border: 1.11px solid rgb(255, 162, 74);
+    color: rgb(255, 162, 74);
+    border-radius: 8px;
+    font-family: Lato;
+    font-size: 18.8px;
+    font-weight: 700;
+    line-height: 23.5px;
     cursor: pointer;
     text-align: center;
-  }
-  
-  .assign-team-button:hover,
-  .submit-button:hover {
-    background-color: #0056b3;
+    padding: 8px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.assign-team-button.clicked {
+  background: rgba(255, 162, 74, 1);
+  color: black;
+  border: 1.11px solid rgba(0, 0, 0, 1);
+  border-radius: 8px;
+}
+  .submit-button {
+    font-family: Lato;
+    font-size: 24.22px;
+    font-weight: 700;
+    color: white;
+    background: rgba(210, 60, 85, 1);
+    border: 1.07px solid rgba(255, 255, 255, 1);
+    border-radius: 15px;
+    margin-left: 35%;
+    margin-right: 35%;
+
   }
   
   .players-table {
-    width: 100%;
-    border-collapse: collapse;
+    width: 90%;
+    margin-right: 5%;
     margin-top: 20px;
-  }
+    border: 0.88px solid rgba(222, 73, 110, 1);
+    border-radius: 10px;
+    margin-bottom: 15vh;
+}
   
   .players-table th,
   .players-table td {
-    border: 1px solid #555;
+    border: 0.88px solid rgb(222, 73, 110);
     padding: 8px;
-    text-align: left;
+    text-align: right;
+    font-family: Lato;
+    font-size: 24.22px;
+    font-weight: 700;
+    line-height: 30.28px;
     color: #fff;
   }
   

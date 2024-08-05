@@ -1,5 +1,5 @@
 // /mnt/data/EventModal.tsx
-import { MdOutlineExpandMore, MdDelete , MdClose, MdAdd } from 'react-icons/md';
+import { MdOutlineExpandMore, MdDelete, MdClose, MdAdd } from 'react-icons/md';
 import React from 'react';
 
 interface EventModalProps {
@@ -19,8 +19,8 @@ export const EventModal: React.FC<EventModalProps> = ({ isOpen, onClose, onNewEv
             <button className="close" onClick={() => onClose()}>
                 <MdClose size={24} />
             </button>
-            <button onClick={onNewEvent}>הוסף אימון</button>
-            <button onClick={onNewGame}>הוסף משחק </button>
+            <button onClick={onNewEvent} >הוסף אימון</button>
+            <button onClick={onNewGame} >הוסף משחק</button>
         </div>
     );
 };

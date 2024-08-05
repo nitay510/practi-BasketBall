@@ -5,6 +5,17 @@ button {
     cursor: pointer;
     font-family: Rubik;
 }
+.send-drill-button{
+    color: rgba(255, 162, 74, 1);
+    box-shadow: 0px 6.47px 12.94px 0px rgba(255, 255, 255, 0);
+    width: 100px;
+    height: 37.2px;
+    font-family: Lato;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.6098130941px;
+    text-align: center;
+}
 .start-drill-btn {
     background: rgb(255, 162, 74);
     border-radius: 10px;

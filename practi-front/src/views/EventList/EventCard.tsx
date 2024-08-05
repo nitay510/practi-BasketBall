@@ -1,6 +1,6 @@
 // /mnt/data/EventCard.tsx
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Event } from './Event'; // Adjust the import path according to your project structure
 import { useNavigate } from 'react-router-dom';
 import { MdDelete } from 'react-icons/md';
@@ -58,29 +58,29 @@ export const EventCard: React.FC<EventCardProps> = ({ event, token }) => {
       alert('Error deleting event. Please try again.');
     }
   }
-
+  // Log event type here
+  useEffect(() => {
+    console.log(event.type, event._id, event.date);
+  }, []);
   return (
-    <a className={`card ${event.type === 'practice' ? 'win' : 'loss'}`} onClick={handleCardClick}>
-    <div className="card-content">
-      <div className='card-title'>
-        <h2>{new Date(event.date).toLocaleDateString('en-US', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric'
-            })} {calculateEndTime()} - {event.startTime}</h2>
+    <a className={`event-card ${event.type}`} onClick={handleCardClick}>
+      <div className="card-content">
+        <div className='event-card-title'>
+          <h1>{event.type === 'game' ? `משחק נגד ${event.eventName}` : event.eventName}</h1>
+        </div>
+        <div className='event-team'>
+          <h2>{event.teamName}</h2>
+        </div>
+        <div className="start-time-right">
+          <h2>{event.startTime}</h2>
+        </div>
+        <div className="card-actions">
+          <button onClick={deleteEvent} title='Delete Game'>
+            <MdDelete className='row-button' />
+          </button>
+        </div>
       </div>
-      <div className='team-info right'>
-        <h2>{event.teamName}</h2>
-      </div>
-      <div className='team-info left'>
-        <h2>{event.eventName}</h2>
-      </div>
-      <div className="card-actions">
-        <button onClick={deleteEvent} title='Delete Game'>
-          <MdDelete className='row-button' />
-        </button>
-      </div>
-    </div>
-  </a>
+    </a>
+
   );
 };

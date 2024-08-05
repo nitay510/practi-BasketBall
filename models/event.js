@@ -28,7 +28,9 @@ const eventSchema = new mongoose.Schema({
     },
     duration: {
         type: Number, // Duration in minutes
-        required: true
+        required: true,
+        default: 120
+
     },
     tasks: [{
         type: String // Array of tasks as strings

@@ -85,7 +85,7 @@ function DrillPreview({ drillName, token, category, setTopic, drillList }: drill
             )}
           </div>
         </div>
-        <button className="expendMore" onClick={() => toggleDrill(drillName)}>
+        <button className="expendMore" onClick={() => toggleDrill(drillName)}  style={{marginLeft: '0' , fontSize:'18px' }}>
           <MdOutlineExpandMore />
         </button>
       </div>

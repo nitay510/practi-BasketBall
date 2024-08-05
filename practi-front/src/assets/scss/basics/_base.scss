@@ -194,17 +194,15 @@ text-align: center;
 }
 
   //history page
-  .history-page {
+  
+  .drill-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
     margin-left: 10px;
     margin-right: 10px;
   }
-  
-  .drill-list {
-    display: flex;
-    flex-direction: column;
-  }
 
-  
   .green {
     color: #31eb31 !important;
   }
@@ -216,13 +214,12 @@ text-align: center;
     color: yellow !important;
   }
   .opponent-item {
-    margin-top: 20px;
     border: 3.12px solid rgba(210, 60, 85, 1);
     border-radius: 20px;
     background: rgba(34, 35, 38, 1);
     display: flex;
     flex-direction: column;
-    padding: 15px;
+    padding: 10px;
     margin-bottom: 15px;
     cursor: pointer;
   }
@@ -313,12 +310,33 @@ text-align: center;
 }
 
 .signup-form {
-  height: 800px;
+  height: calc(100vh - 50px); /* Adjust the height to fit within the screen, accounting for the CTA bar */
   width: 400px;
   padding: 20px;
   background-color: #000;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensure the button stays at the bottom */
+}
+
+.signup-form .form-content {
+  flex: 1;
+}
+
+.cta-bar-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #000; /* Adjust the color if needed */
+  z-index: 1000; /* Ensure it stays on top */
+}
+
+.custom-input-container .input-wrapper {
+  width: calc(100% - 30px);
 }
 .custom-input-container {
   position: relative;
@@ -326,9 +344,6 @@ text-align: center;
   text-align: right; /* Align text to the right */
 }
 
-.custom-input-container .input-wrapper {
-  width: calc(100% - 30px);
-}
 
 .custom-input-container input {
   width: 100%;
@@ -349,6 +364,7 @@ text-align: center;
   border-bottom: 2px solid #fff;
   background-color: #000;
   color: #fff;
+  font-family: lato;
   outline: none;
   transition: border-color 0.3s ease, color 0.3s ease;
   direction: rtl; /* Right-to-left direction */

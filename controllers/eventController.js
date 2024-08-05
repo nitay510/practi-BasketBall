@@ -13,14 +13,7 @@ exports.addEvent = async (req, res) => {
     const tokenValue = parsedToken.token;
     const decoded = await promisify(jwt.verify)(tokenValue, 'your-secret-key');
     const username = decoded.username;
-    console.log('username:', username);
-    console.log('teamName:', teamName);
-    console.log('type:', type);
-    console.log('eventName:', eventName);
-    console.log('date:', date);
-    console.log('startTime:', startTime);
-    console.log('duration:', duration);
-    console.log('tasks:', tasks);
+
 
 
     const eventData = {
@@ -72,7 +65,6 @@ exports.getUpcomingEvents = async (req, res) => {
     const tokenValue = parsedToken.token;
     const decoded = await promisify(jwt.verify)(tokenValue, 'your-secret-key');
     const username = decoded.username;
-
     const events = await eventService.getUpcomingEvents(username);
     res.json(events);
   } catch (error) {

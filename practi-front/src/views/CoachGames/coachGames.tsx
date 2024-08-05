@@ -116,54 +116,27 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
 
 
   const isDateInRange = (gameDate: Date, startDate: Date | null, endDate: Date | null) => {
-    if (!startDate && !endDate) {
+    // Helper function to get date part only
+    const getDateOnly = (date: Date) => {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    };
+  
+    // Convert to date parts only
+    const gameDateOnly = getDateOnly(gameDate);
+    const startDateOnly = startDate ? getDateOnly(startDate) : null;
+    const endDateOnly = endDate ? getDateOnly(endDate) : null;
+  
+    if (!startDateOnly && !endDateOnly) {
       return true;
-    } else if (!startDate && endDate) {
-      return gameDate <= endDate;
-    } else if (startDate && !endDate) {
-      return gameDate >= startDate;
+    } else if (!startDateOnly && endDateOnly) {
+      return gameDateOnly <= endDateOnly;
+    } else if (startDateOnly && !endDateOnly) {
+      return gameDateOnly >= startDateOnly;
     } else {
-      return gameDate >= startDate && gameDate <= endDate;
+      return gameDateOnly >= startDateOnly && gameDateOnly <= endDateOnly;
     }
   };
 
-  // Function to sort games alphabetically by team's name
-  const sortGamesByName = () => {
-    setGames(prevGames => {
-      const sortedGames = [...prevGames].sort((a, b) => {
-        if (a.teamName < b.teamName) {
-          return -1;
-        }
-        if (a.teamName > b.teamName) {
-          return 1;
-        }
-        // If team names are equal, continue comparing by other properties
-        return 0;
-      });
-      return sortedGames;
-    });
-  };
-
-  const sortGamesByDate = () => {
-    setGames(prevGames => {
-      const sortedGames = [...prevGames].sort((a, b) => {
-        return new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime();
-      });
-      return sortedGames;
-    });
-  }
-
-  const handleSortingOptionChange = (option: string) => {
-    setSortingOption(option);
-    setSortingOptionsOpen(false);
-    if (option === 'לפי שם') {
-      console.log("Sorting by name");
-      sortGamesByName(); // Call the sort function if sorting by name is selected
-    }
-    else if (option === 'לפי זמן') {
-      sortGamesByDate();
-    }
-  };
 
   // Function to apply filters
   const handleApplyFilters = (start: string, end: string, selectedTeams: string[]) => {
@@ -184,22 +157,12 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
             <button onClick={() => setFilterModalOpen(true)}>
               <MdFilterAlt className='filter-button' />
             </button>
-            <button onClick={() => setSortingOptionsOpen(!sortingOptionsOpen)}>
-              <MdSort className='sort-button' />
-            </button>
             <button onClick={() => {
               setErrorMessage('');
               setStartNewGameModal(true);
             }}>
               <MdAdd className='add-button' />
             </button>
-            {sortingOptionsOpen && (
-              <DropdownMenu
-                options={['לפי שם', 'לפי זמן']}
-                onSelectOption={(option) => handleSortingOptionChange(option)}
-                selectedOption={sortingOption} // Pass selectedOption prop
-              />
-            )}
           </div>
         </div>
         <div className="game-cards-container">
@@ -223,12 +186,14 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
               <MdClose />
             </button>
             <h4>הוסף משחק חדש</h4>
+
             <select
               value={myTeamName}
               onChange={(e) => setMyTeamName(e.target.value)}
               placeholder='הקבוצה שלך'
               style={{ borderColor: !myTeamName && errorMessage ? 'red' : '' }}
             >
+
               <option value=''>בחר קבוצה</option>
               {teams.map((team, index) => (
                 <option key={index} value={team.teamName}>
