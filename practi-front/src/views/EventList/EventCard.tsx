@@ -75,8 +75,8 @@ export const EventCard: React.FC<EventCardProps> = ({ event, token }) => {
           <h2>{event.startTime}</h2>
         </div>
         <div className="card-actions">
-          <button onClick={deleteEvent} title='Delete Game'>
-            <MdDelete className='row-button' />
+          <button onClick={deleteEvent} title='Delete Game' style={{ color: 'black' }}>
+            <MdDelete className='row-button 2' />
           </button>
         </div>
       </div>

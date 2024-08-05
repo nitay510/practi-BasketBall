@@ -17,21 +17,15 @@ export const AfterScoreBoard: React.FC<ScoreBoardProps> = ({ myTeamName, rivalTe
         <div className="scoreboard-container">
             <div className="scoreboard-teams">
                 {/* Team A */}
-                <div className="scoreboard-team team-a" style={{ width: '35%'}}>
-                    <img src={teamALogo} alt="Team A Logo" />
+                <div className="scoreboard-team team-a" >
                     <h2>{rivalTeamName}</h2>
+                    <h1> {rivalTeamScore}</h1>
                     </div>
                 {/* Scores */}
-                <div className="scoreboard-scores-after">
-                    <div>
-                        <h2>{rivalTeamScore} : {myTeamScore}</h2>
-                    </div>
-                </div>
                 {/* Team B */}
-                <div className="scoreboard-team team-b" style={{ width: '35%'}}>
-                    <img src={teamBLogo} alt="Team B Logo" />
+                <div className="scoreboard-team team-b" >
                     <h2>{myTeamName}</h2>
-
+                    <h1> {myTeamScore}</h1>
                 </div>
            
         </div>

@@ -19,7 +19,6 @@ export const ScoreBoard: React.FC<ScoreBoardProps> = ({ myTeamName, rivalTeamNam
             <div className="scoreboard-teams">
                 {/* Team A */}
                 <div className="scoreboard-team team-a">
-                    <img src={teamALogo} alt="Team A Logo" />
                     <h2>{rivalTeamName}</h2>
                     <input
                         type="text"
@@ -43,7 +42,6 @@ export const ScoreBoard: React.FC<ScoreBoardProps> = ({ myTeamName, rivalTeamNam
      
                 {/* Team B */}
                 <div className="scoreboard-team team-b">
-                    <img src={teamBLogo} alt="Team B Logo" />
                     <h2>{myTeamName}</h2>
                     <input
                         type="text"

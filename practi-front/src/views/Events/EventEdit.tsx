@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
+import { MdClose } from 'react-icons/md'; // Importing the close icon
+import { FaPlus } from 'react-icons/fa'; // Importing the plus icon
+
 interface Event {
   _id: string;
   teamName: string;
@@ -9,7 +12,6 @@ interface Event {
   eventName: string;
   date: string;
   startTime: string;
-  duration: string;
   tasks: string[];
 }
 
@@ -21,9 +23,8 @@ export function EventEdit({ token }: { token: string }): JSX.Element {
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
-  const [duration, setDuration] = useState('');
-  const [tasks, setTasks] = useState<string[]>([]);
-  const [taskInput, setTaskInput] = useState('');
+  const [tasks, setTasks] = useState<string[]>(['', '', '']); // Initialize with three blank spaces
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,7 +46,6 @@ export function EventEdit({ token }: { token: string }): JSX.Element {
         setEventName(eventData.eventName);
         setDate(eventData.date.split('T')[0]);
         setStartTime(eventData.startTime);
-        setDuration(eventData.duration);
         setTasks(eventData.tasks || []);
       } catch (error) {
         console.error('Error fetching event:', error);
@@ -58,9 +58,6 @@ export function EventEdit({ token }: { token: string }): JSX.Element {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     switch (name) {
-      case 'teamName':
-        setTeamName(value);
-        break;
       case 'eventName':
         setEventName(value);
         break;
@@ -70,32 +67,63 @@ export function EventEdit({ token }: { token: string }): JSX.Element {
       case 'startTime':
         setStartTime(value);
         break;
-      case 'duration':
-        setDuration(value);
-        break;
       default:
         break;
     }
   };
 
-  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedType = e.target.value;
-    setType(selectedType);
-  };
-
-  const handleTaskInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskInput(e.target.value);
+  const handleTaskInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const newTasks = [...tasks];
+    newTasks[index] = e.target.value;
+    setTasks(newTasks);
   };
 
   const handleAddTask = () => {
-    if (taskInput.trim()) {
-      setTasks([...tasks, taskInput]);
-      setTaskInput('');
-    }
+    setTasks([...tasks, '']);
   };
 
   const handleRemoveTask = (index: number) => {
     setTasks(tasks.filter((_, i) => i !== index));
+  };
+
+  const handleUpdateEvent = async () => {
+    if (!teamName || !eventName || !date || !startTime) {
+      setErrorMessage('.יש למלא את כל השדות הנדרשים');
+      return;
+    }
+
+    const updatedTasks = tasks.map(task => (task.trim() === '' ? null : task));
+
+    const updatedEvent = {
+      teamName,
+      type,
+      eventName,
+      date,
+      startTime,
+      tasks: updatedTasks,
+    };
+
+    const storedToken = localStorage.getItem('authToken') || token;
+    try {
+      const response = await fetch(`https://practi-web.onrender.com/api/events/${eventId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${storedToken}`
+        },
+        body: JSON.stringify(updatedEvent)
+      });
+
+      if (response.ok) {
+        navigate('/week-calendar');
+      } else {
+        const result = await response.json();
+        throw result.error || 'Error updating event';
+      }
+    } catch (err) {
+      console.error('Failed to update event:', err);
+      setErrorMessage('נכשל בחיבור לשרת.');
+    }
   };
 
   const handleDeleteEvent = async () => {
@@ -120,43 +148,12 @@ export function EventEdit({ token }: { token: string }): JSX.Element {
     }
   }
 
-  const handleUpdateEvent = async () => {
-    if (!teamName || !eventName || !date || !startTime || !duration) {
-      alert('Please fill in all required fields.');
-      return;
-    }
-
-    const updatedEvent = {
-      teamName,
-      type,
-      eventName,
-      date,
-      startTime,
-      duration,
-      tasks
-    };
-
-    const storedToken = localStorage.getItem('authToken') || token;
-    try {
-      const response = await fetch(`https://practi-web.onrender.com/api/events/${eventId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${storedToken}`
-        },
-        body: JSON.stringify(updatedEvent)
-      });
-
-      if (response.ok) {
-        navigate('/week-calendar');
-      } else {
-        const result = await response.json();
-        throw result.error || 'Error updating event';
-      }
-    } catch (err) {
-      console.error('Failed to update event:', err);
-      alert('Failed to update event.');
-    }
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   if (!event) {
@@ -165,7 +162,8 @@ export function EventEdit({ token }: { token: string }): JSX.Element {
 
   return (
     <div className="eventEditPage">
-          <HeaderThree/>
+      <div className='signup-form'>
+      <HeaderThree />
       <h2>Edit Event</h2>
       <div className="custom-input-container">
         <input
@@ -185,6 +183,7 @@ export function EventEdit({ token }: { token: string }): JSX.Element {
           name="date"
           value={date}
           onChange={handleInputChange}
+          min={getCurrentDate()} // Set the minimum date to today
           required
         />
         <label htmlFor="date">תאריך</label>
@@ -197,54 +196,42 @@ export function EventEdit({ token }: { token: string }): JSX.Element {
           value={startTime}
           onChange={handleInputChange}
           required
+          step="900" // Step to 900 seconds (15 minutes)
         />
         <label htmlFor="startTime">שעת התחלה</label>
       </div>
-      <div className="custom-input-container">
-        <input
-          type="number"
-          id="duration"
-          name="duration"
-          value={duration}
-          onChange={handleInputChange}
-          required
-        />
-        <label htmlFor="duration">משך האימון</label>
-      </div>
-      <div className="custom-input-container">
-        <ul color="white">
-          {tasks.map((task, index) => (
-            <li key={index} style={{ color: 'white', marginBottom: '10px' }}>
-              {task}
-              <button onClick={() => handleRemoveTask(index)}>מחק</button>
-            </li>
-          ))}
-        </ul>
-        <input
-          type="text"
-          value={taskInput}
-          onChange={handleTaskInputChange}
-          placeholder="משימה חדשה"
-        />
-        <button className="signup-button" onClick={handleAddTask}>
-          הוסף משימה
-        </button>
-      </div>
+      {type === 'practice' && (
+        <div className="custom-input-container">
+          <p className="input-label" style={{marginRight:'35%'}}>מערך אימון</p>
+          <ul className="task-list">
+            {tasks.map((task, index) => (
+              <li key={index} className="task-item">
+                <span>{index + 1}</span>
+                <input
+                  type="text"
+                  value={task}
+                  onChange={(e) => handleTaskInputChange(e, index)}
+                  placeholder="משימה חדשה"
+                  required
+                />
+                <MdClose className="delete-icon" onClick={() => handleRemoveTask(index)} />
+              </li>
+            ))}
+          </ul>
+          <div className="task-input-container">
+            <FaPlus className="add-icon" onClick={handleAddTask} />
+          </div>
+        </div>
+      )}
       <br />
-      <div className="button-container">
-        <button className="signup-button" onClick={handleUpdateEvent}>
+        <button className="new-event-button" onClick={handleUpdateEvent}>
           עדכן אימון
         </button>
-        <button className="signup-button" onClick={handleDeleteEvent}>
-          מחק אימון
-        </button>
-        <button className="signup-button" onClick={() => navigate('/week-calendar')}>
-          חזור ללוח שנה
-        </button>
-      </div>
+        </div>
       <div className="cta-bar-container">
         <CtaBarManager />
       </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 }

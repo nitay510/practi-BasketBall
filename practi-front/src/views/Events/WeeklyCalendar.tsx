@@ -5,7 +5,6 @@ import { HeaderThree } from '../../cmps/headers/headerThree';
 import { Game } from '../InGameStats/game';
 import { EventCard } from '../EventList/EventCard'; // Import the EventCard component
 import { MdAdd, MdClose, MdFilterAlt, MdSort } from 'react-icons/md';
-import DropdownMenu from '../CoachGames/DropdownMenu';
 import EventFilterModal from '../EventList/EventFilterModal';
 
 interface WeeklyCalendarProps {
@@ -36,8 +35,6 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [sortingOptionsOpen, setSortingOptionsOpen] = useState(false);
-  const [sortingOption, setSortingOption] = useState<string>('alphabetical');
   const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
 
   const nearestFutureEventRef = useRef<HTMLDivElement>(null);
@@ -138,7 +135,13 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
 
     if (start) {
       filteredEvents = filteredEvents.filter(event => getDateOnly(new Date(event.date)) >= start);
+    } else {
+      // Filter events that start after yesterday if no start date is specified
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      filteredEvents = filteredEvents.filter(event => getDateOnly(new Date(event.date)) > yesterday);
     }
+
     if (end) {
       filteredEvents = filteredEvents.filter(event => getDateOnly(new Date(event.date)) <= end);
     }
@@ -213,16 +216,6 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
     });
   };
 
-  const handleSortingOptionChange = (option: string) => {
-    setSortingOption(option);
-    setSortingOptionsOpen(false);
-    if (option === 'לפי שם') {
-      console.log('Sorting by name');
-      sortGamesByName(); // Call the sort function if sorting by name is selected
-    } else if (option === 'לפי זמן') {
-      sortGamesByDate();
-    }
-  };
 
   // Group events by date
   const groupEventsByDate = (events: Event[]) => {
@@ -246,6 +239,19 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
   const pastEvents = sortedEvents.filter(event => getDateOnly(new Date(event.date)) < getDateOnly(new Date()));
   const futureEvents = sortedEvents.filter(event => getDateOnly(new Date(event.date)) >= getDateOnly(new Date()));
 
+  const renderEvents = (events: Event[]) => {
+    const groupedEvents = groupEventsByDate(events);
+
+    return Object.entries(groupedEvents).map(([date, eventsForDate]) => (
+      <div key={date}>
+        <h3 style={{ margin: '1vh 2vw' }}>{formatDate(date)}</h3>
+        {eventsForDate.map((event, idx) => (
+          <EventCard key={event._id} event={event} token={token} />
+        ))}
+      </div>
+    ));
+  };
+
   return (
     <div className='coach-games'>
       <div className='content-container'>
@@ -256,49 +262,26 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
             <button onClick={() => setFilterModalOpen(true)}>
               <MdFilterAlt className='filter-button' />
             </button>
-            <button onClick={() => setSortingOptionsOpen(!sortingOptionsOpen)}>
-              <MdSort className='sort-button' />
+            <button onClick={() => setModalOpen(true)}>
+              <MdAdd className='sort-button' />
             </button>
-            {sortingOptionsOpen && (
-              <DropdownMenu
-                options={['לפי שם', 'לפי זמן']}
-                onSelectOption={(option) => handleSortingOptionChange(option)}
-                selectedOption={sortingOption} // Pass selectedOption prop
-              />
-            )}
           </div>
-          <button className='add-new-game' onClick={() => setModalOpen(true)}>
-            הוסף אירוע חדש
-          </button>
           {modalOpen && (
-            <div className='new-game-modal'>
+            <div className='new-game-modal '>
               <div className='add-team-popup'>
                 <button className='modal-close-button' onClick={() => setModalOpen(false)}>
                   <MdClose size={24} />
                 </button>
                 <h2>בחר סוג אירוע</h2>
-                <button onClick={handleNewEventClick}>אימון חדש</button> <br />
+                <button onClick={handleNewEventClick} style={{ marginRight: '7vh' }}>אימון חדש</button> <br />
                 <button onClick={handleNewGameClick}>משחק חדש</button>
               </div>
             </div>
           )}
         </div>
         <div className='event-cards-container'>
-          {pastEvents.reverse().map((event, idx) => (
-            <div key={event._id}>
-              <h3 style={{ fontWeight: 'bold', border: 'thin solid #ccc', margin: '1vh 2vw' }}>{formatDate(event.date)}</h3>
-              <EventCard key={idx} event={event} token={token} />
-            </div>
-          ))}
-          {futureEvents.map((event, idx) => {
-            const ref = idx === 0 ? nearestFutureEventRef : null;
-            return (
-              <div key={event._id} ref={ref}>
-                <h3 style={{ fontWeight: 'bold', border: 'thin solid #ccc', margin: '1vh 2vw' }}>{formatDate(event.date)}</h3>
-                <EventCard key={idx} event={event} token={token} />
-              </div>
-            );
-          })}
+          {renderEvents(pastEvents.reverse())}
+          {renderEvents(futureEvents)}
         </div>
         <EventFilterModal
           teams={teams}
@@ -312,6 +295,9 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
           onClose={() => setFilterModalOpen(false)}
           onApplyFilters={handleApplyFilters}
         />
+          <button className='add-new-game' onClick={() => setModalOpen(true)}>
+            הוסף אירוע חדש
+          </button>
       </div>
       <div className='cta-bar-container'>
         <CtaBarManager />

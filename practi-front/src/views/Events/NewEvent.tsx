@@ -19,8 +19,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
   const [type, setType] = useState('practice');
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState('');
-  const [startHour, setStartHour] = useState('10');
-  const [startMinute, setStartMinute] = useState('00');
+  const [startTime, setStartTime] = useState('');
   const [tasks, setTasks] = useState<string[]>(['', '', '']); // Initialize with three blank spaces
   const [isEventNameFocused, setIsEventNameFocused] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -34,11 +33,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
     const urlDate = params.get('date');
     const urlStartTime = params.get('startTime');
     if (urlDate) setDate(urlDate);
-    if (urlStartTime) {
-      const [hour, minute] = urlStartTime.split(':');
-      setStartHour(hour);
-      setStartMinute(minute);
-    }
+    if (urlStartTime) setStartTime(urlStartTime);
   }, []);
 
   const fetchTeams = async () => {
@@ -67,22 +62,11 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
       case 'date':
         setDate(value);
         break;
+      case 'startTime':
+        setStartTime(value);
+        break;
       default:
         break;
-    }
-  };
-
-  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedType = e.target.value;
-    setType(selectedType);
-
-    // Update event name placeholder based on the type
-    if (selectedType === 'game') {
-      setEventName(''); // Clear the event name for games
-    }
-
-    if (selectedType === 'practice') {
-      setEventName('אימון'); // Set default event name for practices
     }
   };
 
@@ -101,7 +85,6 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
   };
 
   const handleNewEvent = async () => {
-    const startTime = `${startHour}:${startMinute}`;
     if (!selectedTeam || !eventName || !date || !startTime) {
       setErrorMessage('.יש למלא את כל השדות הנדרשים');
       return;
@@ -147,9 +130,6 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
     return `${year}-${month}-${day}`;
   };
 
-  const hourOptions = Array.from({ length: 11 }, (_, i) => (i + 10).toString());
-  const minuteOptions = ['00', '15', '30', '45'];
-
   return (
     <div className="newEventPage">
       <div className="signup-form">
@@ -157,7 +137,6 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
         <div className="form-content">
           <h2>אירוע חדש</h2>
           <div className="custom-input-container">
-            <p className="input-label">שם הקבוצה</p>
             <div className="select-container">
               <select
                 id="teamSelect"
@@ -178,66 +157,48 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
             </div>
           </div>
           <div className="custom-input-container">
-            <p className="input-label">שם האימון</p>
-            <input
-              type="text"
-              id="eventName"
-              name="eventName"
-              value={eventName}
-              onChange={handleInputChange}
-              onFocus={() => setIsEventNameFocused(true)}
-              onBlur={() => setIsEventNameFocused(false)}
-              placeholder={!isEventNameFocused && !eventName ? 'שם היריבה' : ''}
-              required
-            />
+            <div className="select-container">
+              <input
+                type="text"
+                id="eventName"
+                name="eventName"
+                value={eventName}
+                onChange={handleInputChange}
+                placeholder={!isEventNameFocused && !eventName ? 'שם האימון' : ''}
+                required
+              />
+            </div>
           </div>
           <div className="custom-input-container">
-            <p className="input-label">תאריך</p>
-            <input
-              type="date"
-              id="date"
-              name="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              min={getCurrentDate()} // Set the minimum date to today
-              required
-            />
+            <div className="select-container">
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                min={getCurrentDate()} // Set the minimum date to today
+                required
+              />
+            </div>
           </div>
           <div className="custom-input-container">
-            <p className="input-label hour">שעת התחלה</p>
-            <div className="time-selector">
-              <select
-                id="startHour"
-                name="startHour"
-                value={startHour}
-                onChange={(e) => setStartHour(e.target.value)}
+            <div className="select-container">
+              <input
+                type="time"
+                id="startTime"
+                name="startTime"
+                value={startTime}
+                onChange={handleInputChange}
+                placeholder={!startTime ? 'שעת התחלה' : ''}
                 required
-              >
-                {hourOptions.map((hour) => (
-                  <option key={hour} value={hour}>
-                    {hour}
-                  </option>
-                ))}
-              </select>
-              <span> : </span>
-              <select
-                id="startMinute"
-                name="startMinute"
-                value={startMinute}
-                onChange={(e) => setStartMinute(e.target.value)}
-                required
-              >
-                {minuteOptions.map((minute) => (
-                  <option key={minute} value={minute}>
-                    {minute}
-                  </option>
-                ))}
-              </select>
+                step="900" // Step to 900 seconds (15 minutes)
+              />
             </div>
           </div>
           {type === 'practice' && (
             <div className="custom-input-container">
-              <p className="input-label">מערך אימון</p>
+              <p className="input-label" style={{marginRight:'35%'}}>מערך אימון</p>
               <ul className="task-list">
                 {tasks.map((task, index) => (
                   <li key={index} className="task-item">

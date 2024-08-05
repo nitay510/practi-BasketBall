@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
+import { MdOutlineSportsBasketball } from 'react-icons/md';
 
 interface Event {
   _id: string;
@@ -42,73 +43,38 @@ export function EventView({ token }: { token: string }): JSX.Element {
   }, [eventId, token]);
 
   if (!event) {
-    return <div>Loading...</div>;
+    return <div>עוד לא הוספת אימונים חדשים</div>;
   }
 
-  // Format the date string
-  const formattedDate = new Date(event.date).toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
-  // Calculate end time based on start time and duration
-  const calculateEndTime = () => {
-    const startTimeArray = event.startTime.split(':');
-    const startHour = parseInt(startTimeArray[0]);
-    const startMinute = parseInt(startTimeArray[1]);
-    const duration = parseInt(event.duration);
-
-    const endMinute = (startMinute + duration) % 60;
-    const endHour = startHour + Math.floor((startMinute + duration) / 60);
-
-    return `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
-  };
-
-  const endTime = calculateEndTime();
-  console.log(eventId)
-
   return (
-    <div className="eventView">
-          <HeaderThree/>
-      <div className="button-container">
-        <button className="signup-button" onClick={() => navigate(`/event/${eventId}/edit`)}>עריכה</button>
+    <>
+      <div className="eventView">
+        <HeaderThree />
+        <div className='content'>
+          <div className="bigTitle">
+            <input type="text" id="eventName" name="eventName" value={event.eventName} readOnly />
+          </div>
+          <div className="taskList">
+            <ul>
+              {event.tasks.map((task, index) => (
+                <li key={index}>
+                 
+                  {task}
+                  <MdOutlineSportsBasketball style={{ marginLeft: '8px', color:'rgba(255, 162, 74, 1)'
+ }} />
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="cta-bar-container">
+            <CtaBarManager />
+          </div>
+        </div>
+        <div className="button-container">
+          <button className="new-event-button" onClick={() => navigate('/week-calendar')}>חזרה</button>
+          <button className="reverse-button" onClick={() => navigate(`/event/${eventId}/edit`)}>עריכה</button>
+        </div>
       </div>
-      <h2>View Event</h2>
-      <div className="custom-input-container">
-        <input type="text" id="teamName" name="teamName" value={event.teamName} readOnly />
-      </div>
-      <div className="custom-input-container">
-        <input type="text" id="type" name="type" value={event.type} readOnly />
-      </div>
-      <div className="custom-input-container">
-        <input type="text" id="eventName" name="eventName" value={event.eventName} readOnly />
-      </div>
-      <div className="custom-input-container">
-        <input type="text" id="date" name="date" value={formattedDate} readOnly />
-      </div>
-      <div className="custom-input-container">
-        <input type="time" id="startTime" name="startTime" value={event.startTime} readOnly />
-      </div>
-      <div className="custom-input-container">
-        <input type="text" id="endTime" name="endTime" value={endTime} readOnly />
-      </div>
-      <div className="custom-input-container">
-        <label>Tasks</label>
-        <ul color='white'>
-          {event.tasks.map((task, index) => (
-            <li key={index} style={{ color: 'white', marginBottom: '10px' }}>{task}</li>
-          ))}
-        </ul>
-      </div>
-      <br />
-      <div className="button-container">
-        <button className="signup-button" onClick={() => navigate('/week-calendar')}>Back to Calendar</button>
-      </div>
-      <div className='cta-bar-container'>
-        <CtaBarManager />
-      </div>
-    </div>
+    </>
   );
 }

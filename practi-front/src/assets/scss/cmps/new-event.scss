@@ -6,7 +6,6 @@
 .task-item {
   display: flex;
   align-items: center;
-  background-color: #333;
   padding: 1vh 1vw;
   border-radius: 0.4vw;
   margin-bottom: 1vh;
@@ -45,12 +44,12 @@
 .new-event-button {
   display: block;
   margin: 2vh auto;
-  padding: 2vh 10vw;
+  padding: 1vh 10vw;
   font-size: 1.5em;
   background-color: #e32652;
   color: white;
   border: none;
-  border-radius: 0.4vw;
+  border-radius: 2vw;
   cursor: pointer;
 }
 
@@ -74,28 +73,48 @@
 
 .select-container select {
   font-size: 1.5em;
-  min-width: 30vw;
+  min-width: 80vw;
   position: relative;
-  right: 50vw;
+  border: 3px solid rgba(210, 60, 85, 1);
+  font-family: Lato;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 25px;
+  letter-spacing: 0.75px;
+  text-align: right;
+  color: black; 
+  background: white;  
+
 }
 
-.signup-form input[type='date'] {
-  margin-top: 2vh;
-  background-color: #f8f8f8;
-  border: 0.1vw solid #ccc;
-  padding: 1vh 1vw;
-  font-size: 1.2em;
-  border-radius: 0.4vw;
-  color: black;
-}
 
 .custom-input-container select {
   max-height: 20vh;
-  overflow-y: auto;
-  font-size: 1.5em;
-  padding: 0.5vh 0.5vw;
+  min-width: 80vw;
+  position: relative;
+  border: 3px solid rgb(210, 60, 85);
+  font-family: Lato;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 25px;
+  letter-spacing: 0.75px;
+  text-align: right;
+  color: black;
+  background: white;
 }
-
+.custom-input-container input{
+  max-height: 20vh;
+  min-width: 80vw;
+  position: relative;
+  border: 3px solid rgb(210, 60, 85);
+  font-family: Lato;
+  font-size: 20px;
+  line-height: 25px;
+  letter-spacing: 0.75px;
+  text-align: right;
+  color: black;
+  background: white;
+}
 .custom-input-container span {
   font-size: 1.5em;
 }
@@ -138,26 +157,28 @@
 .event-card {
   width: 70vw;
   border: 1vw solid #ccc;
-  border-radius: 5vw;
+  border-radius: 3vw;
   margin: 3vh 0vw;
   margin-right: 25vw;
-  height: 18vh;
+  height: 12vh;
+  background: white;
   color: black;
   padding: 1vw;
   box-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.1);
-  background-color: #808284;
   display: flex;
   flex-direction: column;
 
 
-
   .event-card-title {
     h1 {
-      color: white;
-      font-size: 1em;
-      padding: 1vh 0;
+      font-family: Lato;
+      font-size: 20px;
+    font-weight: 700;
+        line-height: 25px;
+      letter-spacing: 0.8713474273681641px;
+    text-align: right;
+    color: black;
       text-align: right;
-      margin-right: 5vw;
     }
 
     position: absolute;
@@ -166,21 +187,25 @@
 
     width: 100%;
     border-radius: 10vw;
-    background-color: #2C2F33;
   }
 
   .start-time-right {
+    font-family: Lato;
+font-size: 20px;
+font-weight: 700;
+line-height: 25px;
+
     margin-right: -22vw;
     font-weight: bold;
 
     h2 {
-      color: wheat;
+      color: white;
     }
   }
 }
 
 .event-card.practice {
-  border-color: #e1ff00;
+  border: 3px solid rgba(210, 60, 85, 1)
 }
 
 .event-card.game {
@@ -194,22 +219,101 @@
 }
 
 .event-team {
+  font-family: Lato;
+text-align: right;
+color: black;
+  text-align: right;
+position: absolute;
+top: 40%;
+h2 {
+  font-size: 20px;
+font-weight: 700;
+    line-height: 25px;
+  letter-spacing: 0.8713474273681641px;
+}
+}
+.eventView {
+  .content {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  }
+  .bigTitle {
+    color: white;
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+
+    input {
+      width: 100%;
+      text-align: center;
+      border: none;
+      background: transparent;
+      /* font-size: 1em; */
+      color: white;
+      outline: none;
+      font-family: Lato;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 32.4px;
+      text-align: center;
+      border-bottom: 1px solid rgba(210, 60, 85, 1);
+    }
+  }
+
+  .taskList {
+    background: white;
+    padding: 10px;
+    border: 3px solid rgba(210, 60, 85, 1);
+    border-radius: 15px;
+    font-family: Lato;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    letter-spacing: 0.8713474273681641px;
+    text-align: right;
+    ul {
+      list-style: none;
+      padding: 0;
+      text-align: right;
+      
+      li {
+        margin-bottom: 10px;
+        padding-right: 20px;
+        position: relative;
+
+      }
+    }
+  }
+
+  .cta-bar-container {
+    margin-top: 20px;
+  }
+}
+
+.button-container {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  position: relative;
-  width: 30vw;
-  max-width: 50vw;
-  padding: 1.5vh 4vw;
-  top: 40%;
-  border-radius: 5vw;
-  background-color: #2C2F33;
-  position: absolute;
-  right: 5vw;
-  
-  h2 {
-    font-size: 1em;
-    color: #ccc;
+  justify-content: space-around;
+  margin-top: 40px;
+
+  .new-event-button,
+  .reverse-button {
+    display: block;
+    margin: 2vh auto;
+    font-size: 1.5em;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+
+  .new-event-button {
+    background-color: #e32652;
+    color: white;
+  }
+
+  .reverse-button {
+    background-color: white;
+    color: #e32652;
+    border: 2px solid #e32652;
   }
 }

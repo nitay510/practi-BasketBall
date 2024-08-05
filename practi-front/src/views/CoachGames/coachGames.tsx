@@ -17,9 +17,6 @@ interface CoachGameProps {
 const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
   const [startNewGameModal, setStartNewGameModal] = useState(false);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [sortingOptionsOpen, setSortingOptionsOpen] = useState(false);
-  const [sortingOption, setSortingOption] = useState<string>('alphabetical');
-
   const [teams, setTeams] = useState([]);
   const [games, setGames] = useState<Game[]>([]);
   const [myTeamName, setMyTeamName] = useState('');
