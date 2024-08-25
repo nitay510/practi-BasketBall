@@ -147,7 +147,7 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
           </p>
           {/* Add to Home Screen button */}
           {deferredPrompt && (
-            <button onClick={handleAddToHomeScreen}>הורד לטלפון</button>
+            <button type="submit" onClick={handleAddToHomeScreen}>הורד לטלפון</button>
           )}
         </div>
       </section>
