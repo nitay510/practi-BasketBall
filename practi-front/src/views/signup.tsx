@@ -8,13 +8,14 @@ interface LoginProps {
   setClub: (club: string) => void;
 }
 
-export function Signup({ setToken, setFirstname, setLoginStatus,setClub }: LoginProps): JSX.Element {
+export function Signup({ setToken, setFirstname, setLoginStatus, setClub }: LoginProps): JSX.Element {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [clubName, setClubName] = useState(''); // State for club selection
   const [password, setPassword] = useState('');
   const [isCoach, setIsCoach] = useState(false);
-  const [role, setRole] = useState(''); 
+  const [role, setRole] = useState('');
+  const [errorMessage, setErrorMessage] = useState(''); // State for error message
   const navigate = useNavigate();
 
   const clubs = [
@@ -48,6 +49,7 @@ export function Signup({ setToken, setFirstname, setLoginStatus,setClub }: Login
   };
 
   const handleSignup = async () => {
+    setErrorMessage(''); // Clear previous error message
     const newUser = {
       fullName,
       username,
@@ -56,31 +58,39 @@ export function Signup({ setToken, setFirstname, setLoginStatus,setClub }: Login
       clubName
     };
 
-    const res = await fetch('https://practi-web.onrender.com/api/Users', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newUser),
-    });
-
-    if (res.ok) {
-      const userLogin = { username, password };
-      const tokenRes = await fetch('https://practi-web.onrender.com/api/Tokens', {
+    try {
+      const res = await fetch('https://practi-web.onrender.com/api/Users', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(userLogin),
+        body: JSON.stringify(newUser),
       });
 
-      const newToken = await tokenRes.text();
-      localStorage.setItem('authToken', newToken);
-      localStorage.setItem('userName', username);
-      await setToken(newToken);
-      fetchUserDetails(newToken, username);
-    } else {
-      alert('Error during signup');
+      if (res.ok) {
+        const userLogin = { username, password };
+        const tokenRes = await fetch('https://practi-web.onrender.com/api/Tokens', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userLogin),
+        });
+
+        const newToken = await tokenRes.text();
+        localStorage.setItem('authToken', newToken);
+        localStorage.setItem('userName', username);
+        await setToken(newToken);
+        fetchUserDetails(newToken, username);
+      } else {
+        if (res.status === 500) {
+          setErrorMessage('המשתמש הנוכחי כבר קיים במערכת');
+        } else {
+          setErrorMessage('Error during signup. Please try again.');
+        }
+      }
+    } catch (error) {
+      setErrorMessage('Error during signup. Please try again.');
     }
   };
 
@@ -95,14 +105,12 @@ export function Signup({ setToken, setFirstname, setLoginStatus,setClub }: Login
 
     if (getUserResponse.ok) {
       const userJson = await getUserResponse.json();
-      const { fullName,isCoach,club } = userJson;
+      const { fullName, isCoach, club } = userJson;
       setFirstname(fullName);
-      setClub(club)
+      setClub(club);
       setLoginStatus(true);
-      if(isCoach)
-      navigate('/app-manager'); //here need to nevigate to coachApp when there will be one 
-      else
-      navigate('/app');
+      if (isCoach) navigate('/app-manager'); //here need to navigate to coachApp when there will be one 
+      else navigate('/app');
     } else {
       alert(getUserResponse.status);
     }
@@ -166,6 +174,7 @@ export function Signup({ setToken, setFirstname, setLoginStatus,setClub }: Login
             </select>
             <label htmlFor="role">מאמן או שחקן?</label>
           </div>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
           <button className="signup-button" onClick={handleSignup}>הרשמה</button>
         </div>
       </section>
