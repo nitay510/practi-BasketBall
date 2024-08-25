@@ -15,17 +15,24 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  
+  const [showInstallButton, setShowInstallButton] = useState(false); // Control visibility of the install button
+
   const gm = ['1357'];
   const navigate = useNavigate();
 
   useEffect(() => {
     // Handle the "beforeinstallprompt" event
     window.addEventListener('beforeinstallprompt', (e) => {
-      // Prevent the mini-infobar from appearing
-      e.preventDefault();
-      // Save the event for later use
-      setDeferredPrompt(e);
+      console.log('beforeinstallprompt event triggered');
+      e.preventDefault(); // Prevent the default mini-infobar
+      setDeferredPrompt(e); // Save the event for later use
+      setShowInstallButton(true); // Show the install button
+    });
+
+    // Handle if the app is already installed
+    window.addEventListener('appinstalled', () => {
+      console.log('App has been installed');
+      setShowInstallButton(false); // Hide the install button after installation
     });
 
     const storedToken = localStorage.getItem('authToken');
@@ -104,13 +111,17 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
     if (deferredPrompt) {
       deferredPrompt.prompt(); // Show the install prompt
       deferredPrompt.userChoice.then((choiceResult: any) => {
+        console.log('User choice:', choiceResult.outcome);
         if (choiceResult.outcome === 'accepted') {
           console.log('User accepted the A2HS prompt');
         } else {
           console.log('User dismissed the A2HS prompt');
         }
         setDeferredPrompt(null); // Reset the deferred prompt
+        setShowInstallButton(false); // Hide the install button after prompt
       });
+    } else {
+      console.log('Deferred prompt is not available.');
     }
   };
 
@@ -146,8 +157,11 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
             אין לך עדיין חשבון? <Link to='/signup' className="blue-link">לחץ כאן</Link>
           </p>
           {/* Add to Home Screen button */}
-          {deferredPrompt && (
-            <button type="submit" onClick={handleAddToHomeScreen}>הורד לטלפון</button>
+          {showInstallButton && (
+            <button    onClick={handleAddToHomeScreen}
+            >
+              הורד לטלפון
+            </button>
           )}
         </div>
       </section>
