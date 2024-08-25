@@ -158,7 +158,8 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
           </p>
           {/* Add to Home Screen button */}
           {showInstallButton && (
-            <button    onClick={handleAddToHomeScreen}
+            <button
+              onClick={handleAddToHomeScreen}
             >
               הורד לטלפון
             </button>
