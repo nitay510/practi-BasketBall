@@ -44,7 +44,7 @@ const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token }) => {
   };
 
   return (
-      <a className={`card ${game.myTeamScore > game.otherTeamScore ? 'win' : 'loss'}`} onClick={goToBoxScore}>
+      <a className={`card ${game.myTeamScore > game.otherTeamScore ? 'win' : 'loss'}`} >
         <div className="card-content">
           <div className='card-title'>
             <h2>{new Date(game.gameDate).toLocaleDateString('en-US', {
@@ -53,14 +53,14 @@ const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token }) => {
               year: 'numeric'
             })}</h2>
           </div>
-          <div className='team-info right'>
+          <div className='team-info right' onClick={goToBoxScore}>
             <img src={teamALogo} alt="Team A Logo" />
             <h2>{game.teamName}</h2>
           </div>
-          <div className="scoreboard">
+          <div className="scoreboard" onClick={goToBoxScore}>
             <span>{game.myTeamScore} : {game.otherTeamScore}</span>
           </div>
-          <div className='team-info left'>
+          <div className='team-info left' onClick={goToBoxScore}>
             <img src={teamBLogo} alt="Team B Logo" />
             <h2>{game.rivalTeamName}</h2>
           </div>

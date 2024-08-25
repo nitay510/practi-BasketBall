@@ -17,7 +17,7 @@ const videos= {
     'כדרור': [
       { _id: 'a124', title: 'כדרור מסל לסל', url: 'FUU7OLJxC9c',  haveSub: true},
       { _id: 'a120', title: 'כדרור תחת לחץ', url: 'bbKbXW2R6ZA',  haveSub: true},
-      { _id: 'a121', title: 'כדרור מול לחץ מגרש שלם', url: '25rDExk-wQE',  haveSub: true},
+      { _id: 'a121', title: 'כדרור לחץ מגרש שלם', url: '25rDExk-wQE',  haveSub: true},
       { _id: 'a122', title: 'כדרור בפיק אנד רול', url: '7VgM83jiPGw',  haveSub: true},
       { _id: 'a123', title: 'בונוס: שליטה בכדור', url: 'cUpEw5Dntkg',  haveSub: false },
 

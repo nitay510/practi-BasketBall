@@ -211,9 +211,7 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
                 color: 'red',
                 fontSize: '1.25em',
                 marginTop: '10px',
-               // backgroundColor: '#ffe6e6',
-                //padding: '10px',
-                //borderRadius: '5em',
+             
                 textAlign: 'center'
               }}>
                 {errorMessage}
