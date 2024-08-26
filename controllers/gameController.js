@@ -55,6 +55,7 @@ exports.getAllGamesForPlayer = async (req, res) => {
 
         // Fetch all teams for this coach
         const teams = await teamService.getTeamsByCoachUsername(username);
+        console.log(teams);
         if (!teams || teams.length === 0) {
             return res.status(404).send('No teams found for this coach.');
         }
@@ -69,7 +70,7 @@ exports.getAllGamesForPlayer = async (req, res) => {
 
         // Sort games by date
         allGames.sort((a, b) => new Date(a.gameDate) - new Date(b.gameDate));
-
+        console.log(allGames);
         res.send(allGames);
     } catch (error) {
         console.error("Failed in getAllGamesForCoach:", error);
