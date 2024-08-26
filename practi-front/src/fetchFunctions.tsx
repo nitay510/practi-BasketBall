@@ -17,6 +17,7 @@ export const fetchTeams = async (club: string, token: string, master: boolean): 
   };
   
   export const fetchGames = async (token: string, master: boolean): Promise<any[]> => {
+    console.log(master);
     const url = master
       ? 'https://practi-web.onrender.com/api/games/coach'
       : 'https://practi-web.onrender.com/api/games/club';
@@ -27,7 +28,8 @@ export const fetchTeams = async (club: string, token: string, master: boolean): 
       });
       if (!response.ok) throw new Error('Failed to fetch games');
       const data = await response.json();
-      return data.sort((a: { gameDate: Date }, b: { gameDate: Date }) => new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime());
+      console.log(data);
+      return data;
     } catch (error) {
       console.error('Error fetching games:', error);
       return [];
