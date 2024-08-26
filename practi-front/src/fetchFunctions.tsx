@@ -16,11 +16,11 @@ export const fetchTeams = async (club: string, token: string, master: boolean): 
     }
   };
   
-  export const fetchGames = async (token: string, master: boolean): Promise<any[]> => {
+  export const fetchGames = async (token: string, master: boolean,club: string): Promise<any[]> => {
     console.log(master);
     const url = master
-      ? 'https://practi-web.onrender.com/api/games/coach'
-      : 'https://practi-web.onrender.com/api/games/club';
+      ? `https://practi-web.onrender.com/api/games/club?clubName=${encodeURIComponent(club)}`
+      : 'https://practi-web.onrender.com/api/games/coach';
   
     try {
       const response = await fetch(url, {

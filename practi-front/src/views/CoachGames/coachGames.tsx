@@ -42,7 +42,7 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
   useEffect(() => {
     // Fetch and set games based on the user’s role (master or regular)
     const storedToken = localStorage.getItem('authToken') || token;
-    fetchGames(storedToken, master).then((gamesData) => setGames(gamesData));
+    fetchGames(storedToken, master,club).then((gamesData) => setGames(gamesData));
   }, [token, master]);
 
   useEffect(() => {
