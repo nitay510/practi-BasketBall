@@ -68,8 +68,8 @@ exports.getAllGamesForPlayer = async (req, res) => {
                 allGames = allGames.concat(games);
         }
 
-        // Sort games by date
-        allGames.sort((a, b) => new Date(a.gameDate).getTime() - new Date(b.gameDate).getTime());
+        // Sort games by date from latest to earliest
+        allGames.sort((a, b) => new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime());
         console.log(allGames);
         res.send(allGames);
     } catch (error) {
@@ -95,8 +95,8 @@ exports.getAllGamesForGm = async (req, res) => {
               allGames = allGames.concat(games);
       }
 
-      // Sort games by date
-      allGames.sort((a, b) => new Date(a.gameDate).getTime() - new Date(b.gameDate).getTime());
+// Sort games by date from latest to earliest
+allGames.sort((a, b) => new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime());
 
       res.send(allGames);
   } catch (error) {

@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import teamALogo from '../../../assets/images/teamA.png'; // Import team A logo image
-import teamBLogo from '../../../assets/images/teamB.png'; // Import team B logo image
 
 interface ScoreBoardProps {
     myTeamName: string;
