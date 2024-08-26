@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { MdClose, MdFilterAlt, MdSort, MdAdd } from 'react-icons/md';
+import { MdFilterAlt, MdAdd } from 'react-icons/md';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import CoachGameCard from './CoachGameCard';
 import { useNavigate } from 'react-router-dom';
 import { Game } from '../InGameStats/game';
 import { HeaderThree } from '../../cmps/headers/headerThree';
-import DropdownMenu from './DropdownMenu';
 import FilterModal from './FilterModal';
+import { fetchTeams, fetchGames } from '../../fetchFunctions'; // Import fetch functions
+import AddGameModal from './AddGameModal'; // Import the new AddGameModal component
 
 interface CoachGameProps {
   token: string;
@@ -24,10 +25,25 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
-  const [selectedGames, setSelectedGames] = useState<Game[]>([]); // New state for selected games
+  const [selectedGames, setSelectedGames] = useState<Game[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch and set teams based on the user’s role (master or regular)
+    const storedToken = localStorage.getItem('authToken') || token;
+    fetchTeams(club, storedToken, master).then((teamsData) => {
+      setTeams(teamsData);
+      setSelectedTeams(teamsData.map((team: { teamName: string }) => team.teamName)); // Select all teams by default
+    });
+  }, [token, master, club]);
+
+  useEffect(() => {
+    // Fetch and set games based on the user’s role (master or regular)
+    const storedToken = localStorage.getItem('authToken') || token;
+    fetchGames(storedToken, master).then((gamesData) => setGames(gamesData));
+  }, [token, master]);
 
   useEffect(() => {
     // Convert start and end dates to Date objects
@@ -43,105 +59,40 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
     setSelectedGames(newSelectedGames);
   }, [selectedTeams, startDate, endDate, games]);
 
-
-  useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const storedToken = localStorage.getItem('authToken') || token;
-        let response;
-        if (master) {
-          response = await fetch(`https://practi-web.onrender.com/api/teams/club?clubName=${encodeURIComponent(club)}`, {
-            headers: { Authorization: `Bearer ${storedToken}` }
-          });
-        } else {
-          response = await fetch('https://practi-web.onrender.com/api/teams', {
-            headers: { 'Authorization': `Bearer ${storedToken}` }
-          });
-        }
-        if (response.ok) {
-          const teamsData = await response.json();
-          setTeams(teamsData);
-          setSelectedTeams(teamsData.map((team: { teamName: any; }) => team.teamName)); // Select all teams by default
-        } else {
-          console.error('Failed to fetch teams');
-        }
-      } catch (error) {
-        console.error('Error fetching teams:', error);
-      }
-    };
-    fetchTeams();
-  }, [token, master, club]);
-
-  useEffect(() => {
-    const fetchGames = async () => {
-      let storedToken = localStorage.getItem('authToken');
-      if (!storedToken) {
-        storedToken = token;
-      }
-
-      try {
-        const response = await fetch('https://practi-web.onrender.com/api/games/coach', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${storedToken}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        if (!response.ok) throw new Error('Failed to fetch games');
-        const data = await response.json();
-        setGames(data.sort((a: { gameDate: Date; }, b: { gameDate: Date; }) => new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime())); // Sort by date initially
-      } catch (error) {
-        console.error('Error fetching games:', error);
-      }
-    };
-    fetchGames();
-  }, []);
   const addGame = () => {
+    // Validate if the required fields are filled before navigating
     let missingFields = [];
-    if (!myTeamName) {
-      missingFields.push('הקבוצה שלך');
-    }
-    if (!rivalTeamName) {
-      missingFields.push('קבוצת היריב');
-    }
+    if (!myTeamName) missingFields.push('הקבוצה שלך');
+    if (!rivalTeamName) missingFields.push('קבוצת היריב');
+
     if (missingFields.length > 0) {
       setErrorMessage(`לא מילאת את: ${missingFields.join(', ')}`);
       return;
     }
+
     navigate(`/gameScores/${encodeURIComponent(myTeamName)}/${encodeURIComponent(rivalTeamName)}`);
   };
 
-
+  // Function to check if a date is within the selected range
   const isDateInRange = (gameDate: Date, startDate: Date | null, endDate: Date | null) => {
-    // Helper function to get date part only
-    const getDateOnly = (date: Date) => {
-      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    };
+    const getDateOnly = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
   
-    // Convert to date parts only
     const gameDateOnly = getDateOnly(gameDate);
     const startDateOnly = startDate ? getDateOnly(startDate) : null;
     const endDateOnly = endDate ? getDateOnly(endDate) : null;
   
-    if (!startDateOnly && !endDateOnly) {
-      return true;
-    } else if (!startDateOnly && endDateOnly) {
-      return gameDateOnly <= endDateOnly;
-    } else if (startDateOnly && !endDateOnly) {
-      return gameDateOnly >= startDateOnly;
-    } else {
-      return gameDateOnly >= startDateOnly && gameDateOnly <= endDateOnly;
-    }
+    if (!startDateOnly && !endDateOnly) return true;
+    if (!startDateOnly) return gameDateOnly <= endDateOnly;
+    if (!endDateOnly) return gameDateOnly >= startDateOnly;
+    return gameDateOnly >= startDateOnly && gameDateOnly <= endDateOnly;
   };
 
-
-  // Function to apply filters
+  // Function to apply filters and close the filter modal
   const handleApplyFilters = (start: string, end: string, selectedTeams: string[]) => {
-    // Close the modal and keep the selected filters local until they are applied
     setStartDate(start);
     setEndDate(end);
     setSelectedTeams(selectedTeams);
-    setFilterModalOpen(false); // Close the modal after applying filters
+    setFilterModalOpen(false);
   };
 
   return (
@@ -175,50 +126,17 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
           הוסף משחק חדש
         </button>
         {startNewGameModal && (
-          <div className='new-game-modal'>
-            <button className='modal-close-button' onClick={() => {
-              setStartNewGameModal(false);
-              setErrorMessage('');
-            }}>
-              <MdClose />
-            </button>
-            <h4>הוסף משחק חדש</h4>
-
-            <select
-              value={myTeamName}
-              onChange={(e) => setMyTeamName(e.target.value)}
-              placeholder='הקבוצה שלך'
-              style={{ borderColor: !myTeamName && errorMessage ? 'red' : '' }}
-            >
-
-              <option value=''>בחר קבוצה</option>
-              {teams.map((team, index) => (
-                <option key={index} value={team.teamName}>
-                  {team.teamName}
-                </option>
-              ))}
-            </select>
-            <input
-              type='text'
-              value={rivalTeamName}
-              onChange={(e) => setRivalTeamName(e.target.value)}
-              placeholder='שם הקבוצה היריבה'
-              style={{ borderColor: !rivalTeamName && errorMessage ? 'red' : '' }}
-            />
-            <button onClick={addGame}>הוסף משחק</button>
-            {errorMessage && (
-              <p style={{
-                color: 'red',
-                fontSize: '1.25em',
-                marginTop: '10px',
-             
-                textAlign: 'center'
-              }}>
-                {errorMessage}
-              </p>
-            )}
-
-          </div>
+          <AddGameModal
+            teams={teams}
+            myTeamName={myTeamName}
+            setMyTeamName={setMyTeamName}
+            rivalTeamName={rivalTeamName}
+            setRivalTeamName={setRivalTeamName}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
+            onClose={() => setStartNewGameModal(false)}
+            onAddGame={addGame}
+          />
         )}
         {/* Filter Modal */}
         <FilterModal

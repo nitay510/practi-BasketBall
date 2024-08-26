@@ -13,15 +13,37 @@ exports.addNewTeam = async (teamName, coachUsername,club) => {
     await newTeam.save();
     return newTeam;
   };
-  
   exports.getTeamsByPlayerUsername = async (username) => {
-    return await Team.find({ players: username });
-  };
-
-  exports.getTeamsByCoachUsername = async (username) => {
-    return await Team.find({ coach: username });
+    try {
+      const teams = await Team.find({ players: username });
+      // Check if there are any teams found
+      if (!teams || teams.length === 0) {
+        // Handle the case where no teams are found (e.g., return an empty array or a specific message)
+        return []; // Or handle it in another way depending on your requirements
+      }
+      return teams;
+    } catch (error) {
+      // Handle any errors that occur during the database query
+      console.error("Error fetching teams by player username:", error);
+      throw error; // You can choose to throw the error or return an empty array
+    }
   };
   
+  exports.getTeamsByCoachUsername = async (username) => {
+    try {
+      const teams = await Team.find({ coach: username });
+      // Check if there are any teams found
+      if (!teams || teams.length === 0) {
+        // Handle the case where no teams are found
+        return []; // Or handle it in another way depending on your requirements
+      }
+      return teams;
+    } catch (error) {
+      // Handle any errors that occur during the database query
+      console.error("Error fetching teams by coach username:", error);
+      throw error; // You can choose to throw the error or return an empty array
+    }
+  };
   exports.getTeamByName = async (teamName) => {
     return await Team.findOne({ teamName });
   };
