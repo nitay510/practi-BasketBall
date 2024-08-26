@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
+import { fetchEventById } from '../../fetchFunctions'; // Import the fetch function
 
 interface Event {
   _id: string;
@@ -20,25 +21,18 @@ export function GameEventView({ token }: { token: string }): JSX.Element {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEvent = async () => {
-      const storedToken = localStorage.getItem('authToken');
+    // Fetch the event details using the event ID and token
+    const fetchEventDetails = async () => {
+      const storedToken = localStorage.getItem('authToken') || token;
       try {
-        const response = await fetch(`https://practi-web.onrender.com/api/events/id/${eventId}`, {
-          headers: {
-            Authorization: `Bearer ${storedToken}`
-          }
-        });
-        if (!response.ok) {
-          throw new Error(`Failed to fetch event with ID ${eventId}`);
-        }
-        const eventData = await response.json();
+        const eventData = await fetchEventById(eventId!, storedToken);
         setEvent(eventData);
       } catch (error) {
         console.error('Error fetching event:', error);
       }
     };
 
-    fetchEvent();
+    fetchEventDetails();
   }, [eventId, token]);
 
   if (!event) {
@@ -50,14 +44,12 @@ export function GameEventView({ token }: { token: string }): JSX.Element {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   });
 
   // Calculate end time based on start time and duration
   const calculateEndTime = () => {
-    const startTimeArray = event.startTime.split(':');
-    const startHour = parseInt(startTimeArray[0]);
-    const startMinute = parseInt(startTimeArray[1]);
+    const [startHour, startMinute] = event.startTime.split(':').map(Number);
     const duration = parseInt(event.duration);
 
     const endMinute = (startMinute + duration) % 60;
@@ -67,13 +59,14 @@ export function GameEventView({ token }: { token: string }): JSX.Element {
   };
 
   const endTime = calculateEndTime();
-  console.log(eventId)
 
   return (
     <div className="eventView">
-      <HeaderThree/>
+      <HeaderThree />
       <div className="button-container">
-        <button className="signup-button" onClick={() => navigate(`/gameEvent/${eventId}/edit`)}>עריכה</button>
+        <button className="signup-button" onClick={() => navigate(`/gameEvent/${eventId}/edit`)}>
+          עריכה
+        </button>
       </div>
       <h2>משחק</h2>
       <div className="custom-input-container">
@@ -97,9 +90,11 @@ export function GameEventView({ token }: { token: string }): JSX.Element {
       <label htmlFor="endTime">משך המשחק</label>
       <br />
       <div className="button-container">
-        <button className="signup-button" onClick={() => navigate('/week-calendar')}>Back to Calendar</button>
+        <button className="signup-button" onClick={() => navigate('/week-calendar')}>
+          חזור ללוח שנה
+        </button>
       </div>
-      <div className='cta-bar-container'>
+      <div className="cta-bar-container">
         <CtaBarManager />
       </div>
     </div>

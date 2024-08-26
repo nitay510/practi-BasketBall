@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { MdOutlineSportsBasketball } from 'react-icons/md';
+import { fetchEventById } from '../../fetchFunctions'; // Import the fetch function
 
 interface Event {
   _id: string;
@@ -21,29 +22,22 @@ export function EventView({ token }: { token: string }): JSX.Element {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEvent = async () => {
-      const storedToken = localStorage.getItem('authToken');
+    // Fetch the event details using the event ID and token
+    const fetchEventDetails = async () => {
+      const storedToken = localStorage.getItem('authToken') || token;
       try {
-        const response = await fetch(`https://practi-web.onrender.com/api/events/id/${eventId}`, {
-          headers: {
-            Authorization: `Bearer ${storedToken}`
-          }
-        });
-        if (!response.ok) {
-          throw new Error(`Failed to fetch event with ID ${eventId}`);
-        }
-        const eventData = await response.json();
+        const eventData = await fetchEventById(eventId!, storedToken);
         setEvent(eventData);
       } catch (error) {
         console.error('Error fetching event:', error);
       }
     };
 
-    fetchEvent();
+    fetchEventDetails();
   }, [eventId, token]);
 
   if (!event) {
-    return <div>עוד לא הוספת אימונים חדשים</div>;
+    return <div>עוד לא הוספת אימונים חדשים</div>; // Display a message if no event is found
   }
 
   return (
@@ -51,25 +45,29 @@ export function EventView({ token }: { token: string }): JSX.Element {
       <div className="eventView">
         <HeaderThree />
         <div className='content'>
+          {/* Display the event name */}
           <div className="bigTitle">
             <input type="text" id="eventName" name="eventName" value={event.eventName} readOnly />
           </div>
+          {/* Display the list of tasks */}
           <div className="taskList">
             <ul>
               {event.tasks.map((task, index) => (
                 <li key={index}>
-                 
                   {task}
-                  <MdOutlineSportsBasketball style={{ marginLeft: '8px', color:'rgba(255, 162, 74, 1)'
- }} />
+                  <MdOutlineSportsBasketball
+                    style={{ marginLeft: '8px', color: 'rgba(255, 162, 74, 1)' }}
+                  />
                 </li>
               ))}
             </ul>
           </div>
+          {/* CTA Bar */}
           <div className="cta-bar-container">
             <CtaBarManager />
           </div>
         </div>
+        {/* Navigation Buttons */}
         <div className="button-container">
           <button className="new-event-button" onClick={() => navigate('/week-calendar')}>חזרה</button>
           <button className="reverse-button" onClick={() => navigate(`/event/${eventId}/edit`)}>עריכה</button>

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
-import { MdClose } from 'react-icons/md'; // Importing the close icon
-import { FaPlus } from 'react-icons/fa'; // Importing the plus icon
+import { MdClose } from 'react-icons/md';
+import { FaPlus } from 'react-icons/fa';
+import { fetchTeams, createNewEvent } from '../../fetchFunctions'; // Import fetch functions
 
 interface NewEventProps {
-  token: string; // Function to set the authentication token
+  token: string;
 }
 
 interface Team {
@@ -27,31 +28,26 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
   const location = useLocation();
 
   useEffect(() => {
-    fetchTeams();
+    // Fetch teams when the component mounts
+    const fetchAllTeams = async () => {
+      const storedToken = localStorage.getItem('authToken') || token;
+      try {
+        const teamsData = await fetchTeams('no relvent',storedToken,false);
+        setTeams(teamsData);
+      } catch (error) {
+        console.error('Error fetching teams:', error);
+      }
+    };
+
+    fetchAllTeams();
+
     // Parse URL query parameters
     const params = new URLSearchParams(location.search);
     const urlDate = params.get('date');
     const urlStartTime = params.get('startTime');
     if (urlDate) setDate(urlDate);
     if (urlStartTime) setStartTime(urlStartTime);
-  }, []);
-
-  const fetchTeams = async () => {
-    const storedToken = localStorage.getItem('authToken') || token;
-    try {
-      const response = await fetch('https://practi-web.onrender.com/api/teams', {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      });
-      if (response.ok) {
-        const teamsData = await response.json();
-        setTeams(teamsData);
-      } else {
-        console.error('Failed to fetch teams.');
-      }
-    } catch (error) {
-      console.error('Error fetching teams:', error);
-    }
-  };
+  }, [token, location]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -77,21 +73,22 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
   };
 
   const handleAddTask = () => {
-    setTasks([...tasks, '']);
+    setTasks([...tasks, '']); // Add a new empty task
   };
 
   const handleRemoveTask = (index: number) => {
-    setTasks(tasks.filter((_, i) => i !== index));
+    setTasks(tasks.filter((_, i) => i !== index)); // Remove a task based on its index
   };
 
   const handleNewEvent = async () => {
+    // Validate required fields
     if (!selectedTeam || !eventName || !date || !startTime) {
       setErrorMessage('.יש למלא את כל השדות הנדרשים');
       return;
     }
 
-    const updatedTasks = tasks.map(task => (task.trim() === '' ? null : task));
-
+    // Prepare tasks and event data
+    const updatedTasks = tasks.map((task) => (task.trim() === '' ? null : task));
     const newEvent = {
       teamName: selectedTeam,
       type,
@@ -100,24 +97,12 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
       startTime,
       tasks: updatedTasks,
     };
-    const storedToken = localStorage.getItem('authToken');
-    try {
-      const response = await fetch('https://practi-web.onrender.com/api/events', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${storedToken}`,
-        },
-        body: JSON.stringify(newEvent),
-      });
 
-      if (response.ok) {
-        navigate('/week-calendar');
-      } else {
-        const result = await response.json();
-        throw result.error || 'Error creating event';
-      }
-    } catch (err) {
+    const storedToken = localStorage.getItem('authToken') || token;
+    try {
+      await createNewEvent(storedToken, newEvent); // Use the new fetch function
+      navigate('/week-calendar'); // Navigate to the calendar page on success
+    } catch (error) {
       setErrorMessage('נכשל בחיבור לשרת.');
     }
   };
@@ -136,6 +121,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
         <HeaderThree />
         <div className="form-content">
           <h2>אירוע חדש</h2>
+          {/* Team Select */}
           <div className="custom-input-container">
             <div className="select-container">
               <select
@@ -156,6 +142,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
               </select>
             </div>
           </div>
+          {/* Event Name Input */}
           <div className="custom-input-container">
             <div className="select-container">
               <input
@@ -169,6 +156,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
               />
             </div>
           </div>
+          {/* Date Input */}
           <div className="custom-input-container">
             <div className="select-container">
               <input
@@ -182,6 +170,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
               />
             </div>
           </div>
+          {/* Start Time Input */}
           <div className="custom-input-container">
             <div className="select-container">
               <input
@@ -196,9 +185,10 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
               />
             </div>
           </div>
+          {/* Task List (Visible only for 'practice' type events) */}
           {type === 'practice' && (
             <div className="custom-input-container">
-              <p className="input-label" style={{marginRight:'35%'}}>מערך אימון</p>
+              <p className="input-label" style={{ marginRight: '35%' }}>מערך אימון</p>
               <ul className="task-list">
                 {tasks.map((task, index) => (
                   <li key={index} className="task-item">
@@ -220,6 +210,7 @@ export function NewEvent({ token }: NewEventProps): JSX.Element {
             </div>
           )}
         </div>
+        {/* Create Event Button */}
         <button className="new-event-button" onClick={handleNewEvent}>
           צור אימון
         </button>

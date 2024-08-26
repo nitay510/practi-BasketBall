@@ -1,5 +1,5 @@
 // /mnt/data/EventModal.tsx
-import { MdOutlineExpandMore, MdDelete, MdClose, MdAdd } from 'react-icons/md';
+import {  MdClose } from 'react-icons/md';
 import React from 'react';
 
 interface EventModalProps {

@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
+import { fetchTeams, createNewGameEvent } from '../../fetchFunctions'; // Import the fetch functions
 
 interface NewEventGameProps {
-  token: string; // Function to set the authentication token
+  token: string;
 }
 
 interface Team {
@@ -17,38 +18,33 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
   const [eventName, setEventName] = useState('');
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
-  const [duration] = useState('120'); // Fixed duration set to 120
-  const [tasks, setTasks] = useState<string[]>([]);
+  const [duration] = useState('120'); // Fixed duration set to 120 minutes
+  const [tasks, setTasks] = useState<string[]>([]); // Placeholder for potential future tasks
   const [isEventNameFocused, setIsEventNameFocused] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    fetchTeams();
+    // Fetch teams when the component mounts
+    const fetchAllTeams = async () => {
+      const storedToken = localStorage.getItem('authToken') || token;
+      try {
+        const teamsData = await fetchTeams('no relevent',storedToken,false);
+        setTeams(teamsData);
+      } catch (error) {
+        console.error('Error fetching teams:', error);
+      }
+    };
+
+    fetchAllTeams();
+
     // Parse URL query parameters
     const params = new URLSearchParams(location.search);
     const urlDate = params.get('date');
     const urlStartTime = params.get('startTime');
     if (urlDate) setDate(urlDate);
     if (urlStartTime) setStartTime(urlStartTime);
-  }, []);
-
-  const fetchTeams = async () => {
-    const storedToken = localStorage.getItem('authToken') || token;
-    try {
-      const response = await fetch('https://practi-web.onrender.com/api/teams', {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      });
-      if (response.ok) {
-        const teamsData = await response.json();
-        setTeams(teamsData);
-      } else {
-        console.error('Failed to fetch teams.');
-      }
-    } catch (error) {
-      console.error('Error fetching teams:', error);
-    }
-  };
+  }, [token, location]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -68,11 +64,13 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
   };
 
   const handleNewEvent = async () => {
+    // Validate required fields
     if (!selectedTeam || !eventName || !date || !startTime || !duration) {
       alert('Please fill in all required fields.');
       return;
     }
 
+    // Prepare the event data
     const newEvent = {
       teamName: selectedTeam,
       type: 'game',
@@ -82,25 +80,13 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
       duration,
       tasks,
     };
-    const storedToken = localStorage.getItem('authToken');
-    try {
-      const response = await fetch('https://practi-web.onrender.com/api/events', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${storedToken}`,
-        },
-        body: JSON.stringify(newEvent),
-      });
 
-      if (response.ok) {
-        navigate('/week-calendar');
-      } else {
-        const result = await response.json();
-        throw result.error || 'Error creating event';
-      }
-    } catch (err) {
-      throw 'Failed to connect to the server.';
+    const storedToken = localStorage.getItem('authToken') || token;
+    try {
+      await createNewGameEvent(storedToken, newEvent); // Use the new fetch function
+      navigate('/week-calendar'); // Navigate to the calendar page on success
+    } catch (error) {
+      alert('Failed to connect to the server.');
     }
   };
 
@@ -109,6 +95,7 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
       <HeaderThree />
       <div className="signup-form">
         <h2>משחק חדש</h2>
+        {/* Team Select */}
         <div className="custom-input-container">
           <select
             id="teamSelect"
@@ -126,6 +113,7 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
           </select>
           <label htmlFor="teamSelect">שם הקבוצה</label>
         </div>
+        {/* Event Name Input */}
         <div className="custom-input-container">
           <input
             type="text"
@@ -142,6 +130,7 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
             <label htmlFor="eventName">שם היריבה</label>
           )}
         </div>
+        {/* Date Input */}
         <div className="custom-input-container">
           <input
             type="date"
@@ -150,11 +139,18 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             placeholder="Start Date"
-            style={{ backgroundColor: '#f8f8f8', border: '1px solid #ccc', padding: '10px', borderRadius: '4px', color: 'black' }}
+            style={{
+              backgroundColor: '#f8f8f8',
+              border: '1px solid #ccc',
+              padding: '10px',
+              borderRadius: '4px',
+              color: 'black',
+            }}
             required
           />
           <label htmlFor="date">תאריך</label>
         </div>
+        {/* Start Time Input */}
         <div className="custom-input-container">
           <input
             type="time"
@@ -163,13 +159,20 @@ export function NewGameEvent({ token }: NewEventGameProps): JSX.Element {
             value={startTime}
             onChange={handleInputChange}
             placeholder={!startTime ? 'שעת התחלה' : ''}
-            style={{ backgroundColor: '#f8f8f8', border: '1px solid #ccc', padding: '10px', borderRadius: '4px', color: 'black' }}
+            style={{
+              backgroundColor: '#f8f8f8',
+              border: '1px solid #ccc',
+              padding: '10px',
+              borderRadius: '4px',
+              color: 'black',
+            }}
             required
-            step="60" // Optional: set step to 60 for minute intervals, or 1 for second intervals
+            step="60" // Optional: set step to 60 for minute intervals
           />
           <label htmlFor="startTime">שעת התחלה</label>
         </div>
 
+        {/* Hidden Input for Duration */}
         <input type="hidden" id="duration" name="duration" value={duration} />
         <button className="signup-button" onClick={handleNewEvent}>
           צור אירוע

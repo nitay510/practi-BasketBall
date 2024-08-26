@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { Game } from '../InGameStats/game';
-import { EventCard } from '../EventList/EventCard'; // Import the EventCard component
-import { MdAdd, MdClose, MdFilterAlt, MdSort } from 'react-icons/md';
+import { EventCard } from '../EventList/EventCard';
+import { MdAdd, MdClose, MdFilterAlt } from 'react-icons/md';
 import EventFilterModal from '../EventList/EventFilterModal';
+import { fetchTeams, fetchEvents, fetchGameDetails } from '../../fetchFunctions'; // Import the fetch functions
 
 interface WeeklyCalendarProps {
   token: string;
@@ -16,12 +17,12 @@ interface Event {
   _id: string;
   username: string;
   teamName: string;
-  type: string; // 'meeting', 'task', 'event'
-  eventName: string; // name of the event
-  date: string; // date of the event
-  startTime: string; // start time of the event
-  duration: number; // duration of the event in hours
-  tasks: string[]; // list of tasks
+  type: string;
+  eventName: string;
+  date: string;
+  startTime: string;
+  duration: number;
+  tasks: string[];
 }
 
 export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): JSX.Element {
@@ -29,7 +30,6 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-
   const [events, setEvents] = useState<Event[]>([]);
   const [games, setGames] = useState<Game[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -44,79 +44,46 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
   };
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const storedToken = localStorage.getItem('authToken');
+    const fetchInitialData = async () => {
+      const storedToken = localStorage.getItem('authToken') || token;
+
       try {
-        const response = await fetch(`https://practi-web.onrender.com/api/events`, {
-          headers: {
-            Authorization: `Bearer ${storedToken}`,
-          },
-        });
+        const teamsData = await fetchTeams('no relevant',storedToken,false);
+        setTeams(teamsData);
+        setSelectedTeams(teamsData.map((team: { teamName: string }) => team.teamName)); // Select all teams by default
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const events: Event[] = await response.json();
+        const eventsData = await fetchEvents(storedToken);
         const now = getDateOnly(new Date());
         const remainingEvents = [];
         const completedGames = [];
 
-        for (const event of events) {
+        for (const event of eventsData) {
           const eventDate = getDateOnly(new Date(event.date));
 
           if (event.type === 'game' && eventDate < now) {
-            const gameResponse = await fetch(
-              `https://practi-web.onrender.com/api/games/date/${event.date}/team/${event.teamName}/rivalTeam/${event.eventName}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${storedToken}`,
-                },
-              }
+            const gameDetails = await fetchGameDetails(
+              storedToken,
+              event.date,
+              event.teamName,
+              event.eventName
             );
-
-            if (gameResponse.ok) {
-              const game = await gameResponse.json();
-              if (game[0]) {
-                completedGames.push(game[0]);
-              }
-            } else {
-              console.warn(`Game not found for event: ${event._id}`);
+            if (gameDetails) {
+              completedGames.push(gameDetails);
             }
           } else {
             remainingEvents.push(event);
           }
         }
+
         setEvents(remainingEvents);
         setGames(completedGames);
         setSelectedEvents(remainingEvents); // Set initial selected events to all events
       } catch (error) {
-        console.error('Error fetching events:', error);
+        console.error('Error fetching initial data:', error);
       }
     };
 
-    const fetchTeams = async () => {
-      try {
-        const storedToken = localStorage.getItem('authToken') || token;
-        const response = await fetch('https://practi-web.onrender.com/api/teams', {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        });
-
-        if (response.ok) {
-          const teamsData = await response.json();
-          console.log('Fetched teams:', teamsData); // Debugging log
-          setTeams(teamsData);
-          setSelectedTeams(teamsData.map((team: { teamName: string }) => team.teamName)); // Select all teams by default
-        } else {
-          console.error('Failed to fetch teams');
-        }
-      } catch (error) {
-        console.error('Error fetching teams:', error);
-      }
-    };
-
-    fetchTeams();
-    fetchEvents();
+    fetchInitialData();
   }, [token]);
 
   useEffect(() => {
@@ -131,19 +98,19 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
     const start = startDate ? getDateOnly(new Date(startDate)) : null;
     const end = endDate ? getDateOnly(new Date(endDate)) : null;
 
-    let filteredEvents = events.filter(event => selectedTeams.includes(event.teamName));
+    let filteredEvents = events.filter((event) => selectedTeams.includes(event.teamName));
 
     if (start) {
-      filteredEvents = filteredEvents.filter(event => getDateOnly(new Date(event.date)) >= start);
+      filteredEvents = filteredEvents.filter((event) => getDateOnly(new Date(event.date)) >= start);
     } else {
       // Filter events that start after yesterday if no start date is specified
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-      filteredEvents = filteredEvents.filter(event => getDateOnly(new Date(event.date)) > yesterday);
+      filteredEvents = filteredEvents.filter((event) => getDateOnly(new Date(event.date)) > yesterday);
     }
 
     if (end) {
-      filteredEvents = filteredEvents.filter(event => getDateOnly(new Date(event.date)) <= end);
+      filteredEvents = filteredEvents.filter((event) => getDateOnly(new Date(event.date)) <= end);
     }
 
     setSelectedEvents(filteredEvents);
@@ -190,34 +157,6 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
     navigate(`/newGameEvent?date=${encodeURIComponent(date)}&startTime=${encodeURIComponent(startTime)}`);
   };
 
-  // Function to sort games alphabetically by team's name
-  const sortGamesByName = () => {
-    setGames((prevGames) => {
-      const sortedGames = [...prevGames].sort((a, b) => {
-        if (a.teamName < b.teamName) {
-          return -1;
-        }
-        if (a.teamName > b.teamName) {
-          return 1;
-        }
-        // If team names are equal, continue comparing by other properties
-        return 0;
-      });
-      return sortedGames;
-    });
-  };
-
-  const sortGamesByDate = () => {
-    setGames((prevGames) => {
-      const sortedGames = [...prevGames].sort((a, b) => {
-        return new Date(b.gameDate).getTime() - new Date(a.gameDate).getTime();
-      });
-      return sortedGames;
-    });
-  };
-
-
-  // Group events by date
   const groupEventsByDate = (events: Event[]) => {
     return events.reduce((acc, event) => {
       if (!acc[event.date]) {
@@ -236,8 +175,8 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
   };
 
   const sortedEvents = selectedEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  const pastEvents = sortedEvents.filter(event => getDateOnly(new Date(event.date)) < getDateOnly(new Date()));
-  const futureEvents = sortedEvents.filter(event => getDateOnly(new Date(event.date)) >= getDateOnly(new Date()));
+  const pastEvents = sortedEvents.filter((event) => getDateOnly(new Date(event.date)) < getDateOnly(new Date()));
+  const futureEvents = sortedEvents.filter((event) => getDateOnly(new Date(event.date)) >= getDateOnly(new Date()));
 
   const renderEvents = (events: Event[]) => {
     const groupedEvents = groupEventsByDate(events);
@@ -245,7 +184,7 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
     return Object.entries(groupedEvents).map(([date, eventsForDate]) => (
       <div key={date}>
         <h3 style={{ margin: '1vh 2vw' }}>{formatDate(date)}</h3>
-        {eventsForDate.map((event, idx) => (
+        {eventsForDate.map((event) => (
           <EventCard key={event._id} event={event} token={token} />
         ))}
       </div>
@@ -267,13 +206,16 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
             </button>
           </div>
           {modalOpen && (
-            <div className='new-game-modal '>
+            <div className='new-game-modal'>
               <div className='add-team-popup'>
                 <button className='modal-close-button' onClick={() => setModalOpen(false)}>
                   <MdClose size={24} />
                 </button>
                 <h2>בחר סוג אירוע</h2>
-                <button onClick={handleNewEventClick} style={{ marginRight: '7vh' }}>אימון חדש</button> <br />
+                <button onClick={handleNewEventClick} style={{ marginRight: '7vh' }}>
+                  אימון חדש
+                </button>
+                <br />
                 <button onClick={handleNewGameClick}>משחק חדש</button>
               </div>
             </div>
@@ -295,9 +237,9 @@ export function WeeklyCalendar({ token, setLoginStatus }: WeeklyCalendarProps): 
           onClose={() => setFilterModalOpen(false)}
           onApplyFilters={handleApplyFilters}
         />
-          <button className='add-new-game' onClick={() => setModalOpen(true)}>
-            הוסף אירוע חדש
-          </button>
+        <button className='add-new-game' onClick={() => setModalOpen(true)}>
+          הוסף אירוע חדש
+        </button>
       </div>
       <div className='cta-bar-container'>
         <CtaBarManager />

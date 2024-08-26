@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
+import { fetchEventById, updateEventById, deleteEventById } from '../../fetchFunctions'; // Import the fetch functions
+
 interface Event {
   _id: string;
   teamName: string;
@@ -27,18 +29,10 @@ export function GameEventEdit({ token }: { token: string }): JSX.Element {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchEvent = async () => {
+    const fetchEventDetails = async () => {
       const storedToken = localStorage.getItem('authToken') || token;
       try {
-        const response = await fetch(`https://practi-web.onrender.com/api/events/id/${eventId}`, {
-          headers: {
-            Authorization: `Bearer ${storedToken}`
-          }
-        });
-        if (!response.ok) {
-          throw new Error(`Failed to fetch event with ID ${eventId}`);
-        }
-        const eventData = await response.json();
+        const eventData = await fetchEventById(eventId!, storedToken);
         setEvent(eventData);
         setTeamName(eventData.teamName);
         setType(eventData.type);
@@ -52,7 +46,7 @@ export function GameEventEdit({ token }: { token: string }): JSX.Element {
       }
     };
 
-    fetchEvent();
+    fetchEventDetails();
   }, [eventId, token]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,47 +72,15 @@ export function GameEventEdit({ token }: { token: string }): JSX.Element {
     }
   };
 
-  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedType = e.target.value;
-    setType(selectedType);
-  };
-
-  const handleTaskInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTaskInput(e.target.value);
-  };
-
-  const handleAddTask = () => {
-    if (taskInput.trim()) {
-      setTasks([...tasks, taskInput]);
-      setTaskInput('');
-    }
-  };
-
-  const handleRemoveTask = (index: number) => {
-    setTasks(tasks.filter((_, i) => i !== index));
-  };
-
   const handleDeleteEvent = async () => {
     const storedToken = localStorage.getItem('authToken') || token;
     try {
-      const response = await fetch(`https://practi-web.onrender.com/api/events/${eventId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${storedToken}`
-        }
-      });
-
-      if (response.ok) {
-        navigate('/week-calendar');
-      } else {
-        const result = await response.json();
-        throw result.error || 'Error deleting event';
-      }
-    } catch (err) {
-      console.error('Failed to delete event:', err);
+      await deleteEventById(eventId!, storedToken);
+      navigate('/week-calendar');
+    } catch (error) {
       alert('Failed to delete event.');
     }
-  }
+  };
 
   const handleUpdateEvent = async () => {
     if (!teamName || !eventName || !date || !startTime || !duration) {
@@ -133,28 +95,14 @@ export function GameEventEdit({ token }: { token: string }): JSX.Element {
       date,
       startTime,
       duration,
-      tasks
+      tasks,
     };
 
     const storedToken = localStorage.getItem('authToken') || token;
     try {
-      const response = await fetch(`https://practi-web.onrender.com/api/events/${eventId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${storedToken}`
-        },
-        body: JSON.stringify(updatedEvent)
-      });
-
-      if (response.ok) {
-        navigate('/week-calendar');
-      } else {
-        const result = await response.json();
-        throw result.error || 'Error updating event';
-      }
-    } catch (err) {
-      console.error('Failed to update event:', err);
+      await updateEventById(eventId!, storedToken, updatedEvent);
+      navigate('/week-calendar');
+    } catch (error) {
       alert('Failed to update event.');
     }
   };
@@ -165,7 +113,7 @@ export function GameEventEdit({ token }: { token: string }): JSX.Element {
 
   return (
     <div className="eventEditPage">
-          <HeaderThree/>
+      <HeaderThree />
       <h2>ערוך משחק</h2>
       <div className="custom-input-container">
         <input
@@ -211,7 +159,7 @@ export function GameEventEdit({ token }: { token: string }): JSX.Element {
         />
         <label htmlFor="duration">זמן המשחק</label>
       </div>
-      
+
       <br />
       <div className="button-container">
         <button className="signup-button" onClick={handleUpdateEvent}>
