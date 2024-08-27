@@ -1,18 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import VideoModel from '../../Models/VideoModel';
 import { Header } from '../../cmps/headers/header';
-import { useLocation } from 'react-router-dom';
 import { CtaBar } from '../../cmps/cta/cta-bar';
 import { NavBar } from '../../cmps/nav-bar';
 import { VideoList } from '../../cmps/video/video-list';
 import { VideoPlayerLi } from '../../cmps/video-player-li';
-import {  startVideo } from '../../store/slicers/selectedVideo.slice';
-import {  getNextVideoInCategory, getVideos, getVideoByName } from '../../cmps/video/functions';
+import { startVideo, setSelectedVideo, setVideoState } from '../../store/slicers/selectedVideo.slice';
 import { setVideos } from '../../store/slicers/videos.slice';
-import { setSelectedVideo, setVideoState } from '../../store/slicers/selectedVideo.slice';
 import { selectedVideoState, selectedVideosState } from '../../store/store';
-import { useNavigate } from 'react-router-dom';
+import { getNextVideoInCategory, getVideos, getVideoByName } from '../../cmps/video/functions';
+import { fetchLastDrill } from '../../fetchFunctionsPlayer'; // Import the new fetch function
 
 interface PractiViewProps {
   token: string;
@@ -26,10 +25,8 @@ interface PractiViewProps {
 }
 
 export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginStatus, setLoginStatus, lastLogin }: PractiViewProps): JSX.Element => {
-  // State
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [nextDrill, setNextDrill] = useState<VideoModel | null>(null);
-  const [nextDrillTopic, setNextDrillTopic] = useState("כדרור");
   const videos = useSelector(selectedVideosState);
   const [filterBy, setFilterBy] = useState(topic);
   const selectedVideo = useSelector(selectedVideoState);
@@ -41,7 +38,6 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
   const { drillToDo } = location.state || {};
 
   useEffect(() => {
-    // Fetch data on component mount or when filterBy or token changes
     const fetchData = async () => {
       await loadVideos();
     };
@@ -55,43 +51,32 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
   }, [token]);
 
   useEffect(() => {
-    // Redirect to login page when loginStatus is false
-    if (loginStatus === false) {
+    if (!loginStatus) {
       navigate('/');
     }
   }, [loginStatus]);
 
   const loadVideos = async () => {
-
     try {
-      // Fetch videos based on filterBy and set them in the Redux store
       const fetchedVideos = await getVideos(filterBy, token);
       dispatch(setVideos(fetchedVideos));
       if (!isFirstLoad) {
-        console.log('not first load');
         dispatch(setSelectedVideo(fetchedVideos[0]));
       } else {
         setIsFirstLoad(false);
         if (drillToDo) {
-          // Fetch the video by name asynchronously
           const videoToDo = await getVideoByName(drillToDo);
-          // Ensure the video is found before setting nextDrill
           if (videoToDo) {
             dispatch(setSelectedVideo(videoToDo));
             setTimeout(() => {
               onSetVideoStatus(true);
-              dispatch(startVideo()); // Dispatch the startVideo action
+              dispatch(startVideo());
             }, 1500);
-          } else {
-            console.log('Video not found');
           }
+        } else if (nextDrill) {
+          dispatch(setSelectedVideo(nextDrill));
         } else {
-          if (nextDrill) {
-            dispatch(setSelectedVideo(nextDrill));
-          } else {   
-            console.log('NextDrill is null or undefined');
-            dispatch(setSelectedVideo(fetchedVideos[0]));
-          }
+          dispatch(setSelectedVideo(fetchedVideos[0]));
         }
       }
     } catch (error) {
@@ -100,29 +85,14 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
   };
 
   const onSetVideoStatus = (isPlaying: boolean): void => {
-    // Set video playing status in Redux store
     dispatch(setVideoState(isPlaying));
-  };
-
-  const onSetVideo = (video: VideoModel): void => {
-    // Set selected video in Redux store
-    dispatch(setSelectedVideo(video));
   };
 
   const findLastDrill = async () => {
     try {
-      const storedToken = localStorage.getItem('authToken');
-      // Fetch information about the last drill
-      const getUserResponse = await fetch(`https://practi-web.onrender.com/api/LastDrill/`, {
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${storedToken}`
-        }
-      });
-      if (getUserResponse.ok) {
-        const userJson = await getUserResponse.json();
-        const { drillName, topic } = userJson;
+      const lastDrillData = await fetchLastDrill(token); // Use the new fetch function
+      if (lastDrillData) {
+        const { drillName, topic } = lastDrillData;
         const nextVideo = await getNextVideoInCategory(topic, drillName, token);
         if (nextVideo) {
           setNextDrill(nextVideo);
@@ -132,8 +102,6 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
         } else {
           setNextDrill(null);
         }
-      } else {
-        setNextDrill(null);
       }
     } catch (error) {
       console.error('Error finding last drill:', error);
@@ -154,16 +122,13 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
             <div ref={ctaBarContainerRef}>
               <VideoList
                 onSetVideoStatus={onSetVideoStatus}
-                onSetVideo={onSetVideo}
+                onSetVideo={(video) => dispatch(setSelectedVideo(video))}
                 videos={videos}
                 selectedVideo={selectedVideo}
               />
             </div>
           </div>
         </section>
-      </div>
-      <div className="cta-bar-container">
-        <CtaBar />
       </div>
       <div className="cta-bar-container">
         <CtaBar />

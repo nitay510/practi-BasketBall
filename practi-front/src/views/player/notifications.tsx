@@ -2,16 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CtaBar } from '../../cmps/cta/cta-bar';
 import { useNavigate } from 'react-router-dom';
 import { HeaderTwo } from '../../cmps/headers/headertwo';
-import { BsPlayFill, BsCheck } from 'react-icons/bs'; // Import check icon
-
-interface Drill {
-  drillId: string;
-  date: string;
-  userPlayer: string;
-  userCoach: string;
-  drillName: string;
-  topic: string;
-}
+import { BsPlayFill, BsCheck } from 'react-icons/bs';
+import { fetchUserDrills, fetchCompletedDrills, Drill } from '../../fetchFunctionsPlayer'; // Import fetch functions
 
 interface UserTrainingsProps {
   setLoginStatus: (isLogin: boolean) => void;
@@ -20,56 +12,30 @@ interface UserTrainingsProps {
 
 const Notifications: React.FC<UserTrainingsProps> = ({ setLoginStatus, setTopic }) => {
   const [drills, setDrills] = useState<Drill[]>([]);
-  const [completedDrills, setCompletedDrills] = useState<string[]>([]); // Track completed drills
+  const [completedDrills, setCompletedDrills] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchDrills();
+    loadDrills();
   }, []);
 
-  const fetchDrills = async () => {
+  // Load all drills and check for completed ones
+  const loadDrills = async () => {
     try {
       const storedToken = localStorage.getItem('authToken');
-      const response = await fetch('https://practi-web.onrender.com/api/SendDrills/user', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${storedToken}`
-        }
-      });
+      if (!storedToken) throw new Error('No authentication token found');
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch drills');
-      }
+      // Fetch user drills
+      const fetchedDrills = await fetchUserDrills(storedToken);
+      setDrills(fetchedDrills);
 
-      const data = await response.json();
-      setDrills(data);
-      checkCompletedDrills(data); // Check which drills are completed
-    } catch (error) {
-      console.error('Error fetching drills:', error);
-      setError('Failed to fetch drills');
-    }
-  };
-
-  const checkCompletedDrills = async (drills: Drill[]) => {
-    try {
-      const storedToken = localStorage.getItem('authToken');
-      const responses = await Promise.all(drills.map(drill => 
-        fetch(`https://practi-web.onrender.com/api/checkUserDrill?drillName=${drill.drillName}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${storedToken}`
-          }
-        })
-      ));
-
-      const results = await Promise.all(responses.map(res => res.json()));
-      const completedDrillNames = drills.filter((_, index) => results[index].hasDoneDrill).map(drill => drill.drillName);
+      // Check which drills are completed
+      const completedDrillNames = await fetchCompletedDrills(fetchedDrills, storedToken);
       setCompletedDrills(completedDrillNames);
     } catch (error) {
-      console.error('Error checking completed drills:', error);
+      console.error('Error loading drills:', error);
+      setError('Failed to fetch drills');
     }
   };
 
@@ -92,7 +58,7 @@ const Notifications: React.FC<UserTrainingsProps> = ({ setLoginStatus, setTopic 
             <div className="notification" key={drill.drillId} onClick={() => handleDrillClick(drill.drillName, drill.topic)}>
               <BsPlayFill className="notification-icon" onClick={() => handleDrillClick(drill.drillName, drill.topic)} />
               <p>
-              {completedDrills.includes(drill.drillName) && <BsCheck className="completed-icon" />} {/* Show check icon if completed */}
+                {completedDrills.includes(drill.drillName) && <BsCheck className="completed-icon" />} {/* Show check icon if completed */}
               </p>
               <div className="notification-date">{new Date(drill.date).toLocaleDateString()}</div>
               <div className="notification-text">

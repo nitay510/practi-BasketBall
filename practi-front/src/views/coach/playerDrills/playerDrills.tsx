@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { drillsData } from './drillsData';
 import { CtaBarManager } from '../../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../../cmps/headers/headerThree';
-import { fetchTeamsWithPlayers, sendDrillAssignments } from '../../../fetchFunctions'; // Import the fetch functions
+import { fetchTeamsWithPlayers, sendDrillAssignments } from '../../../fetchFunctionsCoach'; // Import the fetch functions
 
 interface Player {
   fullName: string;

@@ -1,7 +1,7 @@
 import { Player } from "./views/InGameStats/Player";
 import { GameForPlayer } from "./views/InGameStats/gameForPlayer";
 
-// fetchFunctions.tsx
+// fetchFunctionsCoach.tsx
 export const fetchTeams = async (club: string, token: string, master: boolean): Promise<any[]> => {
     const url = master
       ? `https://practi-web.onrender.com/api/teams/club?clubName=${encodeURIComponent(club)}`
@@ -114,7 +114,6 @@ export const fetchTeams = async (club: string, token: string, master: boolean): 
   };
   
   export const fetchGames = async (token: string, master: boolean,club: string): Promise<any[]> => {
-    console.log(master);
     const url = master
       ? `https://practi-web.onrender.com/api/games/club?clubName=${encodeURIComponent(club)}`
       : 'https://practi-web.onrender.com/api/games/coach';
@@ -125,7 +124,6 @@ export const fetchTeams = async (club: string, token: string, master: boolean): 
       });
       if (!response.ok) throw new Error('Failed to fetch games');
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       console.error('Error fetching games:', error);

@@ -3,7 +3,15 @@ import { MdClose, MdExitToApp } from 'react-icons/md'; // Importing the exit ico
 import { HeaderTwo } from '../../cmps/headers/headertwo';
 import { CtaBar } from '../../cmps/cta/cta-bar';
 import PlayerGameStats from '../../cmps/player-game-stats';
+import { fetchTeams } from '../../fetchFunctionsCoach';
+import { fetchPlayerTeams, fetchWinsLosses, joinTeam,leaveTeam } from '../../fetchFunctionsPlayer';
 
+interface ProfileProps {
+  token: string;
+  setToken: (token: string) => void;
+  firstName: string;
+  club: string;
+}
 interface ProfileProps {
   token: string;
   setToken: (token: string) => void;
@@ -18,23 +26,14 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
   const [availableTeams, setAvailableTeams] = useState<string[]>([]);
   const [teamWins, setTeamWins] = useState(0);
   const [teamLosses, setTeamLosses] = useState(0);
-  // Fetch the teams the player is already a member of
+
   useEffect(() => {
-    const fetchPlayerTeams = async () => {
-      const storedToken = localStorage.getItem('authToken');
-      const authToken = `Bearer ${storedToken || token}`;
-      setToken(storedToken || token);
+    const fetchTeamsData = async () => {
       try {
-        const response = await fetch('https://practi-web.onrender.com/api/teams/player', {
-          headers: { Authorization: authToken }
-        });
-        const data = await response.json();
-        if (data.length > 0) {
-          setTeamName(data[0].teamName);
-          const winLossResponse = await fetch(`https://practi-web.onrender.com/api/games/team/${data[0].teamName}/wins-losses`, {
-            headers: { Authorization: authToken }
-          });
-          const { wins, losses } = await winLossResponse.json();
+        const playerTeams = await fetchPlayerTeams(token);
+        if (playerTeams.length > 0) {
+          setTeamName(playerTeams[0].teamName);
+          const { wins, losses } = await fetchWinsLosses(playerTeams[0].teamName, token);
           setTeamWins(wins);
           setTeamLosses(losses);
         }
@@ -42,74 +41,41 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
         console.error('Failed to fetch teams', error);
       }
     };
-    fetchPlayerTeams();
-  }, [setToken, token]);
+    fetchTeamsData();
+  }, [token]);
 
-  // Fetch all teams in the club
   useEffect(() => {
-    const fetchTeamsInClub = async () => {
-      const storedToken = localStorage.getItem('authToken');
+    const loadAvailableTeams = async () => {
       try {
-        const response = await fetch(`https://practi-web.onrender.com/api/teams/club?clubName=${encodeURIComponent(club)}`, {
-          headers: { Authorization: `Bearer ${storedToken || token}` }
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setAvailableTeams(data.map((team: { teamName: string }) => team.teamName));
-        } else {
-          console.error('Failed to fetch teams in the club');
-        }
+        const teams = await fetchTeams(club, token, false);
+        setAvailableTeams(teams.map((team: { teamName: string }) => team.teamName));
       } catch (error) {
-        console.error('Error fetching teams in club:', error);
+        console.error('Error fetching available teams:', error);
       }
     };
-    fetchTeamsInClub();
+    loadAvailableTeams();
   }, [club, token]);
 
-  const joinTeam = async () => {
+  const handleJoinTeam = async () => {
     try {
-      const storedToken = localStorage.getItem('authToken');
-      const response = await fetch('https://practi-web.onrender.com/api/teams/join', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${storedToken || token}`
-        },
-        body: JSON.stringify({ teamName: newTeamName, club:club })
-      });
-      if (response.ok) {
-        alert('Successfully joined the team!');
-        setTeamName(newTeamName);
-        setNewTeamName('');
-        setShowJoinTeamModal(false);
-      } else {
-        alert('Failed to join the team');
-      }
+      await joinTeam(newTeamName, club, token);
+      alert('Successfully joined the team!');
+      setTeamName(newTeamName);
+      setNewTeamName('');
+      setShowJoinTeamModal(false);
     } catch (error) {
-      console.error('Error joining team', error);
+      alert('Failed to join the team');
     }
   };
 
-  const leaveTeam = async () => {
-    if (window.confirm('אתה בטוח שברצונך לעזוב את הקבוצה?')) {
+  const handleLeaveTeam = async () => {
+    if (window.confirm('Are you sure you want to leave the team?')) {
       try {
-        const storedToken = localStorage.getItem('authToken');
-        const response = await fetch('https://practi-web.onrender.com/api/teams/removePlayerByPlayer', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${storedToken || token}`
-          },
-          body: JSON.stringify({ teamName })
-        });
-        if (response.ok) {
-          alert('You have left the team successfully.');
-          setTeamName('');
-        } else {
-          alert('Failed to leave the team.');
-        }
+        await leaveTeam(teamName, token);
+        alert('You have left the team successfully.');
+        setTeamName('');
       } catch (error) {
-        console.error('Error leaving team', error);
+        alert('Failed to leave the team.');
       }
     }
   };
@@ -118,45 +84,47 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
     <div className="profile-page">
       <HeaderTwo />
       <div className='content-container'>
-        <h3>שלום, {firstName}</h3>
+        <h3>Hello, {firstName}</h3>
         {teamName ? (
           <>
-            <h2>משחק בקבוצת: {teamName} <MdExitToApp className="leave-icon" onClick={leaveTeam} /></h2>
+            <h2>
+              Playing in team: {teamName}{' '}
+              <MdExitToApp className="leave-icon" onClick={handleLeaveTeam} />
+            </h2>
             <div className="team-stats">
-      <div className="stat-container">
-        <div className="rectangle wins">{teamWins}</div>
-        <div className="label">נצחונות</div>
-      </div>
-      <div className="slash">/</div>
-      <div className="stat-container">
-        <div className="rectangle losses">{teamLosses}</div>
-        <div className="label">הפסדים</div>
-      </div>
-    </div>
+              <div className="stat-container">
+                <div className="rectangle wins">{teamWins}</div>
+                <div className="label">Wins</div>
+              </div>
+              <div className="slash">/</div>
+              <div className="stat-container">
+                <div className="rectangle losses">{teamLosses}</div>
+                <div className="label">Losses</div>
+              </div>
+            </div>
             <PlayerGameStats playerName={firstName} teamName={teamName} />
           </>
         ) : (
-          <button className='joinTeamButton' onClick={() => setShowJoinTeamModal(true)}>הצטרף לקבוצה חדשה</button>
+          <button className='joinTeamButton' onClick={() => setShowJoinTeamModal(true)}>Join a New Team</button>
         )}
         {showJoinTeamModal && (
           <div className="modal">
             <button className='modal-close-button' onClick={() => setShowJoinTeamModal(false)}>
               <MdClose />
             </button>
-            <h4>הצטרף לקבוצה חדשה</h4>
+            <h4>Join a New Team</h4>
             <select
               value={newTeamName}
               onChange={(e) => setNewTeamName(e.target.value)}
-              
             >
-              <option value="">בחר קבוצה</option>
+              <option value="">Select a team</option>
               {availableTeams.map((team, index) => (
                 <option key={index} value={team}>
                   {team}
                 </option>
               ))}
             </select>
-            <button onClick={joinTeam}>הצטרף</button>
+            <button onClick={handleJoinTeam}>Join</button>
           </div>
         )}
       </div>

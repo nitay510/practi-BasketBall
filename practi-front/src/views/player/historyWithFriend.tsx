@@ -3,8 +3,8 @@ import { CtaBar } from '../../cmps/cta/cta-bar';
 import { HeaderTwo } from '../../cmps/headers/headertwo';
 import { MdOutlineExpandMore } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import {DrillModel} from '../../Models/DrillModel';
-
+import { DrillModel } from '../../Models/DrillModel';
+import { fetchAllDoubleDrills, fetchWins, fetchLosses } from '../../fetchFunctionsPlayer'; // Import the fetch functions
 
 // Props for the HistoryPageDouble component
 interface HistoryPageDoubleProps {
@@ -13,7 +13,7 @@ interface HistoryPageDoubleProps {
   setTopic: (topic: string) => void;
 }
 
-function HistoryPageDouble({ token,setToken,setTopic }: HistoryPageDoubleProps) {
+function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps) {
   const [drills, setDrills] = useState<DrillModel[]>([]);
   const [opponentStats, setOpponentStats] = useState<{ [opponent: string]: { wins: number, loses: number } }>({});
   const navigate = useNavigate();
@@ -33,21 +33,12 @@ function HistoryPageDouble({ token,setToken,setTopic }: HistoryPageDoubleProps) 
     }
   }, [drills]);
 
-  // Fetch all double drills from the server
+  // Fetch all double drills using the fetch function from fetchFunctionsPlayer.tsx
   const getAllDrills = async () => {
-    const storedToken = localStorage.getItem('authToken')
-    const res = await fetch(`https://practi-web.onrender.com/api/DrillsDouble`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${storedToken}`,
-      },
-    });
-
-    if (res.ok) {
-      const drillsData = await res.json();
-      setDrills(drillsData);
-    } else {
+    try {
+      const fetchedDrills = await fetchAllDoubleDrills(token);
+      setDrills(fetchedDrills);
+    } catch (error) {
       alert('Unable to fetch drills');
     }
   };
@@ -62,46 +53,19 @@ function HistoryPageDouble({ token,setToken,setTopic }: HistoryPageDoubleProps) 
   };
 
   // Handle the click to return to training
-  const handleReturnToTraining = (drillName: string,topic: string) => {
-    setTopic(topic)
+  const handleReturnToTraining = (drillName: string, topic: string) => {
+    setTopic(topic);
     navigate(`/PracticeView/${drillName}`);
   };
 
-  // Fetch the number of wins for a specific opponent
-  const howManyWins = async (opponent: string|undefined): Promise<number> => {
-    const res = await fetch(`https://practi-web.onrender.com/api/Drills/howManyWins/${opponent}`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.ok) {
-      const wins = await res.json();
-      return wins;
-    } else {
-      alert('Unable to fetch wins');
-      return 0;
-    }
-  };
-
-  // Fetch the number of losses for a specific opponent
-  const howManyLose = async (opponent: string|undefined): Promise<number> => {
-    const total = drills.filter((drill) => drill.opponentName === opponent).length;
-    const wins = await howManyWins(opponent);
-    return total - wins;
-  };
-
-  // Update opponent statistics
+  // Update opponent statistics using the fetch functions from fetchFunctionsPlayer.tsx
   const updateOpponentStats = async () => {
     const stats: { [opponent: string]: { wins: number, loses: number } } = {};
 
     for (const opponent of drills.map(drill => drill.opponentName)) {
-      const wins = await howManyWins(opponent);
-      const loses = await howManyLose(opponent);
-      if(opponent)
-      stats[opponent] = { wins, loses };
+      const wins = await fetchWins(token, opponent);
+      const loses = await fetchLosses(token, opponent, drills);
+      if (opponent) stats[opponent] = { wins, loses };
     }
     setOpponentStats(stats);
   };
@@ -173,4 +137,5 @@ function HistoryPageDouble({ token,setToken,setTopic }: HistoryPageDoubleProps) 
     </div>
   );
 }
+
 export default HistoryPageDouble;

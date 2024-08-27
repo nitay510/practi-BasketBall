@@ -4,7 +4,7 @@ import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { MdClose } from 'react-icons/md'; // Importing the close icon
 import { FaPlus } from 'react-icons/fa'; // Importing the plus icon
-import { fetchEventById, updateEventById } from '../../fetchFunctions'; // Importing the fetch functions
+import { fetchEventById, updateEventById } from '../../fetchFunctionsCoach'; // Importing the fetch functions
 
 interface Event {
   _id: string;

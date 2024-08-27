@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { MdOutlineSportsBasketball } from 'react-icons/md';
-import { fetchEventById } from '../../fetchFunctions'; // Import the fetch function
+import { fetchEventById } from '../../fetchFunctionsCoach'; // Import the fetch function
 
 interface Event {
   _id: string;

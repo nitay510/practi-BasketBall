@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
-import { fetchEventById, updateEventById, deleteEventById } from '../../fetchFunctions'; // Import the fetch functions
+import { fetchEventById, updateEventById, deleteEventById } from '../../fetchFunctionsCoach'; // Import the fetch functions
 
 interface Event {
   _id: string;

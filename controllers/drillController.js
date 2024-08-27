@@ -99,7 +99,6 @@ exports.getAllDrillsDouble = async (req, res) => {
 exports.getAllDrillsSingleByCoach = async (req, res) => {
   try {
     const {currentUser} = req.body;
-    console.log(currentUser);
     const {category } = req.params;
     const drills = await drillService.getAllDrillsSingle(currentUser,category);
     console.log(drills);

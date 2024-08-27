@@ -7,6 +7,7 @@ import { NavBarHistory } from '../../cmps/nav-bar-history';
 import DrillListSingle from '../../cmps/drill/drill-list-single';
 import { DrillModel } from '../../Models/DrillModel';
 import { HeaderTwo } from '../../cmps/headers/headertwo';
+import { fetchDrills } from '../../fetchFunctionsPlayer';
 
 // Props for the HistoryPage component
 interface HistoryPageProps {
@@ -18,15 +19,13 @@ interface HistoryPageProps {
 /* 
   This view is the history of the single drills for the user
 */
-function HistoryPage({ token,setToken, setTopic }: HistoryPageProps) {
+function HistoryPage({ token, setToken, setTopic }: HistoryPageProps) {
   const [videos, setVideos] = useState<VideoModel[]>([]);
   const [drills, setDrills] = useState<DrillModel[]>([]);
   const [category, setCategory] = useState('קליעה');
-  const navigate = useNavigate();
-
   useEffect(() => {
     loadVideos();
-    getDrills();
+    loadDrills();
   }, [category]);
 
   const loadVideos = async () => {
@@ -34,23 +33,12 @@ function HistoryPage({ token,setToken, setTopic }: HistoryPageProps) {
     setVideos(fetchedVideos);
   };
 
-  // Fetch all drills from the server
-  const getDrills = async () => {
-    
-    const storedToken = localStorage.getItem('authToken')
-    const res = await fetch(`https://practi-web.onrender.com/api/Drills/${category}`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${storedToken}`,
-      },
-    });
-
-    if (res.ok) {
-      const drillsData = await res.json();
-      setDrills(drillsData);
-    
-    } else {
+  // Load drills using the fetchDrills function from fetchFunctionsPlayer.tsx
+  const loadDrills = async () => {
+    try {
+      const fetchedDrills = await fetchDrills(category, token);
+      setDrills(fetchedDrills);
+    } catch (error) {
       alert('Unable to fetch drills');
     }
   };
@@ -81,8 +69,5 @@ function HistoryPage({ token,setToken, setTopic }: HistoryPageProps) {
     </div>
   );
 }
-
-
-
 
 export default HistoryPage;

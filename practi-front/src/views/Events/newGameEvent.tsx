@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
-import { fetchTeams, createNewGameEvent } from '../../fetchFunctions'; // Import the fetch functions
+import { fetchTeams, createNewGameEvent } from '../../fetchFunctionsCoach'; // Import the fetch functions
 
 interface NewEventGameProps {
   token: string;

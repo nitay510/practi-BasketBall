@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Event } from './Event'; // Adjust the import path according to your project structure
 import { useNavigate } from 'react-router-dom';
 import { MdDelete } from 'react-icons/md';
-import { deleteEventById } from '../../fetchFunctions'; // Import the delete function
+import { deleteEventById } from '../../fetchFunctionsCoach'; // Import the delete function
 
 interface EventCardProps {
   event: Event;

@@ -6,7 +6,7 @@ import { Game } from '../InGameStats/game';
 import { EventCard } from '../EventList/EventCard';
 import { MdAdd, MdClose, MdFilterAlt } from 'react-icons/md';
 import EventFilterModal from '../EventList/EventFilterModal';
-import { fetchTeams, fetchEvents, fetchGameDetails } from '../../fetchFunctions'; // Import the fetch functions
+import { fetchTeams, fetchEvents, fetchGameDetails } from '../../fetchFunctionsCoach'; // Import the fetch functions
 
 interface WeeklyCalendarProps {
   token: string;

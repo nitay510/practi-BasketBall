@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { MdClose } from 'react-icons/md';
 import { FaPlus } from 'react-icons/fa';
-import { fetchTeams, createNewEvent } from '../../fetchFunctions'; // Import fetch functions
+import { fetchTeams, createNewEvent } from '../../fetchFunctionsCoach'; // Import fetch functions
 
 interface NewEventProps {
   token: string;

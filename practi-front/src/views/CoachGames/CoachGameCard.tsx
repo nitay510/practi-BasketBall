@@ -4,7 +4,7 @@ import { MdAssessment, MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import teamALogo from '../../assets/images/teamA.png'; // Import team A logo image
 import teamBLogo from '../../assets/images/teamB.png'; // Import team B logo image
-import { deleteGameByDetails } from '../../fetchFunctions'; // Import the delete function
+import { deleteGameByDetails } from '../../fetchFunctionsCoach'; // Import the delete function
 
 interface CoachGameCardProps {
   game: Game; // Receive a single game object
