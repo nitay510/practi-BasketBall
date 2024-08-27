@@ -7,7 +7,13 @@ const bcrypt = require('bcrypt');
  */
 exports.createUser = async (userData) => {
   try {
-    const { fullName, username, isCoach, password,clubName} = userData;
+    const { fullName, username, isCoach, password, clubName } = userData;
+
+    // Check if the username already exists
+    const existingUser = await Users.findOne({ username });
+    if (existingUser) {
+      throw new Error('Username already exists. Please choose a different username.');
+    }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -15,19 +21,18 @@ exports.createUser = async (userData) => {
     // Create a new User document
     const user = new Users({
       fullName,
-      club:clubName,
+      club: clubName,
       username,
       isCoach,
       password: hashedPassword, // Save the hashed password
     });
-    console.log(user);
+
     // Save the user document to the database
     await user.save();
 
     return user;
   } catch (error) {
-    console.log(error);
-    console.error(error);
+    console.error('Error creating user:', error);
     throw error;
   }
 };

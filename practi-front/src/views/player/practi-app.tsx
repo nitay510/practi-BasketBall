@@ -62,7 +62,7 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
   }, [loginStatus]);
 
   const loadVideos = async () => {
-    console.log('loadVideos')
+
     try {
       // Fetch videos based on filterBy and set them in the Redux store
       const fetchedVideos = await getVideos(filterBy, token);
