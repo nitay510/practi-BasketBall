@@ -41,7 +41,8 @@ export const VideoDetails = ({
   // Load the high score of this drill
   const loadHighScore = async () => {
     try {
-      const high = await fetchHighScore(title, drillName, token); // Use fetchHighScore
+      const storedToken = localStorage.getItem('authToken') || token;
+      const high = await fetchHighScore(title, drillName, storedToken); // Use fetchHighScore
       setHighScore(high);
     } catch (error) {
       alert('Unable to fetch drills');
@@ -94,7 +95,8 @@ export const VideoDetails = ({
       };
 
       try {
-        await submitDrillResult(drillId, dataToSend, token); // Use submitDrillResult
+        const storedToken = localStorage.getItem('authToken') || token;
+        await submitDrillResult(drillId, dataToSend, storedToken); // Use submitDrillResult
       } catch (error) {
         console.error('Error:', error);
       }

@@ -38,7 +38,8 @@ export const VideoDetailsDouble = ({
     };
 
     try {
-      await submitDoubleDrillResult(drillId, dataToSend, token); // Use submitDoubleDrillResult
+      const storedToken = localStorage.getItem('authToken') || token;
+      await submitDoubleDrillResult(drillId, dataToSend, storedToken); // Use submitDoubleDrillResult
     } catch (error) {
       console.error('Error:', error);
     }

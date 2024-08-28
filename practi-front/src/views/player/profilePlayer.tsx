@@ -30,7 +30,8 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
   useEffect(() => {
     const fetchTeamsData = async () => {
       try {
-        const playerTeams = await fetchPlayerTeams(token);
+        const storedToken = localStorage.getItem('authToken') || token;
+        const playerTeams = await fetchPlayerTeams(storedToken);
         if (playerTeams.length > 0) {
           setTeamName(playerTeams[0].teamName);
           const { wins, losses } = await fetchWinsLosses(playerTeams[0].teamName, token);
@@ -48,7 +49,8 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
   useEffect(() => {
     const loadAvailableTeams = async () => {
       try {
-        const teams = await fetchTeams(club, token, false);
+        const storedToken = localStorage.getItem('authToken') || token;
+        const teams = await fetchTeams(club, storedToken, true);
         console.log(teams);
         setAvailableTeams(teams.map((team: { teamName: string }) => team.teamName));
       } catch (error) {
@@ -61,7 +63,8 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
 
   const handleJoinTeam = async () => {
     try {
-      await joinTeam(newTeamName, club, token);
+      const storedToken = localStorage.getItem('authToken') || token;
+      await joinTeam(newTeamName, club, storedToken);
       alert('Successfully joined the team!');
       setTeamName(newTeamName);
       setNewTeamName('');
@@ -74,7 +77,8 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
   const handleLeaveTeam = async () => {
     if (window.confirm('Are you sure you want to leave the team?')) {
       try {
-        await leaveTeam(teamName, token);
+        const storedToken = localStorage.getItem('authToken') || token;
+        await leaveTeam(teamName, storedToken);
         alert('You have left the team successfully.');
         setTeamName('');
       } catch (error) {

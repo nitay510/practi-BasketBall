@@ -91,8 +91,8 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
 
   const findLastDrill = async () => {
     try {
-      setToken(localStorage.getItem('authToken'))
-      const lastDrillData = await fetchLastDrill(token); // Use the new fetch function
+      const storedToken = localStorage.getItem('authToken') || token;
+      const lastDrillData = await fetchLastDrill(storedToken); // Use the new fetch function
       if (lastDrillData) {
         const { drillName, topic } = lastDrillData;
         const nextVideo = await getNextVideoInCategory(topic, drillName, token);

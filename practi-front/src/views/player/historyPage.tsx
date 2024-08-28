@@ -24,7 +24,6 @@ function HistoryPage({ token, setToken, setTopic }: HistoryPageProps) {
   const [drills, setDrills] = useState<DrillModel[]>([]);
   const [category, setCategory] = useState('קליעה');
   useEffect(() => {
-    setToken(localStorage.getItem('authToken'))
     loadVideos();
     loadDrills();
   }, [category]);
@@ -37,7 +36,8 @@ function HistoryPage({ token, setToken, setTopic }: HistoryPageProps) {
   // Load drills using the fetchDrills function from fetchFunctionsPlayer.tsx
   const loadDrills = async () => {
     try {
-      const fetchedDrills = await fetchDrills(category, token);
+      const storedToken = localStorage.getItem('authToken') || token;
+      const fetchedDrills = await fetchDrills(category, storedToken);
       setDrills(fetchedDrills);
     } catch (error) {
       alert('Unable to fetch drills');

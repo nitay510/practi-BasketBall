@@ -23,7 +23,6 @@ function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps
       await getAllDrills();
       await updateOpponentStats();
     };
-    setToken(localStorage.getItem('authToken'))
     fetchData();
   }, []);
 
@@ -36,7 +35,8 @@ function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps
   // Fetch all double drills using the fetch function from fetchFunctionsPlayer.tsx
   const getAllDrills = async () => {
     try {
-      const fetchedDrills = await fetchAllDoubleDrills(token);
+      const storedToken = localStorage.getItem('authToken') || token;
+      const fetchedDrills = await fetchAllDoubleDrills(storedToken);
       setDrills(fetchedDrills);
     } catch (error) {
       alert('Unable to fetch drills');
@@ -63,8 +63,9 @@ function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps
     const stats: { [opponent: string]: { wins: number, loses: number } } = {};
 
     for (const opponent of drills.map(drill => drill.opponentName)) {
-      const wins = await fetchWins(token, opponent);
-      const loses = await fetchLosses(token, opponent, drills);
+      const storedToken = localStorage.getItem('authToken') || token;
+      const wins = await fetchWins(storedToken, opponent);
+      const loses = await fetchLosses(storedToken, opponent, drills);
       if (opponent) stats[opponent] = { wins, loses };
     }
     setOpponentStats(stats);
