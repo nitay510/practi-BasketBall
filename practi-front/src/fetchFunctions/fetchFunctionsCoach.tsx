@@ -92,6 +92,21 @@ export const fetchPlayersForTeam = async (teamName: string, token: string): Prom
     throw error;
   }
 };
+export const fetchPlayersForTeamList = async (teamName: string, token: string): Promise<any[]> => {
+  const response = await fetch('https://practi-web.onrender.com/api/teams/players', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ teamName }),
+  });
+
+  if (!response.ok) throw new Error('Failed to fetch players');
+  const data = await response.json();
+  return data.players || [];
+};
+
 
 
 // Adds a new team to the system.

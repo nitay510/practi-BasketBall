@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { MdOutlineExpandMore, MdClose, MdAdd, MdPeople } from 'react-icons/md';
+import { MdOutlineExpandMore, MdDelete, MdClose, MdAdd, MdArrowBack, MdPeople } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { FiUser } from 'react-icons/fi';
-import { fetchTeams, fetchPlayersForTeam,  addTeam } from '../../fetchFunctions/fetchFunctionsCoach'; // Adjust the import path accordingly
+import { fetchTeams, fetchPlayersForTeamList, addTeam } from '../../fetchFunctions/fetchFunctionsCoach'; // Import the functions
 import { fetchWinsLosses } from '../../fetchFunctions/fetchFunctionsPlayer';
 interface TeamListProps {
   token: string;
@@ -19,21 +19,26 @@ interface Player {
 const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
   const [teams, setTeams] = useState<any[]>([]);
   const [teamName, setTeamName] = useState('');
-  const [showAddTeamModal, setShowAddTeamModal] = useState(false);
   const navigate = useNavigate();
+  const [showAddTeamModal, setShowAddTeamModal] = useState(false);
 
   useEffect(() => {
-    const loadTeams = async () => {
+    loadTeams();
+  }, []);
+
+  const loadTeams = async () => {
+    try {
       const storedToken = localStorage.getItem('authToken') || token;
       const teamsData = await fetchTeams(club, storedToken, master);
-      const teamsWithDetails = await Promise.all(
+
+      const teamsWithPlayersAndResults = await Promise.all(
         teamsData.map(async (team) => {
-          const players = await fetchPlayersForTeam(team.teamName, storedToken);
+          const playersData = await fetchPlayersForTeamList(team.teamName, storedToken);
           const { wins, losses } = await fetchWinsLosses(team.teamName, storedToken);
 
           return {
             ...team,
-            players,
+            players: playersData,
             wins,
             losses,
             expanded: false,
@@ -41,31 +46,28 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
         })
       );
 
-      setTeams(teamsWithDetails);
-    };
-
-    loadTeams();
-  }, [token, club, master]);
+      setTeams(teamsWithPlayersAndResults);
+    } catch (error) {
+      console.error('Failed to load teams:', error);
+    }
+  };
 
   const handleAddTeam = async () => {
     if (teamName.trim()) {
       try {
         const storedToken = localStorage.getItem('authToken') || token;
+        setToken(storedToken);
         const response = await addTeam(teamName, club, storedToken);
-
         if (response.ok) {
           alert('Team added successfully');
           setTeamName('');
           setShowAddTeamModal(false);
-          // Reload teams after adding a new one
-          const teamsData = await fetchTeams(club, storedToken, master);
-          setTeams(teamsData);
+          loadTeams(); // Reload teams after adding a new one
         } else {
           alert('Failed to add team');
         }
       } catch (error) {
-        console.error('Error adding team:', error);
-        alert('An error occurred while adding the team.');
+        alert(`Error: ${error}`);
       }
     } else {
       alert('Please enter a team name');
@@ -79,26 +81,28 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
     setTeams(newTeams);
   };
 
+
   const handlePlayerClickGames = (teamName: string, playerName: string, username: string) => {
     navigate(`/coach-player-stats/${encodeURIComponent(teamName)}/${encodeURIComponent(playerName)}`);
   };
 
+
+
   return (
     <div className="team-list">
       {teams.map((team, index) => (
-        <div key={index} className="team-card">
-          <h3 className="team-name" onClick={() => toggleTeamExpansion(index)}>
+        <div key={index} className="team-item">
+          <h3 onClick={() => toggleTeamExpansion(index)} style={{ cursor: 'pointer' }}>
             {team.teamName}
           </h3>
           <div className="player-info" onClick={() => toggleTeamExpansion(index)}>
             <MdPeople /> {team.players.length}
-            <span className="expand-more">
+            <span className='expend-more' onClick={() => toggleTeamExpansion(index)}>
               <MdOutlineExpandMore />
             </span>
           </div>
-
           {team.expanded && (
-            <div className="team-details">
+            <div className="player-list">
               <p className="wins-loses">
                 נצחונות: {team.wins} / הפסדים: {team.losses}
               </p>
@@ -107,9 +111,7 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
               </p>
               {team.players.map((player: Player, playerIndex: React.Key) => (
                 <div key={playerIndex} className="player-row">
-                  <p className="player-name" onClick={() => handlePlayerClickGames(team.teamName, player.fullName, player.username)}>
-                    {player.fullName}
-                  </p>
+                  <p className="player-name" onClick={() => handlePlayerClickGames(team.teamName, player.fullName, player.username)}>{player.fullName}</p>
                   <p className="go-to-player" onClick={() => handlePlayerClickGames(team.teamName, player.fullName, player.username)}>
                     <FiUser />
                   </p>
