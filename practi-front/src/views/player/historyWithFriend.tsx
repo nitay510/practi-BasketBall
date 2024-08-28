@@ -88,7 +88,7 @@ function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps
                     <div className="opponent-latest">
                       :מאזן
                     </div>
-                    <div className={`opponent-latest ${opponentStats[opponent]?.wins > opponentStats[opponent]?.loses ? 'green' : opponentStats[opponent]?.loses > opponentStats[opponent]?.wins ? 'red' : ''}`}>
+                    <div className={`opponent-latest ${opponentStats[opponent]?.wins > opponentStats[opponent]?.loses ? 'green' : opponentStats[opponent]?.loses > opponentStats[opponent]?.wins ? 'red' : ''}`} style={{marginRight:'2px'}}>
                       {`${opponentStats[opponent]?.wins || 0}-${opponentStats[opponent]?.loses || 0}`}
                     </div>
                   </div>

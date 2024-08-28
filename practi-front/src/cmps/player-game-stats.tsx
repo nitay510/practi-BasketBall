@@ -1,6 +1,7 @@
 // PlayerGameStats.tsx
 import React, { useState, useEffect } from 'react';
 import { GameForPlayer } from '../views/InGameStats/gameForPlayer';
+import { fetchGamesForPlayer } from '../fetchFunctions/fetchFunctionsPlayer';
 
 interface PlayerGameStatsProps {
   playerName: string;
@@ -15,17 +16,14 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName 
     useEffect(() => {
         const fetchGames = async () => {
             const storedToken = localStorage.getItem('authToken');
-            try {
-                // Fetch games data for a specific player and team
-                const response = await fetch(`https://practi-web.onrender.com/api/games/team/${encodeURIComponent(teamName)}/player/${encodeURIComponent(playerName)}`, {
-                    headers: {
-                        'Authorization': `Bearer ${storedToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+            if (!storedToken) return;
 
-                if (!response.ok) throw new Error('Failed to fetch games');
-                const data: GameForPlayer[] = await response.json();
+            try {
+                console.log(teamName);
+                console.log(playerName);
+                console.log(storedToken);
+                // Fetch games data for a specific player and team
+                const data = await fetchGamesForPlayer(teamName, playerName, storedToken);
                 setGames(data);
 
                 // Calculate averages
@@ -52,27 +50,27 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName 
 
         fetchGames();
     }, [playerName, teamName]);
+
     return (
         <div>
-        
             {/* Average Stats Table */}
             <div className="game-stats">
-      <div className="stat-container">
-        <div className="rectangle">{averageStats.score}</div>
-        <div className="label">נקודות</div>
-      </div>
-      <div className="stat-container">
-        <div className="rectangle">{averageStats.rebounds}</div>
-        <div className="label">ריבאונדים</div>
-      </div>
-      <div className="stat-container">
-        <div className="rectangle">{averageStats.assists}</div>
-        <div className="label">אסיסטים</div>
-      </div>
-    </div>
-    <div className="header-container">
-        <h1> לוח משחקים </h1>
-        </div>
+                <div className="stat-container">
+                    <div className="rectangle">{averageStats.score}</div>
+                    <div className="label">נקודות</div>
+                </div>
+                <div className="stat-container">
+                    <div className="rectangle">{averageStats.rebounds}</div>
+                    <div className="label">ריבאונדים</div>
+                </div>
+                <div className="stat-container">
+                    <div className="rectangle">{averageStats.assists}</div>
+                    <div className="label">אסיסטים</div>
+                </div>
+            </div>
+            <div className="header-container">
+                <h1> לוח משחקים </h1>
+            </div>
             {/* Individual Games Stats Table */}
             <table className="game-stats-table">
                 <thead>
@@ -99,4 +97,5 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName 
         </div>
     );
 };
+
 export default PlayerGameStats;

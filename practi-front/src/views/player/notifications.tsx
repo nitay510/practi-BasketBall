@@ -28,10 +28,20 @@ const Notifications: React.FC<UserTrainingsProps> = ({ setLoginStatus, setTopic 
 
       // Fetch user drills
       const fetchedDrills = await fetchUserDrills(storedToken);
-      setDrills(fetchedDrills);
+
+      // Use a Map to ensure each drillName is unique and store only the latest drill
+      const drillMap = new Map<string, Drill>();
+      fetchedDrills.forEach(drill => {
+        drillMap.set(drill.drillName, drill);
+      });
+
+      // Convert the Map back to an array
+      const uniqueDrills = Array.from(drillMap.values());
+
+      setDrills(uniqueDrills);
 
       // Check which drills are completed
-      const completedDrillNames = await fetchCompletedDrills(fetchedDrills, storedToken);
+      const completedDrillNames = await fetchCompletedDrills(uniqueDrills, storedToken);
       setCompletedDrills(completedDrillNames);
     } catch (error) {
       console.error('Error loading drills:', error);

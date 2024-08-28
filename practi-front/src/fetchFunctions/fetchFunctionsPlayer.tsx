@@ -1,4 +1,5 @@
 import { DrillModel } from '../Models/DrillModel'
+import { GameForPlayer } from '../views/InGameStats/gameForPlayer';
 
 export interface Drill {
     drillId: string;
@@ -374,4 +375,20 @@ export const fetchWinsLosses = async (teamName: string, token: string): Promise<
     console.error('Error fetching wins and losses:', error);
     throw error;
   }
+};
+
+export const fetchGamesForPlayer = async (teamName: string, playerName: string, token: string): Promise<GameForPlayer[]> => {
+  const response = await fetch(`https://practi-web.onrender.com/api/games/team/${encodeURIComponent(teamName)}/player/${encodeURIComponent(playerName)}`, {
+      headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+      }
+  });
+
+  if (!response.ok) {
+      throw new Error('Failed to fetch games');
+  }
+
+  const data: GameForPlayer[] = await response.json();
+  return data;
 };
