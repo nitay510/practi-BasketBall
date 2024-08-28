@@ -4,6 +4,7 @@ import { GameForPlayer } from "../views/InGameStats/gameForPlayer";
 
 // Fetches all teams associated with a given club. If the user is a master, it fetches teams based on the club name; otherwise, it fetches all teams.
 export const fetchTeams = async (club: string, token: string, master: boolean): Promise<any[]> => {
+  console.log(club);
   const url = master
     ? `https://practi-web.onrender.com/api/teams/club?clubName=${encodeURIComponent(club)}`
     : 'https://practi-web.onrender.com/api/teams';
@@ -92,32 +93,6 @@ export const fetchPlayersForTeam = async (teamName: string, token: string): Prom
   }
 };
 
-// Fetches teams along with players and their win/loss records.
-export const fetchTeamsWithPlayersAndResults = async (club: string, token: string, master: boolean): Promise<any[]> => {
-  const teams = await fetchTeams(club, token, master);
-
-  const teamsWithPlayersAndResults = await Promise.all(
-    teams.map(async (team: { teamName: string }) => {
-      const players = await fetchPlayersForTeam(team.teamName, token);
-
-      const winLossResponse = await fetch(`https://practi-web.onrender.com/api/games/team/${team.teamName}/wins-losses`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const { wins, losses } = await winLossResponse.json();
-
-      return {
-        ...team,
-        players,
-        wins,
-        losses,
-        expanded: false,
-      };
-    })
-  );
-
-  return teamsWithPlayersAndResults;
-};
 
 // Adds a new team to the system.
 export const addTeam = async (teamName: string, club: string, token: string): Promise<Response> => {

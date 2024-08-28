@@ -41,6 +41,7 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
         console.error('Failed to fetch teams', error);
       }
     };
+    setToken(localStorage.getItem('authToken'))
     fetchTeamsData();
   }, [token]);
 
@@ -48,11 +49,13 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
     const loadAvailableTeams = async () => {
       try {
         const teams = await fetchTeams(club, token, false);
+        console.log(teams);
         setAvailableTeams(teams.map((team: { teamName: string }) => team.teamName));
       } catch (error) {
         console.error('Error fetching available teams:', error);
       }
     };
+    setToken(localStorage.getItem('authToken'))
     loadAvailableTeams();
   }, [club, token]);
 

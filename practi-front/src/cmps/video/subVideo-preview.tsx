@@ -201,7 +201,7 @@ export const SubVideoPreview = ({
           )}
         </div>
         <div className="action-heading-container">
-          <span className="video-title">{video.title}</span>
+          <span style={{ textAlign: 'right'}} className="video-title">{video.title}</span>
           <button className="play-pause-btn blue-bg-btn">
             {selectedVideo._id === video._id && selectedVideo.isPlaying ? (
               <BsPauseFill onClick={onPauseVideo} />

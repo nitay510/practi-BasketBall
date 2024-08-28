@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { MdOutlineExpandMore, MdClose, MdAdd, MdPeople } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { FiUser } from 'react-icons/fi';
-import { fetchTeamsWithPlayersAndResults, addTeam, deletePlayerFromTeam } from '../../fetchFunctions/fetchFunctionsCoach'; // Import functions
-
+import { fetchTeams, fetchPlayersForTeam,  addTeam } from '../../fetchFunctions/fetchFunctionsCoach'; // Adjust the import path accordingly
+import { fetchWinsLosses } from '../../fetchFunctions/fetchFunctionsPlayer';
 interface TeamListProps {
   token: string;
   setToken: (token: string) => void;
@@ -19,41 +19,53 @@ interface Player {
 const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
   const [teams, setTeams] = useState<any[]>([]);
   const [teamName, setTeamName] = useState('');
-  const navigate = useNavigate();
   const [showAddTeamModal, setShowAddTeamModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchTeamsData();
-  }, []);
-
-  const fetchTeamsData = async () => {
-    try {
+    const loadTeams = async () => {
       const storedToken = localStorage.getItem('authToken') || token;
-      setToken(storedToken);
-      const teamsData = await fetchTeamsWithPlayersAndResults(club, storedToken, master);
-      setTeams(teamsData);
-    } catch (error) {
-      console.error('Failed to fetch teams', error);
-    }
-  };
+      const teamsData = await fetchTeams(club, storedToken, master);
+      const teamsWithDetails = await Promise.all(
+        teamsData.map(async (team) => {
+          const players = await fetchPlayersForTeam(team.teamName, storedToken);
+          const { wins, losses } = await fetchWinsLosses(team.teamName, storedToken);
+
+          return {
+            ...team,
+            players,
+            wins,
+            losses,
+            expanded: false,
+          };
+        })
+      );
+
+      setTeams(teamsWithDetails);
+    };
+
+    loadTeams();
+  }, [token, club, master]);
 
   const handleAddTeam = async () => {
     if (teamName.trim()) {
       try {
         const storedToken = localStorage.getItem('authToken') || token;
-        setToken(storedToken);
-        const response = await addTeam(teamName, club, storedToken); // Use addTeam function
+        const response = await addTeam(teamName, club, storedToken);
 
         if (response.ok) {
           alert('Team added successfully');
           setTeamName('');
           setShowAddTeamModal(false);
-          fetchTeamsData(); // Reload teams after adding
+          // Reload teams after adding a new one
+          const teamsData = await fetchTeams(club, storedToken, master);
+          setTeams(teamsData);
         } else {
           alert('Failed to add team');
         }
       } catch (error) {
-        alert(`Error: ${error}`);
+        console.error('Error adding team:', error);
+        alert('An error occurred while adding the team.');
       }
     } else {
       alert('Please enter a team name');
@@ -71,45 +83,22 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
     navigate(`/coach-player-stats/${encodeURIComponent(teamName)}/${encodeURIComponent(playerName)}`);
   };
 
-  const handleDeletePlayer = (username: string, teamName: string) => {
-    if (window.confirm('אתה בטוח שברצונך למחוק את השחקן?')) {
-      deletePlayer(username, teamName);
-    }
-  };
-
-  const deletePlayer = async (username: string, teamName: string) => {
-    try {
-      const storedToken = localStorage.getItem('authToken') || token;
-      setToken(storedToken);
-      const response = await deletePlayerFromTeam(username, teamName, storedToken); // Use deletePlayerFromTeam function
-
-      if (response.ok) {
-        alert('Player removed successfully');
-        fetchTeamsData(); // Reload the teams data
-      } else {
-        alert('Failed to remove player');
-      }
-    } catch (error) {
-      console.error('Failed to delete player:', error);
-      alert('Failed to remove player due to an error');
-    }
-  };
-
   return (
     <div className="team-list">
       {teams.map((team, index) => (
-        <div key={index} className="team-item">
-          <h3 onClick={() => toggleTeamExpansion(index)} style={{ cursor: 'pointer' }}>
+        <div key={index} className="team-card">
+          <h3 className="team-name" onClick={() => toggleTeamExpansion(index)}>
             {team.teamName}
           </h3>
           <div className="player-info" onClick={() => toggleTeamExpansion(index)}>
             <MdPeople /> {team.players.length}
-            <span className="expend-more" onClick={() => toggleTeamExpansion(index)}>
+            <span className="expand-more">
               <MdOutlineExpandMore />
             </span>
           </div>
+
           {team.expanded && (
-            <div className="player-list">
+            <div className="team-details">
               <p className="wins-loses">
                 נצחונות: {team.wins} / הפסדים: {team.losses}
               </p>

@@ -24,6 +24,7 @@ function HistoryPage({ token, setToken, setTopic }: HistoryPageProps) {
   const [drills, setDrills] = useState<DrillModel[]>([]);
   const [category, setCategory] = useState('קליעה');
   useEffect(() => {
+    setToken(localStorage.getItem('authToken'))
     loadVideos();
     loadDrills();
   }, [category]);

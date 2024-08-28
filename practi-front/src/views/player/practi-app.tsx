@@ -41,6 +41,7 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
     const fetchData = async () => {
       await loadVideos();
     };
+    setToken(localStorage.getItem('authToken'))
     fetchData();
   }, [filterBy]);
 
@@ -90,6 +91,7 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
 
   const findLastDrill = async () => {
     try {
+      setToken(localStorage.getItem('authToken'))
       const lastDrillData = await fetchLastDrill(token); // Use the new fetch function
       if (lastDrillData) {
         const { drillName, topic } = lastDrillData;

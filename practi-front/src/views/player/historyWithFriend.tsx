@@ -23,7 +23,7 @@ function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps
       await getAllDrills();
       await updateOpponentStats();
     };
-
+    setToken(localStorage.getItem('authToken'))
     fetchData();
   }, []);
 
