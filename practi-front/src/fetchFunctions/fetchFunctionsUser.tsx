@@ -20,7 +20,7 @@ export const fetchUserDetails = async (
       if (response.ok) {
         const userData = await response.json();
         const { fullName, isCoach, club } = userData;
-  
+        localStorage.setItem('firstName', fullName);
         // Set user details
         setFirstname(fullName);
         setLoginStatus(true);

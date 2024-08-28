@@ -6,9 +6,10 @@ import { fetchGamesForPlayer } from '../fetchFunctions/fetchFunctionsPlayer';
 interface PlayerGameStatsProps {
   playerName: string;
   teamName: string;
+  isPlayer: boolean;
 }
 
-const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName }) => {
+const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName,isPlayer }) => {
 
     const [games, setGames] = useState<GameForPlayer[]>([]);
     const [averageStats, setAverageStats] = useState({ score: "0.0", rebounds: "0.0", assists: "0.0" });
@@ -16,12 +17,13 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName 
     useEffect(() => {
         const fetchGames = async () => {
             const storedToken = localStorage.getItem('authToken');
-            if (!storedToken) return;
+            if (!storedToken) return;   
 
             try {
-                console.log(teamName);
-                console.log(playerName);
-                console.log(storedToken);
+                var firstName = playerName;
+                if(isPlayer){
+                    firstName = localStorage.getItem('firstName');
+                }
                 // Fetch games data for a specific player and team
                 const data = await fetchGamesForPlayer(teamName, playerName, storedToken);
                 setGames(data);

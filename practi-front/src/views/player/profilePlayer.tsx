@@ -6,12 +6,7 @@ import PlayerGameStats from '../../cmps/player-game-stats';
 import { fetchTeams } from '../../fetchFunctions/fetchFunctionsCoach';
 import { fetchPlayerTeams, fetchWinsLosses, joinTeam,leaveTeam } from '../../fetchFunctions/fetchFunctionsPlayer';
 
-interface ProfileProps {
-  token: string;
-  setToken: (token: string) => void;
-  firstName: string;
-  club: string;
-}
+
 interface ProfileProps {
   token: string;
   setToken: (token: string) => void;
@@ -109,7 +104,7 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
                 <div className="label">הפסדים</div>
               </div>
             </div>
-            <PlayerGameStats playerName={firstName} teamName={teamName} />
+            <PlayerGameStats playerName={firstName} teamName={teamName} isPlayer={true} />
           </>
         ) : (
           <button className='joinTeamButton' onClick={() => setShowJoinTeamModal(true)}>הצטרף לקבוצה חדשה</button>

@@ -51,7 +51,7 @@ const CoachPlayerStats: React.FC = () => {
       <div className='content-container'>
         <div>
           <div className='playerName'> נתוני שחקן עבור {playerName}</div>
-          <PlayerGameStats playerName={playerName} teamName={teamName} />
+          <PlayerGameStats playerName={playerName} teamName={teamName} isPlayer={false} />
         </div>
       </div>
       <div className="cta-bar-container">
