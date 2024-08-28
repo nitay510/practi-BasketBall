@@ -15,8 +15,6 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName 
     useEffect(() => {
         const fetchGames = async () => {
             const storedToken = localStorage.getItem('authToken');
-            if (!storedToken) return;
-
             try {
                 // Fetch games data for a specific player and team
                 const response = await fetch(`https://practi-web.onrender.com/api/games/team/${encodeURIComponent(teamName)}/player/${encodeURIComponent(playerName)}`, {
