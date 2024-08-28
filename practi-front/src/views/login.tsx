@@ -111,7 +111,7 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
             אין לך עדיין חשבון? <Link to='/signup' className="blue-link">לחץ כאן</Link>
           </p>
           {showInstallButton && (
-            <button onClick={handleAddToHomeScreen} style={{color : 'blue'}}>
+            <button onClick={handleAddToHomeScreen} style={{background : 'blue'}}>
               הורד לטלפון
             </button>
           )}

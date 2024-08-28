@@ -62,6 +62,96 @@ export const fetchAllDoubleDrills = async (token: string): Promise<DrillModel[]>
       throw error;
     }
   };
+
+  /**
+ * Fetches the high score for a specific drill.
+ * @param title - The title of the drill.
+ * @param drillName - The name of the drill.
+ * @param token - The authentication token.
+ * @returns The high score for the drill.
+ */
+export const fetchHighScore = async (title: string, drillName: string, token: string): Promise<number> => {
+  const params = new URLSearchParams({ drillName });
+  const url = `https://practi-web.onrender.com/api/Drills/highScore/${title}?${params.toString()}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Unable to fetch high score');
+    }
+
+    const highScore = await response.json();
+    return highScore;
+  } catch (error) {
+    console.error('Error fetching high score:', error);
+    throw error;
+  }
+};
+
+/**
+ * Submits the drill result to the server.
+ * @param drillId - The ID of the drill.
+ * @param data - The data to submit.
+ * @param token - The authentication token.
+ */
+export const submitDrillResult = async (drillId: string, data: any, token: string): Promise<void> => {
+  const url = `https://practi-web.onrender.com/api/Drills/${drillId}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit drill result');
+    }
+  } catch (error) {
+    console.error('Error submitting drill result:', error);
+    throw error;
+  }
+};
+// fetchFunctionsPlayer.ts
+
+/**
+ * Submits the result of a double drill to the server.
+ * @param drillId - The ID of the drill.
+ * @param data - The data to submit.
+ * @param token - The authentication token.
+ */
+export const submitDoubleDrillResult = async (drillId: string, data: any, token: string): Promise<void> => {
+  const url = `https://practi-web.onrender.com/api/Drills/${drillId}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit double drill result');
+    }
+  } catch (error) {
+    console.error('Error submitting double drill result:', error);
+    throw error;
+  }
+};
+
   
   /**
    * Fetches the number of wins for a specific opponent.

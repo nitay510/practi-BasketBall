@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SuccessRate } from '../drill/success-rate';
+import { fetchHighScore, submitDrillResult } from '../../fetchFunctions/fetchFunctionsPlayer'; // Import the new functions
 
 interface VideoDetailsProps {
   drillId: string;
@@ -16,10 +17,6 @@ interface VideoDetailsProps {
   setRate: (rate: number) => void;
 }
 
-/* 
-  This component is the page of the form that is added to drill videos of single person drill. 
-  It also manages the submit to the server.
-*/
 export const VideoDetails = ({
   drillId,
   target,
@@ -38,27 +35,15 @@ export const VideoDetails = ({
   const [highScore, setHighScore] = useState(0);
 
   useEffect(() => {
-    getHighScore();
+    loadHighScore();
   }, [drillName]);
 
-  //get the high score of this drill
-  const getHighScore = async () => {
-    const params = new URLSearchParams({
-      drillName: drillName,
-    });
-
-    const res = await fetch(`https://practi-web.onrender.com/api/Drills/highScore/${title}?${params.toString()}`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.ok) {
-      const high = await res.json();
+  // Load the high score of this drill
+  const loadHighScore = async () => {
+    try {
+      const high = await fetchHighScore(title, drillName, token); // Use fetchHighScore
       setHighScore(high);
-    } else {
+    } catch (error) {
       alert('Unable to fetch drills');
     }
   };
@@ -69,63 +54,60 @@ export const VideoDetails = ({
 
   // This function submits to the server whatever is inside the form.
   const handleSubmit = async () => {
-    if(missionCount>tries){
-      alert("הכנסת מספר קליעות הגדול ממספר הנסיונות, הכנס שוב")
-    }
-    else{
-    setIsSubmit(true);
-    // Calculate success rate percentage
-    const successRate = Math.round((missionCount! / tries) * 100);
-    setRate(successRate);
-    let newMessage = ``;
-    if (missionCount! > highScore) {
-      setHighScore(missionCount!);
-      setBrokenRecord(true);
-//choose the massege acording to the result and target
-      if (successRate >= target) {
-        newMessage = 'התוצאה שלך מעל הממוצע, כל הכבוד';
-        setColor('green')
-      } else if (successRate >= target - 40) {
-        newMessage += 'התוצאה שלך בטווח הממוצע, עוד קצת';
-        setColor('yellow')
-      } else {
-        newMessage += 'התוצאה שלך מתחת לממוצע, המשך להתאמן';
-        setColor('red')
+    if (missionCount! > tries) {
+      alert('הכנסת מספר קליעות הגדול ממספר הנסיונות, הכנס שוב');
+    } else {
+      setIsSubmit(true);
+
+      // Calculate success rate percentage
+      const successRate = Math.round((missionCount! / tries) * 100);
+      setRate(successRate);
+
+      let newMessage = '';
+      if (missionCount! > highScore) {
+        setHighScore(missionCount!);
+        setBrokenRecord(true);
+
+        // Choose the message according to the result and target
+        if (successRate >= target) {
+          newMessage = 'התוצאה שלך מעל הממוצע, כל הכבוד';
+          setColor('green');
+        } else if (successRate >= target - 40) {
+          newMessage += 'התוצאה שלך בטווח הממוצע, עוד קצת';
+          setColor('yellow');
+        } else {
+          newMessage += 'התוצאה שלך מתחת לממוצע, המשך להתאמן';
+          setColor('red');
+        }
+      }
+
+      setSubmitMessage(newMessage);
+
+      // Data to send
+      const dataToSend = {
+        missionName: title,
+        tries,
+        successes: missionCount!,
+        drillName,
+        topic,
+        target,
+      };
+
+      try {
+        await submitDrillResult(drillId, dataToSend, token); // Use submitDrillResult
+      } catch (error) {
+        console.error('Error:', error);
       }
     }
-
-    setSubmitMessage(newMessage);
-
-    // Data to send 
-    const dataToSend1 = {
-      missionName: title,
-      tries: tries,
-      successes: missionCount!,
-      drillName: drillName,
-      topic: topic,
-      target: target,
-    };
-    try {
-      const res1 = await fetch(`https://practi-web.onrender.com/api/Drills/${drillId}`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(dataToSend1),
-      });
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
   };
 
   return (
     <div className="video-details">
-         <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="mission1Count"> שיא אישי:
-          <SuccessRate success={highScore} tries={tries} target={target} />
+          <label htmlFor="mission1Count">
+            שיא אישי:
+            <SuccessRate success={highScore} tries={tries} target={target} />
           </label>
           <input
             type="number"
