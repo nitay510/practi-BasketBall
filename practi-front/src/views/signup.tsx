@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { addUser, loginUser, fetchUserDetails } from '../fetchFunctions/fetchFunctionsUser'; // Import the functions
 
-interface LoginProps {
+interface SignupProps {
   setToken: (token: string) => void;
   setFirstname: (username: string) => void;
   setLoginStatus: (loginStatus: boolean) => void;
   setClub: (club: string) => void;
 }
 
-export function Signup({ setToken, setFirstname, setLoginStatus, setClub }: LoginProps): JSX.Element {
+export function Signup({ setToken, setFirstname, setLoginStatus, setClub }: SignupProps): JSX.Element {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [clubName, setClubName] = useState(''); // State for club selection
@@ -17,6 +18,8 @@ export function Signup({ setToken, setFirstname, setLoginStatus, setClub }: Logi
   const [role, setRole] = useState('');
   const [errorMessage, setErrorMessage] = useState(''); // State for error message
   const navigate = useNavigate();
+
+  const gm = ['1357']; // General managers or other identifiers
 
   const clubs = [
     'מכבי חיפה',
@@ -50,38 +53,16 @@ export function Signup({ setToken, setFirstname, setLoginStatus, setClub }: Logi
 
   const handleSignup = async () => {
     setErrorMessage(''); // Clear previous error message
-    const newUser = {
-      fullName,
-      username,
-      password,
-      isCoach,
-      clubName
-    };
 
     try {
-      const res = await fetch('https://practi-web.onrender.com/api/Users', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUser),
-      });
+      const res = await addUser(fullName, username, password, isCoach, clubName); // Use the addUser function
 
       if (res.ok) {
-        const userLogin = { username, password };
-        const tokenRes = await fetch('https://practi-web.onrender.com/api/Tokens', {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userLogin),
-        });
-
-        const newToken = await tokenRes.text();
+        const newToken = await loginUser(username, password); // Use the loginUser function
         localStorage.setItem('authToken', newToken);
         localStorage.setItem('userName', username);
         await setToken(newToken);
-        fetchUserDetails(newToken, username);
+        fetchUserDetails(newToken, username, setFirstname, setLoginStatus, setClub, () => {}, gm, navigate); // Use the fetchUserDetails function
       } else {
         if (res.status === 500) {
           setErrorMessage('המשתמש הנוכחי כבר קיים במערכת');
@@ -91,28 +72,6 @@ export function Signup({ setToken, setFirstname, setLoginStatus, setClub }: Logi
       }
     } catch (error) {
       setErrorMessage('Error during signup. Please try again.');
-    }
-  };
-
-  const fetchUserDetails = async (token: string, username: string) => {
-    const getUserResponse = await fetch(`https://practi-web.onrender.com/api/Users/${username}`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (getUserResponse.ok) {
-      const userJson = await getUserResponse.json();
-      const { fullName, isCoach, club } = userJson;
-      setFirstname(fullName);
-      setClub(club);
-      setLoginStatus(true);
-      if (isCoach) navigate('/app-manager'); //here need to navigate to coachApp when there will be one 
-      else navigate('/app');
-    } else {
-      alert(getUserResponse.status);
     }
   };
 

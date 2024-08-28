@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HeroLogin } from '../cmps/cta/hero-login';
+import { fetchUserDetails, loginUser } from '../fetchFunctions/fetchFunctionsUser'; // Import the functions
 
 interface LoginProps {
   setToken: (token: string) => void;
@@ -15,24 +16,20 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [showInstallButton, setShowInstallButton] = useState(false); // Control visibility of the install button
+  const [showInstallButton, setShowInstallButton] = useState(false);
 
   const gm = ['1357'];
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Handle the "beforeinstallprompt" event
     window.addEventListener('beforeinstallprompt', (e) => {
-      console.log('beforeinstallprompt event triggered');
-      e.preventDefault(); // Prevent the default mini-infobar
-      setDeferredPrompt(e); // Save the event for later use
-      setShowInstallButton(true); // Show the install button
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallButton(true);
     });
 
-    // Handle if the app is already installed
     window.addEventListener('appinstalled', () => {
-      console.log('App has been installed');
-      setShowInstallButton(false); // Hide the install button after installation
+      setShowInstallButton(false);
     });
 
     const storedToken = localStorage.getItem('authToken');
@@ -46,82 +43,39 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
         setLastLogin(new Date(storedLastLogin));
         localStorage.setItem('lastLogin', new Date().toString());
       }
-      fetchUserDetails(storedToken, storedUsername);
+      fetchUserDetails(storedToken, storedUsername, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate);
     }
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const userLogin = { username, password };
-
     try {
-      const res = await fetch('https://practi-web.onrender.com/api/Tokens', {
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userLogin),
-      });
+      const newToken = await loginUser(username, password); // Use the new login function
+      localStorage.setItem('authToken', newToken);
+      localStorage.setItem('userName', username);
 
-      if (res.ok) {
-        const newToken = await res.text();
-        localStorage.setItem('authToken', newToken);
-        localStorage.setItem('userName', username);
-        const storedLastLogin = localStorage.getItem('lastLogin');
-        if (storedLastLogin) {
-          setLastLogin(new Date(storedLastLogin));
-          localStorage.setItem('lastLogin', new Date().toString());
-        }
-        await setToken(newToken);
-        fetchUserDetails(newToken, username);
-      } else {
-        alert('אין לך עדיין משתמש, הירשם');
+      const storedLastLogin = localStorage.getItem('lastLogin');
+      if (storedLastLogin) {
+        setLastLogin(new Date(storedLastLogin));
+        localStorage.setItem('lastLogin', new Date().toString());
       }
+
+      await setToken(newToken);
+      fetchUserDetails(newToken, username, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate); // Use the existing function
     } catch (error) {
+      alert('אין לך עדיין משתמש, הירשם');
       console.error('Error during login:', error);
-    }
-  };
-
-  const fetchUserDetails = async (token: string, username: string) => {
-    const getUserResponse = await fetch(`https://practi-web.onrender.com/api/Users/${username}`, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (getUserResponse.ok) {
-      const userJson = await getUserResponse.json();
-      const { fullName, isCoach, club } = userJson;
-      setFirstname(fullName);
-      setLoginStatus(true);
-      setClub(club);
-      if (isCoach) {
-        setMaster(gm.includes(username));
-        navigate('/app-manager');
-      } else {
-        navigate('/app', { state: { drillToDo: null } });
-      }
-    } else {
-      alert(getUserResponse.status);
     }
   };
 
   const handleAddToHomeScreen = () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt(); // Show the install prompt
+      deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult: any) => {
-        console.log('User choice:', choiceResult.outcome);
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the A2HS prompt');
-        } else {
-          console.log('User dismissed the A2HS prompt');
-        }
-        setDeferredPrompt(null); // Reset the deferred prompt
-        setShowInstallButton(false); // Hide the install button after prompt
+        setDeferredPrompt(null);
+        setShowInstallButton(false);
       });
-    } else {
-      console.log('Deferred prompt is not available.');
     }
   };
 
@@ -156,11 +110,8 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
           <p>
             אין לך עדיין חשבון? <Link to='/signup' className="blue-link">לחץ כאן</Link>
           </p>
-          {/* Add to Home Screen button */}
           {showInstallButton && (
-            <button
-              onClick={handleAddToHomeScreen}
-            >
+            <button onClick={handleAddToHomeScreen} style={{color : 'blue'}}>
               הורד לטלפון
             </button>
           )}

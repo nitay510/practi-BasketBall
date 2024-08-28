@@ -4,7 +4,7 @@ import { GameForPlayer } from '../InGameStats/gameForPlayer';
 import { useParams } from 'react-router-dom';
 import { CtaBarManager } from '../../cmps/cta/cta-bar-manager';
 import { HeaderThree } from '../../cmps/headers/headerThree';
-import { fetchPlayerGames } from '../../fetchFunctionsCoach'; // Import the fetch function
+import { fetchPlayerGames } from '../../fetchFunctions/fetchFunctionsCoach'; // Import the fetch function
 
 const CoachPlayerStats: React.FC = () => {
   const [games, setGames] = useState<GameForPlayer[]>([]);

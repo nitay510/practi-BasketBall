@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Game } from '../InGameStats/game';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import FilterModal from './FilterModal';
-import { fetchTeams, fetchGames } from '../../fetchFunctionsCoach'; // Import fetch functions
+import { fetchTeams, fetchGames } from '../../fetchFunctions/fetchFunctionsCoach'; // Import fetch functions
 import AddGameModal from './AddGameModal'; // Import the new AddGameModal component
 
 interface CoachGameProps {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { PlayerRow } from './PlayerRow';
 import { Player } from '../Player';
 import { MdAdd, MdClose } from 'react-icons/md';
-import { fetchPlayersForTeam, saveGameDetails, createNewEvent } from '../../../fetchFunctionsCoach'; // Import the fetch functions
+import { fetchPlayersForTeam, saveGameDetails, createNewEvent } from '../../../fetchFunctions/fetchFunctionsCoach'; // Import the fetch functions
 
 interface PlayerTableProps {
   myTeamName: string;

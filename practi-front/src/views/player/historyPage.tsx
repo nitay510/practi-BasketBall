@@ -7,7 +7,7 @@ import { NavBarHistory } from '../../cmps/nav-bar-history';
 import DrillListSingle from '../../cmps/drill/drill-list-single';
 import { DrillModel } from '../../Models/DrillModel';
 import { HeaderTwo } from '../../cmps/headers/headertwo';
-import { fetchDrills } from '../../fetchFunctionsPlayer';
+import { fetchDrills } from '../../fetchFunctions/fetchFunctionsPlayer';
 
 // Props for the HistoryPage component
 interface HistoryPageProps {

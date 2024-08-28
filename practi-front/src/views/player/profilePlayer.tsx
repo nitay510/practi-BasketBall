@@ -3,8 +3,8 @@ import { MdClose, MdExitToApp } from 'react-icons/md'; // Importing the exit ico
 import { HeaderTwo } from '../../cmps/headers/headertwo';
 import { CtaBar } from '../../cmps/cta/cta-bar';
 import PlayerGameStats from '../../cmps/player-game-stats';
-import { fetchTeams } from '../../fetchFunctionsCoach';
-import { fetchPlayerTeams, fetchWinsLosses, joinTeam,leaveTeam } from '../../fetchFunctionsPlayer';
+import { fetchTeams } from '../../fetchFunctions/fetchFunctionsCoach';
+import { fetchPlayerTeams, fetchWinsLosses, joinTeam,leaveTeam } from '../../fetchFunctions/fetchFunctionsPlayer';
 
 interface ProfileProps {
   token: string;
@@ -84,47 +84,47 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
     <div className="profile-page">
       <HeaderTwo />
       <div className='content-container'>
-        <h3>Hello, {firstName}</h3>
+        <h3>שלום, {firstName}</h3>
         {teamName ? (
           <>
             <h2>
-              Playing in team: {teamName}{' '}
+              משחק בקבוצת: {teamName}{' '}
               <MdExitToApp className="leave-icon" onClick={handleLeaveTeam} />
             </h2>
             <div className="team-stats">
               <div className="stat-container">
                 <div className="rectangle wins">{teamWins}</div>
-                <div className="label">Wins</div>
+                <div className="label">נצחונות</div>
               </div>
               <div className="slash">/</div>
               <div className="stat-container">
                 <div className="rectangle losses">{teamLosses}</div>
-                <div className="label">Losses</div>
+                <div className="label">הפסדים</div>
               </div>
             </div>
             <PlayerGameStats playerName={firstName} teamName={teamName} />
           </>
         ) : (
-          <button className='joinTeamButton' onClick={() => setShowJoinTeamModal(true)}>Join a New Team</button>
+          <button className='joinTeamButton' onClick={() => setShowJoinTeamModal(true)}>הצטרף לקבוצה חדשה</button>
         )}
         {showJoinTeamModal && (
           <div className="modal">
             <button className='modal-close-button' onClick={() => setShowJoinTeamModal(false)}>
               <MdClose />
             </button>
-            <h4>Join a New Team</h4>
+            <h4>הצטרף לקבוצה חדשה</h4>
             <select
               value={newTeamName}
               onChange={(e) => setNewTeamName(e.target.value)}
             >
-              <option value="">Select a team</option>
+              <option value="">בחר קבוצה</option>
               {availableTeams.map((team, index) => (
                 <option key={index} value={team}>
                   {team}
                 </option>
               ))}
             </select>
-            <button onClick={handleJoinTeam}>Join</button>
+            <button onClick={handleJoinTeam}>הצטרף</button>
           </div>
         )}
       </div>

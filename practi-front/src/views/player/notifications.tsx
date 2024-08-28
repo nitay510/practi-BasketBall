@@ -3,7 +3,7 @@ import { CtaBar } from '../../cmps/cta/cta-bar';
 import { useNavigate } from 'react-router-dom';
 import { HeaderTwo } from '../../cmps/headers/headertwo';
 import { BsPlayFill, BsCheck } from 'react-icons/bs';
-import { fetchUserDrills, fetchCompletedDrills, Drill } from '../../fetchFunctionsPlayer'; // Import fetch functions
+import { fetchUserDrills, fetchCompletedDrills, Drill } from '../../fetchFunctions/fetchFunctionsPlayer'; // Import fetch functions
 
 interface UserTrainingsProps {
   setLoginStatus: (isLogin: boolean) => void;

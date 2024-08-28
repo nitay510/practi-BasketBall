@@ -7,6 +7,7 @@ import { NavBarHistory } from '../../cmps/nav-bar-history';
 import DrillListForCoach from '../../cmps/drill/drill-list-for-coach';
 import { DrillModel } from '../../Models/DrillModel';
 import { HeaderThree } from '../../cmps/headers/headerThree';
+import { fetchDrillsByCoach } from '../../fetchFunctions/fetchFunctionsCoach'; // Import the fetch function
 
 // Props for the HistoryPage component
 interface HistoryPageCoachProps {
@@ -15,45 +16,37 @@ interface HistoryPageCoachProps {
 }
 
 /* 
-  This view is the history of the single drills for the user
+  This view shows the history of drills assigned to a specific player by the coach.
 */
-function HistoryPageForCoach({ token,setToken }: HistoryPageCoachProps) {
+function HistoryPageForCoach({ token, setToken }: HistoryPageCoachProps) {
   const [videos, setVideos] = useState<VideoModel[]>([]);
   const [drills, setDrills] = useState<DrillModel[]>([]);
-  const [category, setCategory] = useState('קליעה');;
+  const [category, setCategory] = useState('קליעה'); // Default category is "Shooting"
   const location = useLocation();
-  const { player } = location.state || {};  // Default to an empty object if state is undefined
-
+  const { player } = location.state || {};  // Extract the player from the state, if available
 
   useEffect(() => {
     loadVideos();
-    getDrills();
+    loadDrills(); // Call the updated fetch function
   }, [category]);
 
+  // Function to load videos based on the selected category
   const loadVideos = async () => {
     const fetchedVideos = await getVideos(category, token);
     setVideos(fetchedVideos);
   };
 
-  const getDrills = async () => {
-    const storedToken = localStorage.getItem('authToken')
-    const res = await fetch(`https://practi-web.onrender.com/api/DrillsByCoach/${category}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${storedToken}`,
-      },
-      body: JSON.stringify({ currentUser: player })  // Changed key from 'player' to 'currentUser'
-    });
-
-    if (res.ok) {
-        const drillsData = await res.json();
-        setDrills(drillsData);
-    } else {
-        console.error('Unable to fetch drills');
-        alert('Unable to fetch drills');
+  // Function to load drills assigned by the coach to the player
+  const loadDrills = async () => {
+    try {
+      const fetchedDrills = await fetchDrillsByCoach(category, token, player); // Use the fetch function from fetchFunctionsCoach.tsx
+      setDrills(fetchedDrills);
+    } catch (error) {
+      console.error('Unable to fetch drills:', error);
+      alert('Unable to fetch drills');
     }
-};
+  };
+
   // Extract unique drill names
   const uniqueDrills = Array.from(new Set(videos.map(video => video.title)))
     .filter(title => !title.includes('בונוס'));
@@ -74,9 +67,10 @@ function HistoryPageForCoach({ token,setToken }: HistoryPageCoachProps) {
         />
       </div>
       <div className="cta-bar-container">
-        <CtaBarManager/>
+        <CtaBarManager />
       </div>
     </div>
   );
 }
+
 export default HistoryPageForCoach;

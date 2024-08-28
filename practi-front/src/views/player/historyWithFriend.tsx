@@ -4,7 +4,7 @@ import { HeaderTwo } from '../../cmps/headers/headertwo';
 import { MdOutlineExpandMore } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { DrillModel } from '../../Models/DrillModel';
-import { fetchAllDoubleDrills, fetchWins, fetchLosses } from '../../fetchFunctionsPlayer'; // Import the fetch functions
+import { fetchAllDoubleDrills, fetchWins, fetchLosses } from '../../fetchFunctions/fetchFunctionsPlayer'; // Import the fetch functions
 
 // Props for the HistoryPageDouble component
 interface HistoryPageDoubleProps {

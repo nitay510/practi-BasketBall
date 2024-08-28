@@ -11,7 +11,7 @@ import { startVideo, setSelectedVideo, setVideoState } from '../../store/slicers
 import { setVideos } from '../../store/slicers/videos.slice';
 import { selectedVideoState, selectedVideosState } from '../../store/store';
 import { getNextVideoInCategory, getVideos, getVideoByName } from '../../cmps/video/functions';
-import { fetchLastDrill } from '../../fetchFunctionsPlayer'; // Import the new fetch function
+import { fetchLastDrill } from '../../fetchFunctions/fetchFunctionsPlayer'; // Import the new fetch function
 
 interface PractiViewProps {
   token: string;
