@@ -21,6 +21,31 @@ export const fetchTeams = async (club: string, token: string, master: boolean): 
   }
 };
 
+// Function to delete a team by its name.
+export const deleteTeam = async (teamName: string, token: string): Promise<void> => {
+  const url = 'https://practi-web.onrender.com/api/teams/delete';
+
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ teamName }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete the team');
+    }
+
+    console.log(`Team ${teamName} deleted successfully`);
+  } catch (error) {
+    console.error('Error deleting the team:', error);
+    throw error;
+  }
+};
+
 // Fetches teams along with their associated players. If the user is a master, it fetches teams based on the club name; otherwise, it fetches all teams.
 export const fetchTeamsWithPlayers = async (token: string, club: string, master: boolean): Promise<any[]> => {
   const url = master

@@ -19,7 +19,16 @@ exports.addNewTeam = async (teamName, coachUsername, club) => {
     await newTeam.save();  // Save the new team to the database
     return newTeam;  // Return the newly created team
 };
-
+/**
+ * Deletes a team based on its name and the coach's username.
+ * Ensures that only the coach who created the team can delete it.
+ * @param {string} teamName - The name of the team to be deleted.
+ * @param {string} coachUsername - The username of the coach requesting deletion.
+ * @returns {Object|null} The deleted team document, or null if the team was not found.
+ */
+exports.deleteTeamByCoach = async (teamName, coachUsername) => {
+    return await Team.findOneAndDelete({ teamName, coach: coachUsername });
+};
 /**
  * Retrieves all teams that a player is part of, based on their username.
  * @param {string} username - The username of the player.

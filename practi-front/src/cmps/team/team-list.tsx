@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { MdOutlineExpandMore, MdDelete, MdClose, MdAdd, MdArrowBack, MdPeople } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { FiUser } from 'react-icons/fi';
-import { fetchTeams, fetchPlayersForTeamList, addTeam } from '../../fetchFunctions/fetchFunctionsCoach'; // Import the functions
+import { fetchTeams, fetchPlayersForTeamList, addTeam, deletePlayerFromTeam, deleteTeam } from '../../fetchFunctions/fetchFunctionsCoach'; // Import the functions
 import { fetchWinsLosses } from '../../fetchFunctions/fetchFunctionsPlayer';
+
 interface TeamListProps {
   token: string;
   setToken: (token: string) => void;
@@ -81,12 +82,36 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
     setTeams(newTeams);
   };
 
-
   const handlePlayerClickGames = (teamName: string, playerName: string, username: string) => {
     navigate(`/coach-player-stats/${encodeURIComponent(teamName)}/${encodeURIComponent(playerName)}`);
   };
 
+  const handleDeletePlayer = async (username: string, teamName: string) => {
+    if (window.confirm('אתה בטוח שברצונך למחוק את השחקן?')) {
+      try {
+        await deletePlayerFromTeam(username, teamName, token);
+        loadTeams(); // Reload the teams data
+        alert('Player removed successfully');
+      } catch (error) {
+        console.error('Failed to delete player:', error);
+        alert('Failed to remove player due to an error');
+      }
+    }
+  };
 
+  const handleDeleteTeam = async (teamName: string) => {
+    if (window.confirm('אתה בטוח שברצונך למחוק את הקבוצה?')) {
+      try {
+        const storedToken = localStorage.getItem('authToken') || token;
+        await deleteTeam(teamName, storedToken);
+        loadTeams(); // Reload teams after deletion
+        alert('Team deleted successfully');
+      } catch (error) {
+        console.error('Failed to delete team:', error);
+        alert('Failed to delete team due to an error');
+      }
+    }
+  };
 
   return (
     <div className="team-list">
@@ -95,6 +120,13 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
           <h3 onClick={() => toggleTeamExpansion(index)} style={{ cursor: 'pointer' }}>
             {team.teamName}
           </h3>
+          <div className="team-controls">
+            <MdDelete
+              className="delete-team-icon"
+              style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
+              onClick={() => handleDeleteTeam(team.teamName)}
+            />
+          </div>
           <div className="player-info" onClick={() => toggleTeamExpansion(index)}>
             <MdPeople /> {team.players.length}
             <span className='expend-more' onClick={() => toggleTeamExpansion(index)}>
@@ -111,10 +143,17 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
               </p>
               {team.players.map((player: Player, playerIndex: React.Key) => (
                 <div key={playerIndex} className="player-row">
-                  <p className="player-name" onClick={() => handlePlayerClickGames(team.teamName, player.fullName, player.username)}>{player.fullName}</p>
+                  <p className="player-name" onClick={() => handlePlayerClickGames(team.teamName, player.fullName, player.username)}>
+                    {player.fullName}
+                  </p>
                   <p className="go-to-player" onClick={() => handlePlayerClickGames(team.teamName, player.fullName, player.username)}>
                     <FiUser />
                   </p>
+                  <MdDelete
+                    className="delete-player-icon"
+                    style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
+                    onClick={() => handleDeletePlayer(player.username, team.teamName)}
+                  />
                 </div>
               ))}
             </div>

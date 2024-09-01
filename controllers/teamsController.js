@@ -29,6 +29,33 @@ exports.createTeam = async (req, res) => {
   }
 };
 
+
+/**
+ * Deletes a team by the coach who created it.
+ * The team name is extracted from the request body, and the coach's username is retrieved from the JWT token.
+ * If successful, a success message and the deleted team are returned.
+ * If the team is not found or the coach is not authorized, an appropriate error message is returned.
+ * If an error occurs, a 500 status code is returned with the error details.
+ */
+exports.deleteTeamByCoach = async (req, res) => {
+  const { teamName } = req.body;
+  const token = req.headers.authorization.split(' ')[1];
+  const parsedToken = JSON.parse(token);
+  const tokenValue = parsedToken.token;
+
+  const decoded = await promisify(jwt.verify)(tokenValue, 'your-secret-key');
+  const username = decoded.username;
+
+  try {
+      const deletedTeam = await teamService.deleteTeamByCoach(teamName, username);
+      if (!deletedTeam) {
+          return res.status(404).json({ error: 'Team not found or you are not authorized to delete this team' });
+      }
+      res.json({ message: 'Team deleted successfully', team: deletedTeam });
+  } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error', details: error });
+  }
+};
 /**
  * Retrieves all teams for the authenticated player.
  * The player's username is extracted from the JWT token, and the teams are retrieved using the team service.

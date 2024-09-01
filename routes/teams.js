@@ -13,4 +13,5 @@ router.post('/teams/join', teamsController.joinTeam);
 router.post('/teams/removePlayerByCoach', teamsController.removePlayerByCoach);
 router.post('/teams/removePlayerByPlayer', teamsController.removePlayerByPlayer);
 router.get('/teams/club', teamsController.getTeamsByClub);
+router.delete('/teams/delete', teamsController.deleteTeamByCoach);
 module.exports = router;
