@@ -22,7 +22,9 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName,
             try {
                 var firstName = playerName;
                 if(isPlayer){
+                    console.log(firstName)
                     firstName = localStorage.getItem('firstName');
+                    console.log(firstName)
                 }
                 // Fetch games data for a specific player and team
                 const data = await fetchGamesForPlayer(teamName, playerName, storedToken);

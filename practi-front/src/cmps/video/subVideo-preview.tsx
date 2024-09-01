@@ -200,6 +200,7 @@ export const SubVideoPreview = ({
             )}
           </div>
           <div className="action-heading-container">
+          {!video.single && <MdPeople className="people-icon" />} {/* Add MdPeople icon if single is false */}
             <span style={{ textAlign: 'right' }} className="video-title">
               {video.title}
             </span>
@@ -210,7 +211,6 @@ export const SubVideoPreview = ({
                 <BsPlayFill onClick={() => onPlayVideo(video._id)} />
               )}
             </button>
-            {!video.single && <MdPeople className="people-icon" />} {/* Add MdPeople icon if single is false */}
           </div>
         </div>
         {detailsComponent}

@@ -25,7 +25,6 @@ export const VideoPreviewCoach = ({
     onSetVideo,
     onSetVideoStatus,
   }: VideoPreviewCoachProps) => {
-    const videoPlayerRef = useSelector(videoElState);
     const navigate = useNavigate();
     const dispatch = useDispatch(); // Add this line to get the dispatch function
   
