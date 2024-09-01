@@ -20,16 +20,18 @@ const PlayerGameStats: React.FC<PlayerGameStatsProps> = ({ playerName, teamName,
             if (!storedToken) return;   
 
             try {
-                var firstName = playerName;
+                var data ;
                 if(isPlayer){
+                   const firstName = localStorage.getItem('firstName');
                     console.log(firstName)
-                    firstName = localStorage.getItem('firstName');
-                    console.log(firstName)
+                    data = await fetchGamesForPlayer(teamName, firstName, storedToken);
+                    setGames(data);
                 }
                 // Fetch games data for a specific player and team
-                const data = await fetchGamesForPlayer(teamName, playerName, storedToken);
+                else{
+                data = await fetchGamesForPlayer(teamName, playerName, storedToken);
                 setGames(data);
-
+                }
                 // Calculate averages
                 const totalGames = data.length;
                 const totalScores = data.reduce((acc, game) => acc + game.playerStats.score, 0);
