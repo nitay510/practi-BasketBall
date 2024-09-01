@@ -60,7 +60,6 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
         setLastLogin(new Date(storedLastLogin));
         localStorage.setItem('lastLogin', new Date().toString());
       }
-
       await setToken(newToken);
       fetchUserDetails(newToken, username, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate); // Use the existing function
     } catch (error) {

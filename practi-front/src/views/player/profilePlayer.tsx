@@ -70,7 +70,7 @@ function Profile({ token, setToken, firstName, club }: ProfileProps) {
   };
 
   const handleLeaveTeam = async () => {
-    if (window.confirm('Are you sure you want to leave the team?')) {
+    if (window.confirm('אתה בטוח שברצונך לעזוב את הקבוצה?')) {
       try {
         const storedToken = localStorage.getItem('authToken') || token;
         await leaveTeam(teamName, storedToken);

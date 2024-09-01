@@ -198,9 +198,9 @@ export const SubVideoPreview = ({
                 <MdOutlineExpandMore />
               </button>
             )}
+            {!video.single && <MdPeople className="people-icon" />} {/* Add MdPeople icon if single is false */}
           </div>
           <div className="action-heading-container">
-          {!video.single && <MdPeople className="people-icon" />} {/* Add MdPeople icon if single is false */}
             <span style={{ textAlign: 'right' }} className="video-title">
               {video.title}
             </span>
