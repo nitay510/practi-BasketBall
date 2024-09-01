@@ -117,13 +117,12 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
     <div className="team-list">
       {teams.map((team, index) => (
         <div key={index} className="team-item">
-          <h3 onClick={() => toggleTeamExpansion(index)} style={{ cursor: 'pointer' }}>
-            {team.teamName}
-          </h3>
-          <div className="team-controls">
+          <div className="team-header">
+            <h3 onClick={() => toggleTeamExpansion(index)} style={{ cursor: 'pointer', flexGrow: 1 }}>
+              {team.teamName}
+            </h3>
             <MdDelete
               className="delete-team-icon"
-              style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
               onClick={() => handleDeleteTeam(team.teamName)}
             />
           </div>
@@ -151,7 +150,6 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
                   </p>
                   <MdDelete
                     className="delete-player-icon"
-                    style={{ cursor: 'pointer', color: 'red', marginLeft: '10px' }}
                     onClick={() => handleDeletePlayer(player.username, team.teamName)}
                   />
                 </div>

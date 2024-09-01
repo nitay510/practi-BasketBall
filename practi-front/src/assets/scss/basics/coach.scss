@@ -161,6 +161,12 @@
             font-size: 16px;
             border: 1px solid rgb(255, 255, 255);
             border-radius: 15px;
+
+    .delete-team-icon{
+        margin-left: 10px;
+        margin-right: 15px;
+        font-size: 20px;
+    }
     .player-info {
         margin-top: 15px;
         font-size: 24px;
@@ -223,11 +229,11 @@
                 }
  
     
-                .delete-player-button {
-         
-                    font-size: 16px;
-                    margin-top: 6px;
+                .delete-player-icon {
     
+                    font-size: 20px;
+                    margin-left: 15px;
+                    margin-right: 10px;
                  
                 }
             }

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import Confetti from 'react-dom-confetti';
-import { MdClose } from 'react-icons/md';
+import { MdClose, MdPeople, MdOutlineExpandMore } from 'react-icons/md'; // Import the MdPeople icon
 import { useSelector } from "react-redux";
 // models
 import subVideoModel from "../../Models/subVideoModel";
 // icons
-import { MdOutlineExpandMore } from 'react-icons/md';
 import { BsPlayFill, BsPauseFill } from 'react-icons/bs';
 // cmps
 import { VideoDetails } from "./video-details";
 import { VideoDetailsDouble } from "./video-detailsDouble";
 // state
-import { stopVideo,startVideo } from '../../store/slicers/selctedSubVideo.slice';
+import { stopVideo, startVideo } from '../../store/slicers/selctedSubVideo.slice';
 import { videoElState } from "../../store/store";
+
 interface SubVideoPreviewProps {
   video: subVideoModel;
   selectedVideo: subVideoModel;
@@ -49,6 +49,7 @@ export const SubVideoPreview = ({
   const [showPopup, setShowPopup] = useState(false);
   const videoPlayerRef = useSelector(videoElState);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (isSubmit) {
       if (brokenRecord) {
@@ -103,7 +104,7 @@ export const SubVideoPreview = ({
         if (currentlyOpenDetails != video._id) {
           setCurrentlyOpenDetails(video._id);
         }
-      },1000);
+      }, 1000);
     } else {
       onSetVideoStatus(true);
       dispatch(startVideo());
@@ -111,12 +112,11 @@ export const SubVideoPreview = ({
         setCurrentlyOpenDetails(video._id);
       }
     }
-  
   };
 
   let detailsComponent = null;
 
-  if (!isSubmit && currentlyOpenDetails === video._id  && video.haveForm) {
+  if (!isSubmit && currentlyOpenDetails === video._id && video.haveForm) {
     if (video.single === true) {
       detailsComponent = (
         <VideoDetails
@@ -148,15 +148,15 @@ export const SubVideoPreview = ({
       );
     }
   }
-  // Handle the click event on the video line
+
   const handleClick = (videoId: string) => {
     if (selectedVideo._id !== videoId) {
       onSetVideo(video);
     }
   };
+
   const rateStyle = `popup-rate ${color}`;
   return (
-   
     <article
       className={`subvideo-preview ${selectedVideo._id === video._id ? 'playing' : ''}`}
       onClick={() => handleClick(video._id)}
@@ -168,53 +168,53 @@ export const SubVideoPreview = ({
       )}
       <Confetti active={showPopup} />
       {showPopup && (
-  <div className="popup-container">
-    <div className="popup">
-      <img
-        src={`${process.env.PUBLIC_URL}/Trophy.png`}
-        alt="Celebrity"
-        style={{ width: '138.33px', height: '139.18px', marginBottom: '10px' }}
-      />
-          <div className="popup-message">
+        <div className="popup-container">
+          <div className="popup">
+            <img
+              src={`${process.env.PUBLIC_URL}/Trophy.png`}
+              alt="Celebrity"
+              style={{ width: '138.33px', height: '139.18px', marginBottom: '10px' }}
+            />
+            <div className="popup-message">
               שיא חדש:
-            {/* Use the modified rateStyle for the color class */}
-            <div className={rateStyle}>
-              {rate}%
-            </div>
+              <div className={rateStyle}>
+                {rate}%
+              </div>
             </div>
             <div className="popup-message">
-            {submitMessage}!
+              {submitMessage}!
             </div>
-      <button className="close-popup-btn" onClick={handleClosePopup}>
-        <MdClose size={23} />
-      </button>
-    </div>
-  </div>
-)}
-      <div className="preview-wrap-details">
-      <div className="preview-wrap">
-        <div className="details-container">
-          {video.haveForm && (
-            <button className="expendMore" onClick={onToggleDetails}>
-              <MdOutlineExpandMore />
+            <button className="close-popup-btn" onClick={handleClosePopup}>
+              <MdClose size={23} />
             </button>
-          )}
+          </div>
         </div>
-        <div className="action-heading-container">
-          <span style={{ textAlign: 'right'}} className="video-title">{video.title}</span>
-          <button className="play-pause-btn blue-bg-btn">
-            {selectedVideo._id === video._id && selectedVideo.isPlaying ? (
-              <BsPauseFill onClick={onPauseVideo} />
-            ) : (
-              <BsPlayFill onClick={() => onPlayVideo(video._id)} />
+      )}
+      <div className="preview-wrap-details">
+        <div className="preview-wrap">
+          <div className="details-container">
+            {video.haveForm && (
+              <button className="expendMore" onClick={onToggleDetails}>
+                <MdOutlineExpandMore />
+              </button>
             )}
-          </button>
+          </div>
+          <div className="action-heading-container">
+            <span style={{ textAlign: 'right' }} className="video-title">
+              {video.title}
+            </span>
+            {!video.single && <MdPeople className="people-icon" />} {/* Add MdPeople icon if single is false */}
+            <button className="play-pause-btn blue-bg-btn">
+              {selectedVideo._id === video._id && selectedVideo.isPlaying ? (
+                <BsPauseFill onClick={onPauseVideo} />
+              ) : (
+                <BsPlayFill onClick={() => onPlayVideo(video._id)} />
+              )}
+            </button>
+          </div>
         </div>
-</div>
-      {detailsComponent}
+        {detailsComponent}
       </div>
     </article>
-
   );
 };
-
