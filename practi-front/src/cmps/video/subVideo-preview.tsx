@@ -203,7 +203,6 @@ export const SubVideoPreview = ({
             <span style={{ textAlign: 'right' }} className="video-title">
               {video.title}
             </span>
-            {!video.single && <MdPeople className="people-icon" />} {/* Add MdPeople icon if single is false */}
             <button className="play-pause-btn blue-bg-btn">
               {selectedVideo._id === video._id && selectedVideo.isPlaying ? (
                 <BsPauseFill onClick={onPauseVideo} />
@@ -211,6 +210,7 @@ export const SubVideoPreview = ({
                 <BsPlayFill onClick={() => onPlayVideo(video._id)} />
               )}
             </button>
+            {!video.single && <MdPeople className="people-icon" />} {/* Add MdPeople icon if single is false */}
           </div>
         </div>
         {detailsComponent}

@@ -161,12 +161,13 @@
             font-size: 16px;
             border: 1px solid rgb(255, 255, 255);
             border-radius: 15px;
-
+            .team-header{
+                display: flex;
     .delete-team-icon{
-        margin-left: 10px;
         margin-right: 15px;
-        font-size: 20px;
+        margin-top: 7px;
     }
+}
     .player-info {
         margin-top: 15px;
         font-size: 24px;
