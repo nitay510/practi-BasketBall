@@ -46,7 +46,6 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
     e.preventDefault();
 
     try {
-      console.log("insidelogin");
       const newToken = await loginUser(username, password); // Perform login to get a new token
       localStorage.setItem('authToken', newToken);
       localStorage.setItem('userName', username);

@@ -7,8 +7,8 @@ const activityController = {
 
     try {
       let activity = await Activity.findOne({ username });
-
       if (activity) {
+        console.log(loginCount);
         activity.loginCount += 1;
         activity.lastLogin = new Date();
       } else {
