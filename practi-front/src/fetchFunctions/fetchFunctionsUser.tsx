@@ -99,3 +99,21 @@ export const fetchUserDetails = async (
       throw error;
     }
   };
+
+  export const trackLoginActivity = async (username: string): Promise<void> => {
+    try {
+      const res = await fetch('https://practi-web.onrender.com/api/activity/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      });
+  
+      if (!res.ok) {
+        throw new Error('Failed to track login activity');
+      }
+    } catch (error) {
+      console.error('Error tracking login activity:', error);
+    }
+  };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HeroLogin } from '../cmps/cta/hero-login';
-import { fetchUserDetails, loginUser } from '../fetchFunctions/fetchFunctionsUser'; // Import the functions
+import { fetchUserDetails, loginUser, trackLoginActivity } from '../fetchFunctions/fetchFunctionsUser'; // Import the functions
 
 interface LoginProps {
   setToken: (token: string) => void;
@@ -61,6 +61,7 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
         localStorage.setItem('lastLogin', new Date().toString());
       }
       await setToken(newToken);
+      await trackLoginActivity(username); // Track the login activity
       fetchUserDetails(newToken, username, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate); // Use the existing function
     } catch (error) {
       alert('אין לך עדיין משתמש, הירשם');
