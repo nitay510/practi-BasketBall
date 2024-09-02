@@ -22,6 +22,7 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("useEFFEct")
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -40,7 +41,7 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
       setUsername(storedUsername);
       fetchUserDetails(storedToken, storedUsername, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate);
     }
-  }, [setToken, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate]);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
