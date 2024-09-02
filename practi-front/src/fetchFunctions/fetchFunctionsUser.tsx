@@ -21,12 +21,11 @@ export const fetchUserDetails = async (
         const userData = await response.json();
         const { fullName, isCoach, club } = userData;
         localStorage.setItem('firstName', fullName);
-        console.log(localStorage.getItem('firstName'))
         // Set user details
         setFirstname(fullName);
         setLoginStatus(true);
         setClub(club);
-  
+        await trackLoginActivity(username);
         // Handle navigation based on user role
         if (isCoach) {
           setMaster(gm.includes(username));

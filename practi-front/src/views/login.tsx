@@ -46,11 +46,12 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
     e.preventDefault();
 
     try {
+      console.log("insidelogin");
       const newToken = await loginUser(username, password); // Perform login to get a new token
       localStorage.setItem('authToken', newToken);
       localStorage.setItem('userName', username);
       setToken(newToken);
-      await trackLoginActivity(username); // Track the login activity
+      setUsername(username)
       fetchUserDetails(newToken, username, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate);
     } catch (error) {
       alert('אין לך עדיין משתמש, הירשם');
