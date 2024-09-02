@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Activity = require('../models/activity');
 
 const activityController = {
@@ -6,27 +7,23 @@ const activityController = {
     const { username } = req.body;
 
     try {
-      let activity = await Activity.findOne({ username });
-      if (activity) {
-        console.log(loginCount);
-        activity.loginCount += 1;
-        activity.lastLogin = new Date();
-      } else {
-        activity = new Activity({
-          username,
-          loginCount: 1,
-          lastLogin: new Date(),
-        });
-      }
+      // Use findOneAndUpdate to update the existing activity or create a new one if it doesn't exist
+      const activity = await Activity.findOneAndUpdate(
+        { username }, 
+        {
+          $inc: { loginCount: 1 },  // Increment loginCount by 1
+          lastLogin: new Date(),    // Update the lastLogin field
+        },
+        { new: true, upsert: true } // Return the modified document and create if it doesn't exist
+      );
 
-      await activity.save();
       res.status(200).json({ message: 'Login tracked successfully', activity });
     } catch (error) {
+      console.error(error);
       res.status(500).json({ error: error.message });
     }
   },
 
- 
   // Get user activity by username
   async getUserActivity(req, res) {
     const { username } = req.params;

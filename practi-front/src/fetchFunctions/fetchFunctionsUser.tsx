@@ -102,7 +102,6 @@ export const fetchUserDetails = async (
 
   export const trackLoginActivity = async (username: string): Promise<void> => {
     try {
-      console.log("inside track login")
       const res = await fetch('https://practi-web.onrender.com/api/activity/login', {
         method: 'POST',
         headers: {
