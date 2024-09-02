@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addUser, loginUser, fetchUserDetails } from '../fetchFunctions/fetchFunctionsUser'; // Import the functions
+import { addUser, loginUser, fetchUserDetails, trackLoginActivity} from '../fetchFunctions/fetchFunctionsUser'; // Import the functions
 
 interface SignupProps {
   setToken: (token: string) => void;
@@ -62,6 +62,7 @@ export function Signup({ setToken, setFirstname, setLoginStatus, setClub }: Sign
         localStorage.setItem('authToken', newToken);
         localStorage.setItem('userName', username);
         await setToken(newToken);
+        await trackLoginActivity(username);
         fetchUserDetails(newToken, username, setFirstname, setLoginStatus, setClub, () => {}, gm, navigate); // Use the fetchUserDetails function
       } else {
         if (res.status === 500) {

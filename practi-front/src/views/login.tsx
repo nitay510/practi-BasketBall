@@ -34,35 +34,24 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
 
     const storedToken = localStorage.getItem('authToken');
     const storedUsername = localStorage.getItem('userName');
-    const storedLastLogin = localStorage.getItem('lastLogin');
 
     if (storedToken && storedUsername) {
       setToken(storedToken);
       setUsername(storedUsername);
-      if (storedLastLogin) {
-        setLastLogin(new Date(storedLastLogin));
-        localStorage.setItem('lastLogin', new Date().toString());
-      }
       fetchUserDetails(storedToken, storedUsername, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate);
     }
-  }, []);
+  }, [setToken, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const newToken = await loginUser(username, password); // Use the new login function
+      const newToken = await loginUser(username, password); // Perform login to get a new token
       localStorage.setItem('authToken', newToken);
       localStorage.setItem('userName', username);
-
-      const storedLastLogin = localStorage.getItem('lastLogin');
-      if (storedLastLogin) {
-        setLastLogin(new Date(storedLastLogin));
-        localStorage.setItem('lastLogin', new Date().toString());
-      }
-      await setToken(newToken);
+      setToken(newToken);
       await trackLoginActivity(username); // Track the login activity
-      fetchUserDetails(newToken, username, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate); // Use the existing function
+      fetchUserDetails(newToken, username, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate);
     } catch (error) {
       alert('אין לך עדיין משתמש, הירשם');
       console.error('Error during login:', error);
@@ -111,7 +100,7 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
             אין לך עדיין חשבון? <Link to='/signup' className="blue-link">לחץ כאן</Link>
           </p>
           {showInstallButton && (
-            <button onClick={handleAddToHomeScreen} style={{background : 'blue'}}>
+            <button onClick={handleAddToHomeScreen} style={{background: 'blue'}}>
               הורד לטלפון
             </button>
           )}
