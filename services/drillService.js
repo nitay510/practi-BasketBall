@@ -132,11 +132,22 @@ exports.getHowManyDrills = async (currentUser) => {
  * @returns {Promise<number>} - Returns the number of wins.
  */
 exports.getWinLose = async (currentUser, opponentName) => {
-  const DrillsForUser = await Drill.find({ user: currentUser, opponentName: opponentName, isSingle: false });
+  // Normalize opponentName by trimming and converting to lowercase
+  const normalizedOpponentName = opponentName.trim().toLowerCase();
+
+  // Find drills where the opponent name matches after normalization
+  const DrillsForUser = await Drill.find({
+    user: currentUser,
+    isSingle: false,
+    $expr: {
+      $eq: [{ $toLower: { $trim: { input: "$opponentName" } } }, normalizedOpponentName]
+    }
+  });
 
   if (DrillsForUser.length > 0) {
     let winCount = 0;
 
+    // Count wins based on the drill results
     for (const drill of DrillsForUser) {
       if (drill.successes > drill.opponentScore) {
         winCount++;
