@@ -4,7 +4,7 @@ import { HeaderTwo } from '../../cmps/headers/headertwo';
 import { MdOutlineExpandMore } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { DrillModel } from '../../Models/DrillModel';
-import { fetchAllDoubleDrills, fetchWins, fetchLosses } from '../../fetchFunctions/fetchFunctionsPlayer'; // Import the fetch functions
+import { fetchAllDoubleDrills, fetchWins } from '../../fetchFunctions/fetchFunctionsPlayer'; // Import the fetch functions
 
 // Props for the HistoryPageDouble component
 interface HistoryPageDoubleProps {
@@ -66,7 +66,12 @@ function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps
     for (const opponent of drills.map(drill => drill.opponentName)) {
       const storedToken = localStorage.getItem('authToken') || token;
       const wins = await fetchWins(storedToken, opponent);
-      const loses = await fetchLosses(storedToken, opponent, drills);
+      const totalDrills = drills.filter(
+        drill => drill.opponentName.trim().toLowerCase() === opponent.trim().toLowerCase()
+      ).length;
+  
+      // Calculate losses as total drills minus wins
+      const loses = totalDrills - wins;
       if (opponent) stats[opponent] = { wins, loses };
     }
     setOpponentStats(stats);

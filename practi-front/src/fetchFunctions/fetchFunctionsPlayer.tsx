@@ -181,25 +181,7 @@ export const submitDoubleDrillResult = async (drillId: string, data: any, token:
       throw error;
     }
   };
-  
-  /**
-   * Fetches the number of losses for a specific opponent.
-   * @param token - The authentication token.
-   * @param opponent - The opponent's name.
-   * @param drills - The list of drills to calculate losses from.
-   * @returns The number of losses against the specified opponent.
-   */
-  export const fetchLosses = async (
-    token: string,
-    opponent: string | undefined,
-    drills: DrillModel[]
-  ): Promise<number> => {
-    const total = drills.filter((drill) => 
-    drill.opponentName.trim().toLowerCase() === opponent.trim().toLowerCase()
-  ).length;
-    const wins = await fetchWins(token, opponent);
-    return total - wins;
-  };
+
 
   /**
  * Fetches all drills assigned to the current user.
