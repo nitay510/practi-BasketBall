@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.d9a29c50.css",
-    "main.js": "/static/js/main.09d64b50.js",
+    "main.js": "/static/js/main.a2f8fd5d.js",
     "static/media/open-screen.gif": "/static/media/open-screen.cf1533326b991dc594c1.gif",
     "static/media/screen-try-1.jpg": "/static/media/screen-try-1.2f6dc7d2b2a1434aa893.jpg",
     "static/media/Rubik-Regular.ttf": "/static/media/Rubik-Regular.974ab100afa4538622da.ttf",
@@ -12,10 +12,10 @@
     "static/media/logo.jpeg": "/static/media/logo.358f4d2f6a2c221916cb.jpeg",
     "index.html": "/index.html",
     "main.d9a29c50.css.map": "/static/css/main.d9a29c50.css.map",
-    "main.09d64b50.js.map": "/static/js/main.09d64b50.js.map"
+    "main.a2f8fd5d.js.map": "/static/js/main.a2f8fd5d.js.map"
   },
   "entrypoints": [
     "static/css/main.d9a29c50.css",
-    "static/js/main.09d64b50.js"
+    "static/js/main.a2f8fd5d.js"
   ]
 }

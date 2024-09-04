@@ -194,7 +194,9 @@ export const submitDoubleDrillResult = async (drillId: string, data: any, token:
     opponent: string | undefined,
     drills: DrillModel[]
   ): Promise<number> => {
-    const total = drills.filter((drill) => drill.opponentName === opponent).length;
+    const total = drills.filter((drill) => 
+    drill.opponentName.trim().toLowerCase() === opponent.trim().toLowerCase()
+  ).length;
     const wins = await fetchWins(token, opponent);
     return total - wins;
   };

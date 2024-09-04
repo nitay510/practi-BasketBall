@@ -149,9 +149,7 @@ exports.getWinLose = async (currentUser, opponentName) => {
 
     // Count wins based on the drill results
     for (const drill of DrillsForUser) {
-      console.log(DrillsForUser);
       if (drill.successes > drill.opponentScore) {
-        console.log(opponentName);
         winCount++;
       }
     }
