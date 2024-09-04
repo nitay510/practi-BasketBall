@@ -46,8 +46,6 @@ function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps
   // Extract unique opponents
   const uniqueOpponents = Array.from(new Set(drills
     .map(drill => drill.opponentName.trim().toLowerCase())));
-  console.log('Fetched drills:', drills);
-  console.log('Unique opponents:', uniqueOpponents);
   const [expandedOpponent, setExpandedOpponent] = useState<string | null>(null);
 
   // Toggle expanded state for an opponent
@@ -69,7 +67,6 @@ function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps
       const storedToken = localStorage.getItem('authToken') || token;
       const wins = await fetchWins(storedToken, opponent);
       const loses = await fetchLosses(storedToken, opponent, drills);
-      console.log(opponent);
       if (opponent) stats[opponent] = { wins, loses };
     }
     setOpponentStats(stats);
@@ -101,29 +98,29 @@ function HistoryPageDouble({ token, setToken, setTopic }: HistoryPageDoubleProps
                 </div>
                 {expandedOpponent === opponent && (
                   <div className="opponent-drills">
-                    {drills
-                      .filter((drill) => drill.opponentName === opponent)
-                      .map((drill) => (
-                        <div key={drill.drillId} className="drill-item">
-                          <div className="drill-date">
-                            {new Date(drill.date).toLocaleDateString()}
-                          </div>
-                          <div className="drill-name">{drill.drillName}</div>
-                          <div
-                            className={`score ${
-                              drill.successes === drill.opponentScore ? 'neutral' : drill.successes > drill.opponentScore ? 'green' : 'red'
-                            }`}
-                          >
-                            {drill.opponentScore}-{drill.successes}
-                          </div>
-                          <button
-                            className="back-to-training"
-                            onClick={() => handleReturnToTraining(drill.drillName, drill.topic)}
-                          >
-                            חזור לאימון
-                          </button>
-                        </div>
-                      ))}
+                  {drills
+  .filter((drill) => drill.opponentName.trim().toLowerCase() === opponent)
+  .map((drill) => (
+    <div key={drill.drillId} className="drill-item">
+      <div className="drill-date">
+        {new Date(drill.date).toLocaleDateString()}
+      </div>
+      <div className="drill-name">{drill.drillName}</div>
+      <div
+        className={`score ${
+          drill.successes === drill.opponentScore ? 'neutral' : drill.successes > drill.opponentScore ? 'green' : 'red'
+        }`}
+      >
+        {drill.opponentScore}-{drill.successes}
+      </div>
+      <button
+        className="back-to-training"
+        onClick={() => handleReturnToTraining(drill.drillName, drill.topic)}
+      >
+        חזור לאימון
+      </button>
+    </div>
+  ))}
                   </div>
                 )}
               </div>
