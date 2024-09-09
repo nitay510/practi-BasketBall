@@ -11,7 +11,7 @@ interface drillListSingleProps {
 }
 
 /* 
-  This view is the history of the single drills for user
+  This view is the drill list for coach
 */
 function DrillListForCoach({ token,category,drillList,uniqueDrills }: drillListSingleProps) {
 

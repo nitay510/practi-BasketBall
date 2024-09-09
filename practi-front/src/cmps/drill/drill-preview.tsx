@@ -5,66 +5,72 @@ import { useNavigate } from 'react-router-dom';
 import { SuccessRate } from './success-rate';
 import { DrillSituation } from './drillSituation';
 import { DrillModel } from '../../Models/DrillModel';
-import SubVideoModel from '../../Models/subVideoModel';
 
+// Define the interface for drill preview component props
 interface drillPreviewProps {
-  drillName: string;
-  token: string;
-  category: string;
-  setTopic: (topic: string) => void;
-  drillList: DrillModel[];
+  drillName: string; // The name of the drill
+  token: string; // Auth token for API requests
+  category: string; // Category of the drill
+  setTopic: (topic: string) => void; // Function to set the topic
+  drillList: DrillModel[]; // List of drills
 }
 
 function DrillPreview({ drillName, token, category, setTopic, drillList }: drillPreviewProps) {
-  const navigate = useNavigate();
-  const [expandeddrill, setExpandeddrill] = useState<string | null>(null);
-  const [totalDrills, setTotalDrills] = useState(0);
-  const [doneDrills, setDoneDrills] = useState(0);
-  const [uniqueDrills, setUniqueDrills] = useState<string[]>([]);
-  const [specificDrillList, setSpecificDrillList] = useState<DrillModel[] | undefined>([]);
+  const navigate = useNavigate(); // Use navigate hook to navigate to different routes
+  const [expandeddrill, setExpandeddrill] = useState<string | null>(null); // State to manage expanded drill
+  const [totalDrills, setTotalDrills] = useState(0); // State to track the total number of drills
+  const [doneDrills, setDoneDrills] = useState(0); // State to track the number of completed drills
+  const [uniqueDrills, setUniqueDrills] = useState<string[]>([]); // State for unique drills
+  const [specificDrillList, setSpecificDrillList] = useState<DrillModel[] | undefined>([]); // State for filtered drill list
 
+  // Function to calculate how many unique drills have been done
   const howManyDrillsDone = (): number => {
-    const allDrills = drillList.filter((drill) => drill.drillName === drillName);
-    const uniqueDrillsArray = Array.from(new Set(allDrills.map(drill => drill.missionName)));
-    setUniqueDrills(uniqueDrillsArray);
+    const allDrills = drillList.filter((drill) => drill.drillName === drillName); // Filter drills by name
+    const uniqueDrillsArray = Array.from(new Set(allDrills.map(drill => drill.missionName))); // Get unique mission names
+    setUniqueDrills(uniqueDrillsArray); // Set unique drills to state
    
-    return uniqueDrillsArray.length;
+    return uniqueDrillsArray.length; // Return the count of unique drills
   };
 
+  // Function to load sub videos related to the drill
   const loadSub = async () => {
     try {
-      const subVideos = await getSubVideos(drillName, token);
-      if(drillName=='זריקת עונשין')
-      setTotalDrills(subVideos.length - 2);
+      const subVideos = await getSubVideos(drillName, token); // Fetch sub videos from API
+      if(drillName=='זריקת עונשין') // Special case for specific drill
+      setTotalDrills(subVideos.length - 2); // Adjust total drills for this case
       else
-      setTotalDrills(subVideos.length - 1);
+      setTotalDrills(subVideos.length - 1); // Otherwise set normally
     } catch (error) {
-      console.error('Error loading sub videos:', error);
+      console.error('Error loading sub videos:', error); // Log error if sub video fetching fails
     }
   };
 
+  // Function to get the list of drills matching the current drill name
   const getDrillList = () => {
-    const allDrills = drillList.filter((drill) => drill.drillName === drillName);
+    const allDrills = drillList.filter((drill) => drill.drillName === drillName); // Filter drills by drillName
     if (allDrills.length === 0) {
-      setSpecificDrillList(undefined);
+      setSpecificDrillList(undefined); // If no drills, set to undefined
     } else {
-      setSpecificDrillList(allDrills);
+      setSpecificDrillList(allDrills); // Otherwise, set the filtered list
     }
   };
 
+  // Toggle drill expansion for viewing more details
   const toggleDrill = (drillName: string) => {
-    setExpandeddrill(expandeddrill === drillName ? null : drillName);
+    setExpandeddrill(expandeddrill === drillName ? null : drillName); // Toggle the expanded state for the drill
   };
 
+  // Navigate to the training page for a specific drill
   const handleReturnToTraining = (drillName: string) => {
-    setTopic(category);
-    navigate(`/PracticeView/${drillName}`);
+    setTopic(category); // Set the category as the topic
+    navigate(`/PracticeView/${drillName}`); // Navigate to the practice view page
   };
 
+  // Effect to update done drills, load sub videos, and fetch drill list when drillList or drillName changes
   useEffect(() => {
-    setDoneDrills(howManyDrillsDone());
-    loadSub();
-    getDrillList();
+    setDoneDrills(howManyDrillsDone()); // Set the number of done drills
+    loadSub(); // Load sub videos
+    getDrillList(); // Get the list of specific drills
   }, [drillList, drillName]);
 
   return (
