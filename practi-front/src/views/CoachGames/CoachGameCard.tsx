@@ -15,18 +15,11 @@ interface CoachGameCardProps {
 
 // Function to dynamically load a club image if it exists
 const loadClubLogo = (club: string) => {
-  console.log(club);
-  const clubImageFileName = clubLogoMap[club]; // Check if club exists in the map
-  console.log(clubImageFileName);
+  const clubImageFileName = clubLogoMap[club]; // Check if the club exists in the map
   if (clubImageFileName) {
-    try {
-      return require(`../../assets/images/${clubImageFileName}`); // Load the specific club image
-    } catch (error) {
-      console.error("Club image not found:", clubImageFileName, error);
-      return teamALogo; // Fallback to default team A logo
-    }
+    return `${process.env.PUBLIC_URL}/assets/images/${clubImageFileName}`; // Load the specific club image dynamically from the public folder
   }
-  return teamALogo; // Fallback if club is not in the map
+  return teamALogo; // Fallback to the default team A logo
 };
 
 const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token, club }) => {
@@ -39,7 +32,7 @@ const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token, club }) => {
 
   // Function to delete a game with confirmation
   const deleteGame = async () => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete the game: ${game.teamName} vs ${game.rivalTeamName}?`);
+    const confirmDelete = window.confirm(`אתה בטוח שברצונך למחוק את ההמשחק?`);
     if (!confirmDelete) return;
 
     try {
@@ -62,7 +55,7 @@ const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token, club }) => {
           })}</h2>
         </div>
         <div className="team-info right" onClick={goToBoxScore}>
-          <img src={loadClubLogo(game.teamName)} alt="Team A Logo" />
+          <img src={loadClubLogo(club)} alt="Team A Logo" />
           <h2>{game.teamName}</h2>
         </div>
         <div className="scoreboard" onClick={goToBoxScore}>
