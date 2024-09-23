@@ -1,17 +1,27 @@
 import React from 'react';
 import { Game } from '../InGameStats/game';
-import { MdAssessment, MdDelete } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import teamALogo from '../../assets/images/teamA.png'; // Import team A logo image
-import teamBLogo from '../../assets/images/teamB.png'; // Import team B logo image
+import teamALogo from '../../assets/images/teamA.png'; // Default team A logo image
+import teamBLogo from '../../assets/images/teamB.png'; // Default team B logo image
 import { deleteGameByDetails } from '../../fetchFunctions/fetchFunctionsCoach'; // Import the delete function
 
 interface CoachGameCardProps {
   game: Game; // Receive a single game object
   token: string;
+  club: string;
 }
 
-const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token }) => {
+// Function to dynamically load a club image if it exists
+const loadClubLogo = (club: string) => {
+  try {
+    return require(`../../assets/images/${club}.jpg`); // Check for club logo
+  } catch (error) {
+    return teamALogo; // Fallback to default team A logo
+  }
+};
+
+const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token, club }) => {
   const navigate = useNavigate();
 
   // Function to navigate to the after-game-boxScore page with the selected game
@@ -44,7 +54,7 @@ const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token }) => {
           })}</h2>
         </div>
         <div className="team-info right" onClick={goToBoxScore}>
-          <img src={teamALogo} alt="Team A Logo" />
+          <img src={loadClubLogo(game.teamName)} alt="Team A Logo" />
           <h2>{game.teamName}</h2>
         </div>
         <div className="scoreboard" onClick={goToBoxScore}>

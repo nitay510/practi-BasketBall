@@ -115,7 +115,7 @@ const CoachGames: React.FC<CoachGameProps> = ({ token, master, club }) => {
         </div>
         <div className="game-cards-container">
           {selectedGames.map((game, index) => (
-            <CoachGameCard key={index} game={game} token={token} />
+            <CoachGameCard key={index} game={game} token={token} club={club}/>
           ))}
         </div>
 
