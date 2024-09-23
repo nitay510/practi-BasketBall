@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import teamALogo from '../../assets/images/teamA.png'; // Default team A logo image
 import teamBLogo from '../../assets/images/teamB.png'; // Default team B logo image
 import { deleteGameByDetails } from '../../fetchFunctions/fetchFunctionsCoach'; // Import the delete function
+import { clubLogoMap } from '../../assets/clubLogoMap'; // Import the club logo map
 
 interface CoachGameCardProps {
   game: Game; // Receive a single game object
@@ -14,11 +15,16 @@ interface CoachGameCardProps {
 
 // Function to dynamically load a club image if it exists
 const loadClubLogo = (club: string) => {
-  try {
-    return require(`../../assets/images/${club}.jpg`); // Check for club logo
-  } catch (error) {
-    return teamALogo; // Fallback to default team A logo
+  const clubImageFileName = clubLogoMap[club]; // Check if club exists in the map
+  if (clubImageFileName) {
+    try {
+      return require(`../../assets/images/${clubImageFileName}`); // Load the specific club image
+    } catch (error) {
+      console.error("Club image not found:", clubImageFileName, error);
+      return teamALogo; // Fallback to default team A logo
+    }
   }
+  return teamALogo; // Fallback if club is not in the map
 };
 
 const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token, club }) => {
