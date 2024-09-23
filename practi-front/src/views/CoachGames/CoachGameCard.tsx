@@ -15,7 +15,9 @@ interface CoachGameCardProps {
 
 // Function to dynamically load a club image if it exists
 const loadClubLogo = (club: string) => {
+  console.log(club);
   const clubImageFileName = clubLogoMap[club]; // Check if club exists in the map
+  console.log(clubImageFileName);
   if (clubImageFileName) {
     try {
       return require(`../../assets/images/${clubImageFileName}`); // Load the specific club image
