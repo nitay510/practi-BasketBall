@@ -18,7 +18,7 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
 
-  const gm = ['1357'];
+  const gm = ['1357','0546651989'];
   const navigate = useNavigate();
 
   useEffect(() => {
