@@ -21,28 +21,6 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
   const gm = ['1357','0546651989'];
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("useEFFEct")
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstallButton(true);
-    });
-
-    window.addEventListener('appinstalled', () => {
-      setShowInstallButton(false);
-    });
-
-    const storedToken = localStorage.getItem('authToken');
-    const storedUsername = localStorage.getItem('userName');
-
-    if (storedToken && storedUsername) {
-      setToken(storedToken);
-      setUsername(storedUsername);
-      fetchUserDetails(storedToken, storedUsername, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate);
-    }
-  }, []);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -55,19 +33,9 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
       fetchUserDetails(newToken, username, setFirstname, setLoginStatus, setClub, setMaster, gm, navigate);
     } catch (error) {
       alert('אין לך עדיין משתמש, הירשם');
-      console.error('Error during login:', error);
     }
   };
 
-  const handleAddToHomeScreen = () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult: any) => {
-        setDeferredPrompt(null);
-        setShowInstallButton(false);
-      });
-    }
-  };
 
   return (
     <div className='loginPage'>
@@ -100,11 +68,6 @@ export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMast
           <p>
             אין לך עדיין חשבון? <Link to='/signup' className="blue-link">לחץ כאן</Link>
           </p>
-          {showInstallButton && (
-            <button onClick={handleAddToHomeScreen} style={{background: 'blue'}}>
-              הורד לטלפון
-            </button>
-          )}
         </div>
       </section>
     </div>

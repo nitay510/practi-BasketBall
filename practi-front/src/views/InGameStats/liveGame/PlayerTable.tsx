@@ -127,7 +127,6 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({ myTeamName, myTeamScor
         duration: 90,
       };
 
-      await createNewEvent( storedToken!,newEvent);
 
       // Navigate to the coach games page after successfully saving the game and event
       navigate('/coach-games');
