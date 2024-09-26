@@ -80,25 +80,27 @@
   border-radius: 8px;
 }
   .submit-button {
+    margin-top: 10px;
+    background: #d23c55;
+    border: 1.07px solid #fff;
+    border-radius: 15px;
+    color: #fff;
     font-family: Lato;
     font-size: 24.22px;
     font-weight: 700;
-    color: white;
-    background: rgba(210, 60, 85, 1);
-    border: 1.07px solid rgba(255, 255, 255, 1);
-    border-radius: 15px;
     margin-left: 35%;
     margin-right: 35%;
+    margin-bottom: 12vh;
 
   }
   
   .players-table {
-    width: 90%;
+    border: .88px solid #de496e;
+    border-radius: 10px;
+    margin-bottom: 25px;
     margin-right: 5%;
     margin-top: 20px;
-    border: 0.88px solid rgba(222, 73, 110, 1);
-    border-radius: 10px;
-    margin-bottom: 12vh;
+    width: 90%;
 }
   
   .players-table th,
