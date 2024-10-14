@@ -19,10 +19,11 @@ export function Signup({ setToken, setFirstname, setLoginStatus, setClub }: Sign
   const [errorMessage, setErrorMessage] = useState(''); // State for error message
   const navigate = useNavigate();
 
-  const gm = ['1357','0546651989']; // General managers or other identifiers
+  const gm = ['1357','0546651989','0545355400']; // General managers or other identifiers
 
   const clubs = [
     'הפועל משגב',
+    'מכבי אלפי מנשה',
     'מכבי חיפה',
     'מכבי תל אביב',
     'הפועל תל אביב',

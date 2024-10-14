@@ -4,7 +4,8 @@ import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import teamALogo from '../../assets/images/teamA.png'; // Default team A logo image
 import teamBLogo from '../../assets/images/teamB.png'; // Default team B logo image
-import misgavLogo from '../../assets/images/misgav.png'; // Specific club logo
+import misgavLogo from '../../assets/images/misgav.png'; 
+import alfeiLogo from '../../assets/images/alfei-menashe.png';
 import { deleteGameByDetails } from '../../fetchFunctions/fetchFunctionsCoach'; // Import the delete function
 
 interface CoachGameCardProps {
@@ -15,6 +16,7 @@ interface CoachGameCardProps {
 
 // Map club names to image imports
 const clubLogoMap: { [key: string]: string } = {
+  "מכבי אלפי מנשה" : alfeiLogo,
   "הפועל משגב": misgavLogo,
 };
 

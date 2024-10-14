@@ -15,10 +15,8 @@ interface LoginProps {
 export function Login({ setToken, setFirstname, setLoginStatus, setClub, setMaster, setLastLogin }: LoginProps): JSX.Element {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [showInstallButton, setShowInstallButton] = useState(false);
-
-  const gm = ['1357','0546651989'];
+  
+  const gm = ['1357','0546651989','0545355400'];
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
