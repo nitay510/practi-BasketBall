@@ -50,8 +50,10 @@ function HistoryPageForCoach({ token, setToken }: HistoryPageCoachProps) {
   return (
     <div className="history-page">
       <div className="content-container-practice">
-        <h2>היסטוריית אימונים של {player.fullName}</h2> {/* Displaying the player's full name */}
         <HeaderThree />
+        <h2 style={{ color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+  היסטוריית אימונים של {player.fullName}
+</h2>
         <NavBarHistory
           category={category}
           setCategory={setCategory}
