@@ -62,7 +62,7 @@ const CoachGameCard: React.FC<CoachGameCardProps> = ({ game, token, club }) => {
         </div>
         <div className="team-info right" onClick={goToBoxScore}>
           <img src={loadClubLogo(club)} alt="Team A Logo" />
-          <h2>{club}</h2>
+          <h2>{game.teamName}</h2>
         </div>
         <div className="scoreboard" onClick={goToBoxScore}>
           <span>{game.myTeamScore} : {game.otherTeamScore}</span>
