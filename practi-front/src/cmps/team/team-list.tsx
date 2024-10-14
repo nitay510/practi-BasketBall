@@ -49,7 +49,7 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
 
       setTeams(teamsWithPlayersAndResults);
     } catch (error) {
-      console.error('Failed to load teams:', error);
+      console.error('נכשל בטעינת הקבוצות:', error);
     }
   };
 
@@ -60,18 +60,18 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
         setToken(storedToken);
         const response = await addTeam(teamName, club, storedToken);
         if (response.ok) {
-          alert('Team added successfully');
+          alert('הקבוצה נוספה בהצלחה');
           setTeamName('');
           setShowAddTeamModal(false);
           loadTeams(); // Reload teams after adding a new one
         } else {
-          alert('Failed to add team');
+          alert('נכשל בהוספת קבוצה');
         }
       } catch (error) {
-        alert(`Error: ${error}`);
+        alert(`שגיאה: ${error}`);
       }
     } else {
-      alert('Please enter a team name');
+      alert('אנא הזן שם קבוצה');
     }
   };
 
@@ -85,8 +85,8 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
   const handlePlayerClickGames = (teamName: string, playerName: string, username: string) => {
     navigate(`/coach-player-stats/${encodeURIComponent(teamName)}/${encodeURIComponent(playerName)}`);
   };
-  const handlePlayerClickHistory = ( username: string) => {
-    navigate('/historyByCoach', { state: { player: username } });
+  const handlePlayerClickHistory = (playerName: string, username: string) => {
+    navigate('/historyByCoach', { state: { player: { fullName: playerName, username } } });
   };
 
   const handleDeletePlayer = async (username: string, teamName: string) => {
@@ -94,10 +94,10 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
       try {
         await deletePlayerFromTeam(username, teamName, token);
         loadTeams(); // Reload the teams data
-        alert('Player removed successfully');
+        alert('השחקן נמחק בהצלחה');
       } catch (error) {
-        console.error('Failed to delete player:', error);
-        alert('Failed to remove player due to an error');
+        console.error('נכשל במחיקת השחקן:', error);
+        alert('נכשל במחיקת השחקן');
       }
     }
   };
@@ -108,10 +108,10 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
         const storedToken = localStorage.getItem('authToken') || token;
         await deleteTeam(teamName, storedToken);
         loadTeams(); // Reload teams after deletion
-        alert('Team deleted successfully');
+        alert('הקבוצה נמחקה בהצלחה');
       } catch (error) {
-        console.error('Failed to delete team:', error);
-        alert('Failed to delete team due to an error');
+        console.error('נכשל במחיקת הקבוצה:', error);
+        alert('נכשל במחיקת הקבוצה עקב שגיאה');
       }
     }
   };
@@ -138,17 +138,17 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
           {team.expanded && (
             <div className="player-list">
               <p className="wins-loses">
-                Wins: {team.wins} / Losses: {team.losses}
+                נצחונות: {team.wins} / הפסדים: {team.losses}
               </p>
               <p className="player-list" style={{ fontSize: '24px', marginBottom: '25px', fontWeight: '700', letterSpacing: '0.75' }}>
-                Player List
+                רשימת שחקנים
               </p>
               {team.players.map((player: Player, playerIndex: React.Key) => (
                 <div key={playerIndex} className="player-row">
                   <p className="player-name" onClick={() => handlePlayerClickGames(team.teamName, player.fullName, player.username)}>
                     {player.fullName}
                   </p>
-                  <p className="go-to-player" onClick={() => handlePlayerClickHistory( player.username)}>
+                  <p className="go-to-player" onClick={() => handlePlayerClickHistory(player.fullName, player.username)}>
                     <MdHistory />
                   </p>
                   <p className="go-to-player" onClick={() => handlePlayerClickGames(team.teamName, player.fullName, player.username)}>
@@ -166,7 +166,7 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
       ))}
       <button className="add-team-button" onClick={() => setShowAddTeamModal(true)}>
         <MdAdd className="md-icon" />
-        Add New Team
+        הוסף קבוצה חדשה
       </button>
       {showAddTeamModal && (
         <div className="add-team-popup-container">
@@ -178,9 +178,9 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
               type="text"
               value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
-              placeholder="Team Name"
+              placeholder="שם הקבוצה"
             />
-            <button onClick={handleAddTeam}>Confirm</button>
+            <button onClick={handleAddTeam}>אישור</button>
           </div>
         </div>
       )}

@@ -9,15 +9,11 @@ import { DrillModel } from '../../Models/DrillModel';
 import { HeaderThree } from '../../cmps/headers/headerThree';
 import { fetchDrillsByCoach } from '../../fetchFunctions/fetchFunctionsCoach'; // Import the fetch function
 
-// Props for the HistoryPage component
 interface HistoryPageCoachProps {
   token: string;
   setToken: (token: string) => void;
 }
 
-/* 
-  This view shows the history of drills assigned to a specific player by the coach.
-*/
 function HistoryPageForCoach({ token, setToken }: HistoryPageCoachProps) {
   const [videos, setVideos] = useState<VideoModel[]>([]);
   const [drills, setDrills] = useState<DrillModel[]>([]);
@@ -39,7 +35,7 @@ function HistoryPageForCoach({ token, setToken }: HistoryPageCoachProps) {
   // Function to load drills assigned by the coach to the player
   const loadDrills = async () => {
     try {
-      const fetchedDrills = await fetchDrillsByCoach(category, token, player); // Use the fetch function from fetchFunctionsCoach.tsx
+      const fetchedDrills = await fetchDrillsByCoach(category, token, player.username); // Use the fetch function from fetchFunctionsCoach.tsx
       setDrills(fetchedDrills);
     } catch (error) {
       console.error('Unable to fetch drills:', error);
@@ -53,7 +49,8 @@ function HistoryPageForCoach({ token, setToken }: HistoryPageCoachProps) {
 
   return (
     <div className="history-page">
-      <div className='content-container-practice'>
+      <div className="content-container-practice">
+        <h2>היסטוריית אימונים של {player.fullName}</h2> {/* Displaying the player's full name */}
         <HeaderThree />
         <NavBarHistory
           category={category}
