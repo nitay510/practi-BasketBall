@@ -36,7 +36,25 @@ exports.createUser = async (userData) => {
     throw error;
   }
 };
-
+/**
+ * Updates the FCM token for the user.
+ * @param {string} username - The username of the user.
+ * @param {string} fcmToken - The FCM token to be saved.
+ * @returns {Promise<User|null>} - Returns the updated user or null if not found.
+ */
+exports.updateFcmToken = async (username, fcmToken) => {
+  try {
+    const user = await Users.findOneAndUpdate(
+      { username },
+      { fcmToken }, // Update the user's FCM token
+      { new: true } // Return the updated document
+    );
+    return user;
+  } catch (error) {
+    console.error('Error updating FCM token:', error);
+    throw error;
+  }
+};
 /**
  * Gets a user from the database based on the provided username.
  * @param {string} username - Username of the user.

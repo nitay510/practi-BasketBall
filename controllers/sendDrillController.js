@@ -1,6 +1,8 @@
 const sendDrillService = require('../services/sendDrillService');
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
+const Users = require('../models/user'); // Assuming Users is your user model
+const admin = require('./firebaseAdmin');
 
 /**
  * Adds a new drill assignment based on the provided data in the request body.
@@ -25,7 +27,32 @@ exports.addDrill = async (req, res) => {
 
     // Add the drill using the service layer
     const addDrill = await sendDrillService.addDrill(drillId, user, coach, drillName, topic);
+
     if (addDrill) {
+      // Fetch the user details to get the FCM token
+      const userRecord = await Users.findOne({ username: user });
+      
+      if (userRecord && userRecord.fcmToken) {
+        // Define the notification message in Hebrew
+        const message = {
+          notification: {
+            title: 'המאמן שלח לך אימון חדש',
+            body: `אימון חדש: ${drillName}`, // Including the drillName in the body
+          },
+          token: userRecord.fcmToken, // Send to the user's FCM token
+        };
+
+        // Try to send the notification, but don't throw an error if it fails
+        admin.messaging().send(message)
+          .then((response) => {
+            console.log('Successfully sent notification:', response);
+          })
+          .catch((error) => {
+            console.warn('Failed to send notification, but continuing:', error);
+          });
+      }
+
+      // Send the response regardless of whether the notification was sent successfully
       res.status(200).json(addDrill);
     } else {
       res.status(401).json({ error: 'Cannot add drill' });

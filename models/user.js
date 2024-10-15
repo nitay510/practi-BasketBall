@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
   fullName: {
@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
@@ -21,9 +21,13 @@ const userSchema = new mongoose.Schema({
   isCoach: {
     type: Boolean,
     required: true,
-  }
-})
+  },
+  fcmToken: { // Add the FCM token here
+    type: String,
+    required: false,
+  },
+});
 
-const Users = mongoose.model('User', userSchema)
+const Users = mongoose.model('User', userSchema);
 
-module.exports = Users
+module.exports = Users;

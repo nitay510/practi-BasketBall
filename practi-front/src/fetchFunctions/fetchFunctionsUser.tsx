@@ -149,3 +149,32 @@ export const trackLoginActivity = async (username: string): Promise<void> => {
     console.error('Error tracking login activity:', error);
   }
 };
+
+/**
+ * Sends the FCM token to the server to associate it with the user.
+ * @param username - The username of the user.
+ * @param fcmToken - The Firebase Cloud Messaging (FCM) token.
+ * @returns A promise indicating the success or failure of the token update.
+ */
+export const sendFcmToken = async (username: string, fcmToken: string): Promise<void> => {
+  try {
+    const response = await fetch('https://practi-web.onrender.com/api/Users/updateFcmToken', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        fcmToken,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send FCM token');
+    }
+
+    console.log('FCM token sent successfully');
+  } catch (error) {
+    console.error('Error sending FCM token:', error);
+  }
+};

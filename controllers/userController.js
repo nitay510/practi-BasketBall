@@ -20,6 +20,27 @@ exports.createUser = async (req, res) => {
 };
 
 /**
+ * Updates the FCM token for a specific user.
+ */
+exports.updateFcmToken = async (req, res) => {
+  try {
+    const { username, fcmToken } = req.body; // Get username and token from the request body
+
+    // Update the user's FCM token
+    const user = await userService.updateFcmToken(username, fcmToken);
+
+    if (user) {
+      res.status(200).send('FCM token updated successfully');
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error updating FCM token:', error);
+    res.status(500).send('Error updating FCM token');
+  }
+};
+
+/**
  * Gets user information by username, with token verification.
  */
 exports.getUser = async (req, res) => {
