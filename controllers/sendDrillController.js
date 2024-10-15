@@ -2,7 +2,7 @@ const sendDrillService = require('../services/sendDrillService');
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 const Users = require('../models/user'); // Assuming Users is your user model
-const admin = require('./fireBaseAdmin');
+const admin = require('../fireBaseAdmin');
 
 /**
  * Adds a new drill assignment based on the provided data in the request body.
