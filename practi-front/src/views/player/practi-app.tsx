@@ -83,11 +83,12 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
         console.error('Error requesting notification permission:', error);
       }
     };
-
+    console.log(loginStatus);
+    console.log(localStorage.getItem('notificationsGranted'))
     if (loginStatus && !localStorage.getItem('notificationsGranted')) {
       requestNotificationPermission(); // Only request permission if it hasn't been granted
     }
-  }, [loginStatus]);
+  }, [token,loginStatus]);
 
   const loadVideos = async () => {
     try {
