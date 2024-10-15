@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { messaging } from '../../firebase'; // Import Firebase messaging
+import { sendFcmToken } from '../../fetchFunctions/fetchFunctionsUser'; // Fetch function to send FCM token to backend
 import VideoModel from '../../Models/VideoModel';
 import { Header } from '../../cmps/headers/header';
 import { CtaBar } from '../../cmps/cta/cta-bar';
@@ -41,7 +43,7 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
     const fetchData = async () => {
       await loadVideos();
     };
-    setToken(localStorage.getItem('authToken'))
+    setToken(localStorage.getItem('authToken'));
     fetchData();
   }, [filterBy]);
 
@@ -54,6 +56,36 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
   useEffect(() => {
     if (!loginStatus) {
       navigate('/');
+    }
+  }, [loginStatus]);
+
+  // Request notification permission only if it hasn't been granted before
+  useEffect(() => {
+    const requestNotificationPermission = async () => {
+      try {
+        const permissionGranted = localStorage.getItem('notificationsGranted');
+
+        // Only request permission if not granted before
+        if (!permissionGranted) {
+          await messaging.requestPermission();
+          console.log('Notification permission granted.');
+
+          const fcmToken = await messaging.getToken();
+          console.log('FCM Token:', fcmToken);
+
+          // Send the token to the backend
+          await sendFcmToken(localStorage.getItem('userName'), fcmToken);
+
+          // Mark permission as granted in localStorage
+          localStorage.setItem('notificationsGranted', 'true');
+        }
+      } catch (error) {
+        console.error('Error requesting notification permission:', error);
+      }
+    };
+
+    if (loginStatus && !localStorage.getItem('notificationsGranted')) {
+      requestNotificationPermission(); // Only request permission if it hasn't been granted
     }
   }, [loginStatus]);
 
