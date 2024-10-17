@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { getToken} from 'firebase/messaging';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { messaging } from '../../firebase'; // Import Firebase messaging
+import { messaging} from '../../fireBase'; // Import Firebase messaging and getToken
 import { sendFcmToken } from '../../fetchFunctions/fetchFunctionsUser'; // Fetch function to send FCM token to backend
 import VideoModel from '../../Models/VideoModel';
 import { Header } from '../../cmps/headers/header';
@@ -67,28 +68,30 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
 
         // Only request permission if not granted before
         if (!permissionGranted) {
-          await messaging.requestPermission();
-          console.log('Notification permission granted.');
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            console.log('Notification permission granted.');
 
-          const fcmToken = await messaging.getToken();
-          console.log('FCM Token:', fcmToken);
+            // Get FCM token
+            const fcmToken = await getToken(messaging, { vapidKey: 'YOUR_VAPID_KEY' });
+            console.log('FCM Token:', fcmToken);
 
-          // Send the token to the backend
-          await sendFcmToken(localStorage.getItem('userName'), fcmToken);
+            // Send the token to the backend
+            await sendFcmToken(localStorage.getItem('userName'), fcmToken);
 
-          // Mark permission as granted in localStorage
-          localStorage.setItem('notificationsGranted', 'true');
+            // Mark permission as granted in localStorage
+            localStorage.setItem('notificationsGranted', 'true');
+          }
         }
       } catch (error) {
         console.error('Error requesting notification permission:', error);
       }
     };
-    console.log(loginStatus);
-    console.log(localStorage.getItem('notificationsGranted'))
-    if (loginStatus && !localStorage.getItem('notificationsGranted')) {
+
+    if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted')) {
       requestNotificationPermission(); // Only request permission if it hasn't been granted
     }
-  }, [token,loginStatus]);
+  }, [token]);
 
   const loadVideos = async () => {
     try {
