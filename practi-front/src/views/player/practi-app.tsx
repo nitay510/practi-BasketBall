@@ -68,16 +68,34 @@ useEffect(() => {
       const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
       console.log('Service worker registered successfully:', registration);
 
-      const permissionGranted = localStorage.getItem('notificationsGranted');
+      // Ensure the service worker is active before requesting permission
+      if (registration.active || registration.waiting) {
+        requestNotificationPermission(registration);
+      } else {
+        // Wait for the service worker to become active
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          requestNotificationPermission(registration);
+        });
+      }
+    } catch (error) {
+      console.error('Error during service worker registration:', error);
+    }
+  };
 
-      // Only request permission if not granted before
+  const requestNotificationPermission = async (registration: ServiceWorkerRegistration) => {
+    try {
+      const permissionGranted = localStorage.getItem('notificationsGranted');
+      
       if (!permissionGranted) {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
           console.log('Notification permission granted.');
 
           // Get FCM token with the service worker registration
-          const fcmToken = await getToken(messaging, { vapidKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg', serviceWorkerRegistration: registration });
+          const fcmToken = await getToken(messaging, {
+            vapidKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg',
+            serviceWorkerRegistration: registration
+          });
           console.log('FCM Token:', fcmToken);
 
           // Send the token to the backend
@@ -96,6 +114,7 @@ useEffect(() => {
     registerServiceWorkerAndRequestPermission(); // Only request permission if it hasn't been granted
   }
 }, [token]);
+
 
 
   const loadVideos = async () => {
