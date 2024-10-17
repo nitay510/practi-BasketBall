@@ -62,57 +62,36 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
 
 // Request notification permission only if it hasn't been granted before
 useEffect(() => {
-  const registerServiceWorkerAndRequestPermission = async () => {
-    try {
-      // Register the service worker
-      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
-      console.log('Service worker registered successfully:', registration);
+  const requestNotificationPermission = async () => {
+  try {
 
-      // Ensure the service worker is active before requesting permission
-      if (registration.active || registration.waiting) {
-        requestNotificationPermission(registration);
-      } else {
-        // Wait for the service worker to become active
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          requestNotificationPermission(registration);
-        });
+    const permissionGranted = localStorage.getItem('notificationsGranted');
+
+    // Only request permission if not granted before
+    if (!permissionGranted) {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+
+          // Get FCM token
+          const fcmToken = await getToken(messaging, { vapidKey: 'AIzaSyBDngnZcQ8XW_z6tl0f6pLwu0oFP3zyctw' });
+        console.log('FCM Token:', fcmToken);
+
+        // Send the token to the backend
+        await sendFcmToken(localStorage.getItem('userName'), fcmToken);
+
+        // Mark permission as granted in localStorage
+        localStorage.setItem('notificationsGranted', 'true');
       }
-    } catch (error) {
-      console.error('Error during service worker registration:', error);
     }
-  };
-
-  const requestNotificationPermission = async (registration: ServiceWorkerRegistration) => {
-    try {
-      const permissionGranted = localStorage.getItem('notificationsGranted');
-      
-      if (!permissionGranted) {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-          console.log('Notification permission granted.');
-
-          // Get FCM token with the service worker registration
-          const fcmToken = await getToken(messaging, {
-            vapidKey: 'AIzaSyBDngnZcQ8XW_z6tl0f6pLwu0oFP3zyctw',
-            serviceWorkerRegistration: registration
-          });
-          console.log('FCM Token:', fcmToken);
-
-          // Send the token to the backend
-          await sendFcmToken(localStorage.getItem('userName'), fcmToken);
-
-          // Mark permission as granted in localStorage
-          localStorage.setItem('notificationsGranted', 'true');
-        }
-      }
-    } catch (error) {
-      console.error('Error requesting notification permission:', error);
-    }
-  };
-
-  if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted')) {
-    registerServiceWorkerAndRequestPermission(); // Only request permission if it hasn't been granted
+  } catch (error) {
+    console.error('Error requesting notification permission:', error);
   }
+};
+
+if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted')) {
+    requestNotificationPermission(); // Only request permission if it hasn't been granted
+}
 }, [token]);
 
 
