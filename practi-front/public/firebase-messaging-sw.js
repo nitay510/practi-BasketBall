@@ -1,7 +1,6 @@
-importScripts('/firebase-app.js');
-importScripts('/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
 
-// Initialize Firebase in the service worker
 console.log('[firebase-messaging-sw.js] Initializing Firebase...');
 firebase.initializeApp({
   apiKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg',
@@ -14,7 +13,7 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
+messaging.onBackgroundMessage(function(payload) {
   console.log('[firebase-messaging-sw.js] Received background message: ', payload);
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
@@ -23,3 +22,5 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+console.log('[firebase-messaging-sw.js] Firebase initialized and service worker registered.');
