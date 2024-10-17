@@ -1,5 +1,4 @@
 // firebase.js
-
 import { initializeApp } from 'firebase/app';
 import { getMessaging } from 'firebase/messaging';
 
@@ -16,14 +15,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-// Register service worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/firebase-messaging-sw.js')
     .then(function(registration) {
-      console.log('Service worker registered successfully:', registration);
+      console.log('[firebase.js] Service worker registered successfully: ', registration);
       messaging.useServiceWorker(registration);
-    }).catch(function(err) {
-      console.error('Service worker registration failed:', err);
+    })
+    .catch(function(err) {
+      console.error('[firebase.js] Service worker registration failed: ', err);
     });
 }
 
