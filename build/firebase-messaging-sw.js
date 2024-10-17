@@ -2,6 +2,8 @@ importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
 
 console.log('[firebase-messaging-sw.js] Initializing Firebase...');
+
+// Initialize Firebase in the service worker
 firebase.initializeApp({
   apiKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg',
   authDomain: 'practi-project.firebaseapp.com',
@@ -20,7 +22,8 @@ messaging.onBackgroundMessage(function(payload) {
     body: payload.notification.body,
   };
 
+  // Show notification
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-console.log('[firebase-messaging-sw.js] Firebase initialized and service worker registered.');
+console.log('[firebase-messaging-sw.js] Firebase initialized and service worker ready.');

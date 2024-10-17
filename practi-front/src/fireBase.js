@@ -1,6 +1,6 @@
 // firebase.js
 import { initializeApp } from 'firebase/app';
-import { getMessaging } from 'firebase/messaging';
+import { getMessaging, onMessage } from 'firebase/messaging';
 
 const firebaseConfig = {
   apiKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg',
@@ -15,15 +15,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
+// Register service worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/firebase-messaging-sw.js')
-    .then(function(registration) {
-      console.log('[firebase.js] Service worker registered successfully: ', registration);
-      messaging.useServiceWorker(registration);
+    .then((registration) => {
+      console.log('[firebase.js] Service worker registered successfully:', registration);
+      // No need for messaging.useServiceWorker() in Firebase v9
     })
-    .catch(function(err) {
-      console.error('[firebase.js] Service worker registration failed: ', err);
+    .catch((err) => {
+      console.error('[firebase.js] Service worker registration failed:', err);
     });
 }
+
+// Handle foreground messages
+onMessage(messaging, (payload) => {
+  console.log('Message received. ', payload);
+  // Customize notification handling
+});
 
 export { messaging };
