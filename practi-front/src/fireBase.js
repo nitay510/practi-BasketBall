@@ -1,9 +1,8 @@
 // firebase.js
 
 import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getMessaging } from 'firebase/messaging';
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg',
   authDomain: 'practi-project.firebaseapp.com',
@@ -15,8 +14,17 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase Cloud Messaging and export it
 const messaging = getMessaging(app);
 
-export { messaging};
+// Register service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then(function(registration) {
+      console.log('Service worker registered successfully:', registration);
+      messaging.useServiceWorker(registration);
+    }).catch(function(err) {
+      console.error('Service worker registration failed:', err);
+    });
+}
+
+export { messaging };
