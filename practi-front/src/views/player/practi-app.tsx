@@ -60,38 +60,43 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
     }
   }, [loginStatus]);
 
-  // Request notification permission only if it hasn't been granted before
-  useEffect(() => {
-    const requestNotificationPermission = async () => {
-      try {
-        const permissionGranted = localStorage.getItem('notificationsGranted');
+// Request notification permission only if it hasn't been granted before
+useEffect(() => {
+  const registerServiceWorkerAndRequestPermission = async () => {
+    try {
+      // Register the service worker
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      console.log('Service worker registered successfully:', registration);
 
-        // Only request permission if not granted before
-        if (!permissionGranted) {
-          const permission = await Notification.requestPermission();
-          if (permission === 'granted') {
-            console.log('Notification permission granted.');
+      const permissionGranted = localStorage.getItem('notificationsGranted');
 
-            // Get FCM token
-            const fcmToken = await getToken(messaging, { vapidKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg' });
-            console.log('FCM Token:', fcmToken);
+      // Only request permission if not granted before
+      if (!permissionGranted) {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          console.log('Notification permission granted.');
 
-            // Send the token to the backend
-            await sendFcmToken(localStorage.getItem('userName'), fcmToken);
+          // Get FCM token with the service worker registration
+          const fcmToken = await getToken(messaging, { vapidKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg', serviceWorkerRegistration: registration });
+          console.log('FCM Token:', fcmToken);
 
-            // Mark permission as granted in localStorage
-            localStorage.setItem('notificationsGranted', 'true');
-          }
+          // Send the token to the backend
+          await sendFcmToken(localStorage.getItem('userName'), fcmToken);
+
+          // Mark permission as granted in localStorage
+          localStorage.setItem('notificationsGranted', 'true');
         }
-      } catch (error) {
-        console.error('Error requesting notification permission:', error);
       }
-    };
-
-    if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted')) {
-      requestNotificationPermission(); // Only request permission if it hasn't been granted
+    } catch (error) {
+      console.error('Error requesting notification permission:', error);
     }
-  }, [token]);
+  };
+
+  if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted')) {
+    registerServiceWorkerAndRequestPermission(); // Only request permission if it hasn't been granted
+  }
+}, [token]);
+
 
   const loadVideos = async () => {
     try {
