@@ -93,7 +93,7 @@ useEffect(() => {
 
           // Get FCM token with the service worker registration
           const fcmToken = await getToken(messaging, {
-            vapidKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg',
+            vapidKey: 'AIzaSyBDngnZcQ8XW_z6tl0f6pLwu0oFP3zyctw',
             serviceWorkerRegistration: registration
           });
           console.log('FCM Token:', fcmToken);
