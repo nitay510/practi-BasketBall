@@ -73,7 +73,7 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
             console.log('Notification permission granted.');
 
             // Get FCM token
-            const fcmToken = await getToken(messaging, { vapidKey: 'YOUR_VAPID_KEY' });
+            const fcmToken = await getToken(messaging, { vapidKey: 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg' });
             console.log('FCM Token:', fcmToken);
 
             // Send the token to the backend
