@@ -72,34 +72,40 @@ export const PractiApp = ({
   useEffect(() => {
     const requestNotificationPermission = async () => {
       try {
-        const permissionGranted = localStorage.getItem('notificationsGranted');
-
-        if (!permissionGranted) {
-          const permission = await Notification.requestPermission();
-          if (permission === 'granted') {
-            console.log('Notification permission granted.');
-
-            // Get FCM token
-            const vapidKey = 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg';
-            const fcmToken = await getToken(messaging, { vapidKey });
-            console.log('FCM Token:', fcmToken);
-
-            // Send the token to the backend
-            await sendFcmToken(localStorage.getItem('userName'), fcmToken);
-
-            // Mark permission as granted in localStorage
-            localStorage.setItem('notificationsGranted', 'true');
+        // Check current notification permission
+        const permission = Notification.permission;
+        if (permission === 'default') {
+          // Permission has not been requested yet
+          const permissionResult = await Notification.requestPermission();
+          if (permissionResult !== 'granted') {
+            console.log('Notification permission not granted');
+            return;
           }
+        } else if (permission === 'denied') {
+          // Permission was previously denied
+          console.log('Notification permission denied');
+          return;
+        }
+  
+        // Permission is granted; get the FCM token
+        const vapidKey = 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg';
+        const fcmToken = await getToken(messaging, { vapidKey });
+        console.log('FCM Token:', fcmToken);
+  
+        // Send the token to the backend
+        const username = localStorage.getItem('userName');
+        if (username && fcmToken) {
+          await sendFcmToken(username, fcmToken);
         }
       } catch (error) {
         console.error('Error requesting notification permission:', error);
       }
     };
-
-    if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted')) {
+  
+    if (isFirstLoad) {
       requestNotificationPermission();
     }
-  }, [token]);
+  }, [loginStatus]);
 
   const loadVideos = async () => {
     try {

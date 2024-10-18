@@ -18,14 +18,14 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function(payload) {
-  console.log('[firebase-messaging-sw.js] Received background message: ', payload);
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-  };
-
-  // Show notification
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
-
-console.log('[firebase-messaging-sw.js] Firebase initialized and service worker ready.');
+    console.log('[firebase-messaging-sw.js] Received background message: ', payload);
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+      body: payload.notification.body,
+      // Optionally, add other notification options like icon, click_action, etc.
+    };
+  
+    self.registration.showNotification(notificationTitle, notificationOptions);
+  });
+  
+  console.log('[firebase-messaging-sw.js] Firebase initialized and service worker ready.');

@@ -24,7 +24,7 @@ exports.createUser = async (req, res) => {
  */
 exports.updateFcmToken = async (req, res) => {
   try {
-    const { username, fcmToken } = req.body; // Get username and token from the request body
+    const { username, fcmToken } = req.body;
 
     // Update the user's FCM token
     const user = await userService.updateFcmToken(username, fcmToken);

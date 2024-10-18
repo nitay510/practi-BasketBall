@@ -6,5 +6,4 @@ router.post('/Users', userController.createUser)
 router.get('/Users/:username', userController.getUser)
 router.post('/Tokens', userController.authenticateUser)
 router.post('/Users/updateFcmToken', userController.updateFcmToken);
-
 module.exports = router
