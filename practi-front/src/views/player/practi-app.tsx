@@ -80,7 +80,7 @@ export const PractiApp = ({
             console.log('Notification permission granted.');
 
             // Get FCM token
-            const vapidKey = process.env.REACT_APP_FIREBASE_VAPID_KEY;
+            const vapidKey = 'BPVVffu9hkSGUvIQ2j12xoaVcAHc9C4da3ybDGpha0HPKMoT6q_tjITl-ekDBfL387vXZqxEzbbFuGi9MIZcAvg';
             const fcmToken = await getToken(messaging, { vapidKey });
             console.log('FCM Token:', fcmToken);
 
