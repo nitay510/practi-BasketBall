@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getToken} from 'firebase/messaging';
+import { getToken } from 'firebase/messaging';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { messaging} from '../../fireBase'; // Import Firebase messaging and getToken
-import { sendFcmToken } from '../../fetchFunctions/fetchFunctionsUser'; // Fetch function to send FCM token to backend
+import { messaging } from '../../fireBase';
+import { sendFcmToken } from '../../fetchFunctions/fetchFunctionsUser';
 import VideoModel from '../../Models/VideoModel';
 import { Header } from '../../cmps/headers/header';
 import { CtaBar } from '../../cmps/cta/cta-bar';
@@ -14,7 +14,7 @@ import { startVideo, setSelectedVideo, setVideoState } from '../../store/slicers
 import { setVideos } from '../../store/slicers/videos.slice';
 import { selectedVideoState, selectedVideosState } from '../../store/store';
 import { getNextVideoInCategory, getVideos, getVideoByName } from '../../cmps/video/functions';
-import { fetchLastDrill } from '../../fetchFunctions/fetchFunctionsPlayer'; // Import the new fetch function
+import { fetchLastDrill } from '../../fetchFunctions/fetchFunctionsPlayer';
 
 interface PractiViewProps {
   token: string;
@@ -27,7 +27,16 @@ interface PractiViewProps {
   lastLogin: Date;
 }
 
-export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginStatus, setLoginStatus, lastLogin }: PractiViewProps): JSX.Element => {
+export const PractiApp = ({
+  token,
+  setToken,
+  firstname,
+  setTopic,
+  topic,
+  loginStatus,
+  setLoginStatus,
+  lastLogin,
+}: PractiViewProps): JSX.Element => {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [nextDrill, setNextDrill] = useState<VideoModel | null>(null);
   const videos = useSelector(selectedVideosState);
@@ -60,41 +69,37 @@ export const PractiApp = ({ token, setToken, firstname, setTopic, topic, loginSt
     }
   }, [loginStatus]);
 
-// Request notification permission only if it hasn't been granted before
-useEffect(() => {
-  const requestNotificationPermission = async () => {
-  try {
+  useEffect(() => {
+    const requestNotificationPermission = async () => {
+      try {
+        const permissionGranted = localStorage.getItem('notificationsGranted');
 
-    const permissionGranted = localStorage.getItem('notificationsGranted');
+        if (!permissionGranted) {
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            console.log('Notification permission granted.');
 
-    // Only request permission if not granted before
-    if (!permissionGranted) {
-      const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
+            // Get FCM token
+            const vapidKey = process.env.REACT_APP_FIREBASE_VAPID_KEY;
+            const fcmToken = await getToken(messaging, { vapidKey });
+            console.log('FCM Token:', fcmToken);
 
-          // Get FCM token
-          const fcmToken = await getToken(messaging, { vapidKey: 'AIzaSyBDngnZcQ8XW_z6tl0f6pLwu0oFP3zyctw' });
-        console.log('FCM Token:', fcmToken);
+            // Send the token to the backend
+            await sendFcmToken(localStorage.getItem('userName'), fcmToken);
 
-        // Send the token to the backend
-        await sendFcmToken(localStorage.getItem('userName'), fcmToken);
-
-        // Mark permission as granted in localStorage
-        localStorage.setItem('notificationsGranted', 'true');
+            // Mark permission as granted in localStorage
+            localStorage.setItem('notificationsGranted', 'true');
+          }
+        }
+      } catch (error) {
+        console.error('Error requesting notification permission:', error);
       }
+    };
+
+    if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted')) {
+      requestNotificationPermission();
     }
-  } catch (error) {
-    console.error('Error requesting notification permission:', error);
-  }
-};
-
-if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted')) {
-    requestNotificationPermission(); // Only request permission if it hasn't been granted
-}
-}, [token]);
-
-
+  }, [token]);
 
   const loadVideos = async () => {
     try {
@@ -131,7 +136,7 @@ if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted'))
   const findLastDrill = async () => {
     try {
       const storedToken = localStorage.getItem('authToken') || token;
-      const lastDrillData = await fetchLastDrill(storedToken); // Use the new fetch function
+      const lastDrillData = await fetchLastDrill(storedToken);
       if (lastDrillData) {
         const { drillName, topic } = lastDrillData;
         const nextVideo = await getNextVideoInCategory(topic, drillName, token);
@@ -152,12 +157,12 @@ if (isFirstLoad && loginStatus && !localStorage.getItem('notificationsGranted'))
   if (!videos.length) return <></>;
 
   return (
-    <div className='practi-app'>
-      <div className='content-container'>
+    <div className="practi-app">
+      <div className="content-container">
         <Header setLoginStatus={setLoginStatus} />
         <section ref={navBarRef}>
           <NavBar setTopic={setTopic} topic={topic} setFilterBy={setFilterBy} />
-          <div className='video-container'>
+          <div className="video-container">
             <h2>About this class</h2>
             <VideoPlayerLi onSetVideoStatus={onSetVideoStatus} />
             <div ref={ctaBarContainerRef}>

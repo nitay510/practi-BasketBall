@@ -3,19 +3,18 @@ import { initializeApp } from 'firebase/app';
 import { getMessaging, onMessage } from 'firebase/messaging';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBDngnZcQ8XW_z6tl0f6pLwu0oFP3zyctw",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY, // Use environment variable here
     authDomain: "practi-project.firebaseapp.com",
     projectId: "practi-project",
     storageBucket: "practi-project.appspot.com",
     messagingSenderId: "171796620914",
     appId: "1:171796620914:web:22ee3a62b49ee49f9a84eb",
     measurementId: "G-1EMC4PELFR"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
-
+  };
+  
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
 // Register service worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/firebase-messaging-sw.js')

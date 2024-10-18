@@ -1,3 +1,4 @@
+//firebase-messaging-sw.js
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
 
@@ -5,7 +6,7 @@ console.log('[firebase-messaging-sw.js] Initializing Firebase...');
 
 // Initialize Firebase in the service worker
 firebase.initializeApp({
-    apiKey: "AIzaSyBDngnZcQ8XW_z6tl0f6pLwu0oFP3zyctw",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: "practi-project.firebaseapp.com",
     projectId: "practi-project",
     storageBucket: "practi-project.appspot.com",
