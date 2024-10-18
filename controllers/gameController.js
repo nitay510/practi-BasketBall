@@ -6,9 +6,10 @@ const gameService = require('../services/gameService');
 const teamService = require('../services/teamsService');
 const userService = require('../services/userService'); // Import user service
 const admin = require('../fireBaseAdmin');
+
 /**
  * Creates a new game using the provided data in the request body.
- * After creating the game, it sends notifications to all players in the team.
+ * After creating the game, it sends notifications to all players in the team individually.
  */
 exports.createGame = async (req, res) => {
   try {
@@ -28,30 +29,36 @@ exports.createGame = async (req, res) => {
     const players = await userService.getUsersByUsernames(playersUsernames);
 
     // Filter out players who don't have an FCM token
-    const tokens = players
-      .filter(player => player.fcmToken)
-      .map(player => player.fcmToken);
+    const playersWithTokens = players.filter(player => player.fcmToken);
 
-    if (tokens.length > 0) {
-      // Prepare the notification message
-      const message = {
-        notification: {
-          title: 'משחק חדש נוסף',
-          body: `משחק חדש נגד ${req.body.rivalTeamName} בתאריך ${new Date(req.body.gameDate).toLocaleDateString('he-IL')}`,
-          icon: '/logo.png',
-          click_action: 'https://practi-web.onrender.com',
-        },
-        tokens: tokens, // Send to multiple tokens
-      };
+    if (playersWithTokens.length > 0) {
+      // Prepare the notification message for each player
+      const notificationPromises = playersWithTokens.map(player => {
+        const message = {
+          data: {
+            title: 'משחק חדש נוסף',
+            body: `משחק חדש נגד ${req.body.rivalTeamName} בתאריך ${new Date(req.body.gameDate).toLocaleDateString('he-IL')}`,
+            icon: '/logo.png',
+            click_action: 'https://practi-web.onrender.com',
+          },
+          token: player.fcmToken, // Send to individual token
+        };
 
-      // Send the notification to all players
-      admin.messaging().sendMulticast(message)
-        .then((response) => {
-          console.log('Successfully sent notifications:', response);
-        })
-        .catch((error) => {
-          console.warn('Failed to send notifications:', error);
-        });
+        // Send the notification to the player
+        return admin.messaging().send(message)
+          .then(response => {
+            console.log(`Successfully sent notification to ${player.username}:`, response);
+            return { success: true, username: player.username };
+          })
+          .catch(error => {
+            console.warn(`Failed to send notification to ${player.username}:`, error);
+            return { success: false, username: player.username, error };
+          });
+      });
+
+      // Wait for all notifications to be sent
+      const notificationResults = await Promise.all(notificationPromises);
+      console.log('Notification results:', notificationResults);
     }
 
     res.status(201).send(newGame);
@@ -60,7 +67,6 @@ exports.createGame = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
 
 /**
  * Fetches a game based on the date and team names provided in the request parameters.

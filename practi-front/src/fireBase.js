@@ -12,7 +12,6 @@ const firebaseConfig = {
   measurementId: "G-1EMC4PELFR"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
