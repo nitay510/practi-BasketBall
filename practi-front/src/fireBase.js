@@ -2,8 +2,9 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, onMessage } from 'firebase/messaging';
 
+console.log('Firebase API Key:', process.env.REACT_APP_FIREBASE_API_KEY);
 const firebaseConfig = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY, // Use environment variable here
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: "practi-project.firebaseapp.com",
     projectId: "practi-project",
     storageBucket: "practi-project.appspot.com",
