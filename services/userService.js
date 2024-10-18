@@ -69,3 +69,17 @@ exports.getUserByUsername = async (username) => {
     throw error;
   }
 };
+/**
+ * Fetches multiple users by their usernames.
+ * @param {string[]} usernames - Array of usernames.
+ * @returns {Promise<User[]>} - Array of user objects.
+ */
+exports.getUsersByUsernames = async (usernames) => {
+  try {
+    const users = await Users.find({ username: { $in: usernames } });
+    return users;
+  } catch (error) {
+    console.error('Error fetching users by usernames:', error);
+    throw error;
+  }
+};

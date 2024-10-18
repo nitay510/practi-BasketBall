@@ -4,20 +4,63 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const gameService = require('../services/gameService');
 const teamService = require('../services/teamsService');
-
+const userService = require('../services/userService'); // Import user service
+const admin = require('../firebase'); // Import Firebase Admin SDK
 /**
  * Creates a new game using the provided data in the request body.
- * If the game creation is successful, it returns the new game with a status of 201.
- * If there is an error during the process, it returns a 400 status with the error.
+ * After creating the game, it sends notifications to all players in the team.
  */
 exports.createGame = async (req, res) => {
   try {
+    // Create the new game using the game service
     const newGame = await gameService.createGame(req.body);
+
+    // Fetch the team information to get the list of players
+    const team = await teamService.getTeamByName(req.body.teamName);
+    if (!team) {
+      return res.status(404).send('Team not found');
+    }
+
+    // Fetch FCM tokens of all players in the team
+    const playersUsernames = team.players; // List of player usernames
+
+    // Fetch user details for the players
+    const players = await userService.getUsersByUsernames(playersUsernames);
+
+    // Filter out players who don't have an FCM token
+    const tokens = players
+      .filter(player => player.fcmToken)
+      .map(player => player.fcmToken);
+
+    if (tokens.length > 0) {
+      // Prepare the notification message
+      const message = {
+        notification: {
+          title: 'משחק חדש נוסף',
+          body: `משחק חדש נגד ${req.body.rivalTeamName} בתאריך ${new Date(req.body.gameDate).toLocaleDateString('he-IL')}`,
+          icon: '/logo.png',
+          click_action: 'https://practi-web.onrender.com',
+        },
+        tokens: tokens, // Send to multiple tokens
+      };
+
+      // Send the notification to all players
+      admin.messaging().sendMulticast(message)
+        .then((response) => {
+          console.log('Successfully sent notifications:', response);
+        })
+        .catch((error) => {
+          console.warn('Failed to send notifications:', error);
+        });
+    }
+
     res.status(201).send(newGame);
   } catch (error) {
-    res.status(400).send(error);
+    console.error('Error creating game and sending notifications:', error);
+    res.status(500).send(error);
   }
 };
+
 
 /**
  * Fetches a game based on the date and team names provided in the request parameters.
