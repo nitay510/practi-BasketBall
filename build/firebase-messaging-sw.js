@@ -17,15 +17,38 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(function(payload) {
-    console.log('[firebase-messaging-sw.js] Received background message: ', payload);
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-      body: payload.notification.body,
-      // Optionally, add other notification options like icon, click_action, etc.
-    };
-  
-    self.registration.showNotification(notificationTitle, notificationOptions);
-  });
-  
-  console.log('[firebase-messaging-sw.js] Firebase initialized and service worker ready.');
+// Handle background messages
+messaging.onBackgroundMessage(function (payload) {
+  console.log('[firebase-messaging-sw.js] Received background message: ', payload);
+
+  const notificationTitle = payload.data.title;
+  const notificationOptions = {
+    body: payload.data.body,
+    icon: payload.data.icon,
+    data: { url: payload.data.click_action },
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+// Handle notification click
+self.addEventListener('notificationclick', function (event) {
+  console.log('[firebase-messaging-sw.js] Notification click Received.');
+
+  event.notification.close();
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clientList) {
+      for (const client of clientList) {
+        if (client.url === event.notification.data.url && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(event.notification.data.url);
+      }
+    })
+  );
+});
+
+console.log('[firebase-messaging-sw.js] Firebase initialized and service worker ready.');

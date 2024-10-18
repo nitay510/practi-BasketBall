@@ -33,16 +33,16 @@ exports.addDrill = async (req, res) => {
       const userRecord = await Users.findOne({ username: user });
       
       if (userRecord && userRecord.fcmToken) {
-        // Define the notification message in Hebrew
         const message = {
-          notification: {
+          data: {
             title: 'המאמן שלח לך אימון חדש',
-            body: `אימון חדש: ${drillName}`, // Including the drillName in the body
+            body: `אימון חדש: ${drillName}`,
+            icon: '/logo.png',
+            click_action: 'https://practi-web.onrender.com',
           },
-          token: userRecord.fcmToken, // Send to the user's FCM token
+          token: userRecord.fcmToken,
         };
-
-        // Try to send the notification, but don't throw an error if it fails
+        
         admin.messaging().send(message)
           .then((response) => {
             console.log('Successfully sent notification:', response);

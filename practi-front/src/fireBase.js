@@ -32,8 +32,23 @@ onMessage(messaging, (payload) => {
   console.log('Message received. ', payload);
 
   if (Notification.permission === 'granted') {
-    const { title, body } = payload.notification;
-    new Notification(title, { body });
+    const notificationTitle = payload.data.title;
+    const notificationOptions = {
+      body: payload.data.body,
+      icon: payload.data.icon,
+      data: { url: payload.data.click_action },
+    };
+
+    const notification = new Notification(notificationTitle, notificationOptions);
+
+    // Handle notification click
+    notification.onclick = (event) => {
+      event.preventDefault();
+      window.open(notificationOptions.data.url, '_blank');
+      notification.close();
+    };
+  } else {
+    console.log('Notification permission not granted.');
   }
 });
 
