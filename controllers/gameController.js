@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const gameService = require('../services/gameService');
 const teamService = require('../services/teamsService');
 const userService = require('../services/userService'); // Import user service
-const admin = require('../firebase'); // Import Firebase Admin SDK
+const admin = require('../fireBaseAdmin');
 /**
  * Creates a new game using the provided data in the request body.
  * After creating the game, it sends notifications to all players in the team.
