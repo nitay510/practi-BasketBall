@@ -376,3 +376,30 @@ export const fetchGamesForPlayer = async (teamName: string, playerName: string, 
   const data: GameForPlayer[] = await response.json();
   return data;
 };
+
+/**
+ * Fetches the total number of drills performed by the authenticated user in the last month.
+ * @param {string} token - The authentication token.
+ * @returns {Promise<number>} - The total number of drills performed in the last month.
+ */
+export const getDrillsLastMonth = async (token: string): Promise<number> => {
+  try {
+    const response = await fetch('https://practi-web.onrender.com/api/DrillsLastMonth', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch drills for the last month.');
+    }
+
+    const data = await response.json();
+    return data.drillsCount;
+  } catch (error) {
+    console.error('Error in getDrillsLastMonth:', error);
+    throw error;
+  }
+};

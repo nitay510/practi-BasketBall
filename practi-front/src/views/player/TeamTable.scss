@@ -1,0 +1,81 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  html {
+    line-height: 1.6;
+  }
+  
+  body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+    background-color: #1e1e1e;
+    color: #fff;
+  }
+  
+  .team-table-container {
+    margin: 10px;
+    font-family: 'Lato', sans-serif;
+    color: #ffffff;
+    background-color: #2e2e2e;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+  }
+  
+  h2 {
+    color: #31eb31;
+    margin-bottom: 20px;
+  }
+  
+  .team-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+  }
+  
+  .team-table th,
+  .team-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .team-table th {
+    background-color: #4caf50;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .team-table tr.highlight {
+    font-weight: bold;
+    background-color: #ffa24a;
+    color: #000;
+  }
+  
+  .team-table tr:nth-child(even) {
+    background-color: #3a3a3a;
+  }
+  
+  .team-table tr:hover {
+    background-color: #575757;
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .team-table-container {
+      padding: 10px;
+    }
+  
+    .team-table th,
+    .team-table td {
+      padding: 8px;
+      font-size: 14px;
+    }
+  
+    h2 {
+      font-size: 20px;
+    }
+  }
+  

@@ -219,3 +219,24 @@ exports.checkUserDrill = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+/**
+ * Gets the total number of drills performed by the user in the last month.
+ * This function calculates the start and end dates of the previous month and fetches drills performed during that time.
+ */
+exports.getDrillsLastMonth = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const parsedToken = JSON.parse(token);
+    const tokenValue = parsedToken.token;
+    const decoded = await promisify(jwt.verify)(tokenValue, 'your-secret-key');
+    const currentUser = decoded.username;
+
+    // Get the total number of drills for the last month
+    const drillsCount = await drillService.getDrillsLastMonth(currentUser);
+    res.json({ drillsCount });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

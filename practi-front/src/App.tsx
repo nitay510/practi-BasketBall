@@ -23,6 +23,7 @@ import CoachPlayerStats from "./views/coach/coachPlayerStats"
 import { EventView } from './views/Events/eventShow';
 import { NewGameEvent } from './views/Events/newGameEvent';
 import { EventEdit } from './views/Events/EventEdit';
+import TeamTable from "./views/player/teamTable";
 import { GameEventEdit } from './views/Events/GameEventEdit';
 import {GameEventView} from './views/Events/GameEventShow';
 import { PracticeViewCoach } from './views/coach/practice-view-coach';
@@ -66,6 +67,7 @@ export function App() {
         <Route path="/event/:eventId/edit" element={<EventEdit token={token} />} />
         <Route path="/gameEvent/:eventId/edit" element={<GameEventEdit token={token} />} />
         <Route path="/gameEvent/:eventId" element={<GameEventView token={token} />} />
+        <Route path="/TeamTable" element={<TeamTable token={token} />} />
       </Routes>
     </div>
   );

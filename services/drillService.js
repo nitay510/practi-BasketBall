@@ -175,3 +175,29 @@ exports.hasUserDoneDrill = async (username, drillName) => {
     throw error;
   }
 };
+
+/**
+ * Gets the total number of drills performed by the user in the last month.
+ * @param {string} username - Username of the user.
+ * @returns {Promise<number>} - Returns the total number of drills.
+ */
+exports.getDrillsLastMonth = async (username) => {
+  try {
+    const currentDate = new Date();
+    const firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const firstDayOfLastMonth = new Date(firstDayOfCurrentMonth);
+    firstDayOfLastMonth.setMonth(firstDayOfLastMonth.getMonth() - 1);
+    const lastDayOfLastMonth = new Date(firstDayOfCurrentMonth);
+    lastDayOfLastMonth.setDate(0);
+
+    // Fetch drills performed in the last month
+    const drillsCount = await Drill.countDocuments({
+      user: username,
+      date: { $gte: firstDayOfLastMonth, $lte: lastDayOfLastMonth },
+    });
+
+    return drillsCount;
+  } catch (error) {
+    throw error;
+  }
+};

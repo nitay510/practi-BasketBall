@@ -11,4 +11,6 @@ router.post('/Drills/:drillId', drillController.addDrill)
  router.get('/Drills/howManyWins/:opponentName', drillController.getWinLose)
  router.get('/LastDrill/', drillController.getLastDrills)
  router.get('/checkUserDrill', drillController.checkUserDrill);
+ router.get('/DrillsLastMonth/', drillController.getDrillsLastMonth);
+
 module.exports = router
