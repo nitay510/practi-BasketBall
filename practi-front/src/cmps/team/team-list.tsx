@@ -65,6 +65,7 @@ const TeamList = ({ token, setToken, club, master }: TeamListProps) => {
           setShowAddTeamModal(false);
           loadTeams(); // Reload teams after adding a new one
         } else {
+          console.log(response);
           alert('נכשל בהוספת קבוצה');
         }
       } catch (error) {
