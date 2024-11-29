@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPlayerTeams, getDrillsLastMonth } from '../../fetchFunctions/fetchFunctionsPlayer';
 import { fetchPlayersForTeamList } from '../../fetchFunctions/fetchFunctionsCoach';
-import './TeamTable.scss';
 
 interface Player {
   username: string;

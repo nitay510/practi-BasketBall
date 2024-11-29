@@ -1,5 +1,3 @@
-// teamModel.js
-
 const mongoose = require('mongoose');
 
 const teamSchema = new mongoose.Schema({
@@ -20,6 +18,9 @@ const teamSchema = new mongoose.Schema({
     required: false,
   }],
 });
+
+// Create a unique compound index for teamName and club
+teamSchema.index({ teamName: 1, club: 1 }, { unique: true });
 
 const Team = mongoose.model('Team', teamSchema);
 
